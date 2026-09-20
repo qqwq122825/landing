@@ -43,9 +43,17 @@ test('blank or invalid Pixel IDs never load the SDK or bind event handlers',()=>
  }
 });
 
-test('preview, redirect, DNT, GPC and explicit opt-out suppress initialization',()=>{
- const cases=[{data:{...config,preview:true}},{globals:{TV_PREVIEW:true}},{globals:{TV_REDIRECTING:true}},{navigator:{doNotTrack:'1'}},{navigator:{globalPrivacyControl:true}},{globals:{HUB_TRACKING_CONSENT:false}}];
- for(const {data=config,...options} of cases){const f=fixture(options);f.ready(data);assert.equal(f.scripts.length,0);assert.deepEqual(f.calls(),[]);}
+test('preview, redirect and explicit site opt-out still suppress initialization with browser signals set',()=>{
+ const cases=[{data:{...config,preview:true}},{globals:{TV_PREVIEW:true}},{globals:{TV_REDIRECTING:true}},{globals:{HUB_TRACKING_CONSENT:false}}];
+ for(const {data=config,...options} of cases){const f=fixture({...options,navigator:{doNotTrack:'1',globalPrivacyControl:true}});f.ready(data);assert.equal(f.scripts.length,0);assert.deepEqual(f.calls(),[]);}
+});
+
+test('DNT and GPC no longer suppress Pixel PageView or DownloadClick',()=>{
+ for(const navigator of [{doNotTrack:'1'},{globalPrivacyControl:true},{doNotTrack:'1',globalPrivacyControl:true}]){
+  const f=fixture({navigator});f.ready(config);f.settings(config);f.click();f.click({type:'auxclick',button:1});
+  assert.equal(f.scripts.length,1);
+  assert.deepEqual(f.calls(),[['init',config.pixelId],['track','PageView'],['trackCustom','DownloadClick'],['trackCustom','DownloadClick']]);
+ }
 });
 
 test('download clicks and middle-clicks are captured; unrelated and disabled buttons are ignored',()=>{
@@ -80,10 +88,11 @@ test('explicit opt-out may be lifted later through settings, without duplicate P
  f.window.HUB_TRACKING_CONSENT=true;f.settings(config);f.click();assert.equal(f.calls().length,3);
 });
 
-test('privacy choices and preview state are checked again for later download clicks',()=>{
- const f=fixture();f.ready(config);f.navigator.globalPrivacyControl=true;f.click();f.navigator.globalPrivacyControl=false;
+test('later browser signal changes do not stop downloads; explicit site opt-out and preview still do',()=>{
+ const f=fixture();f.ready(config);f.navigator.globalPrivacyControl=true;f.navigator.doNotTrack='1';f.click();
+ f.window.HUB_TRACKING_CONSENT=false;f.click();f.window.HUB_TRACKING_CONSENT=true;
  f.window.TV_PREVIEW=true;f.click();f.window.TV_PREVIEW=false;f.window.TV_REDIRECTING=true;f.click();
- assert.equal(f.calls().length,2);
+ assert.deepEqual(f.calls(),[['init',config.pixelId],['track','PageView'],['trackCustom','DownloadClick']]);
 });
 
 test('irrelevant empty settings events are harmless and do not start tracking',()=>{

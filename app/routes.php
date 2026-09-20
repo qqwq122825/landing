@@ -74,7 +74,8 @@ function render_landing(array $p,bool $preview=false,?string $template=null):voi
  $html=preg_replace_callback('#<title>.*?</title>#s',function()use($p){return '<title>'.htmlspecialchars($p['app_name'],ENT_QUOTES,'UTF-8').'</title>';},$html,1);
  $html=preg_replace_callback('#(<head[^>]*>)#i',function($m)use($head){return $m[1].$head;},$html,1);
  $brandVersion=substr(hash_file('sha256',HUB_ROOT.'/public/assets/brand-settings.js'),0,12);
- $html=str_replace('</head>','<script src="/assets/brand-settings.js?v='.$brandVersion.'" defer></script><script src="/assets/collector.js" defer></script></head>',$html);
+ $collectorVersion=substr(hash_file('sha256',HUB_ROOT.'/public/assets/collector.js'),0,12);
+ $html=str_replace('</head>','<script src="/assets/brand-settings.js?v='.$brandVersion.'" defer></script><script src="/assets/collector.js?v='.$collectorVersion.'" defer></script></head>',$html);
  header('Content-Type: text/html; charset=utf-8');header('Cache-Control: no-store');header('Referrer-Policy: strict-origin-when-cross-origin');echo $html;
 }
 function render_console(string $realm):void {

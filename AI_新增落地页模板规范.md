@@ -133,7 +133,8 @@ app/tenant.html + public/assets/tenant.*   子后台入口与模板权限界面
 | 重复配置通知 | 避免重复初始化、重复绑定与重复 PageView |
 | Pixel ID 留空 / 无效 | 不加载 Meta SDK |
 | 总站、子后台、全局 / 项目预览 | 不发送 Pixel 事件 |
-| DNT / GPC、显式暂停初始化 | 保留现有约束 |
+| 浏览器 DNT / GPC | 不作为 Pixel / 第一方统计的自动停报条件 |
+| 显式 Pixel 暂停初始化 `HUB_TRACKING_CONSENT === false` | 仍阻止 Pixel 初始化和后续下载事件 |
 
 默认填写有效 ID 即启用，勿重新引入“必须另设一个未接入的 true 开关才工作”的依赖。部署自行使用访客同意组件时，沿用 README 中明确的接入方式。
 
@@ -189,7 +190,8 @@ node --check public/assets/brand-settings.js
 - [ ] APK 留空不跳转；配置后所有下载入口都走当前项目。
 - [ ] Pixel A / B 配置隔离；打开页面一次 PageView，点击一次 DownloadClick。
 - [ ] 新模板实际渲染页已验证公共脚本与配置接线，全部真实下载入口逐个核对；视觉复刻与 Pixel 接入同时交付。
-- [ ] 未填 ID、后台、预览、DNT / GPC 的停止上报场景通过。
+- [ ] 未填 ID、后台、预览、显式 Pixel 暂停的停止上报场景通过。
+- [ ] DNT / GPC 单独开启或同时开启时，实际落地页仍执行第一方统计和有效 ID 的 Pixel 事件；测试用本地 SDK 替身，不向真实 Meta 账号发送测试数据。
 - [ ] 动态下载按钮、脚本加载前队列、重复设置通知有测试覆盖。
 - [ ] 本地 SDK 替身验证与真实 Meta 接收验证分开记录；真实验证只用用户指定的测试配置。
 

@@ -1,7 +1,8 @@
 (() => {
   'use strict';
   let pixelStarted=false;
-  const trackingAllowed=()=>window.HUB_TRACKING_CONSENT!==false && navigator.doNotTrack!=='1' && !navigator.globalPrivacyControl;
+  // Browser preference signals do not gate tracking; retain the explicit site-level pause.
+  const trackingAllowed=()=>window.HUB_TRACKING_CONSENT!==false;
   function startPixel(data) {
     if(pixelStarted || !/^\d{5,30}$/.test(data.pixelId||'') || data.preview || window.TV_PREVIEW || window.TV_REDIRECTING || !trackingAllowed())return;
     pixelStarted=true;

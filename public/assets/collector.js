@@ -4,7 +4,6 @@
  // All template downloads stay inside the current project's /dl route.
  document.querySelectorAll('a.download-link').forEach(a=>a.href=config.downloadUrl);
  if(config.preview){document.addEventListener('click',e=>{if(e.target.closest?.('.download-link')){e.preventDefault();e.stopImmediatePropagation();}},true);return;}
- if(navigator.doNotTrack==='1'||navigator.globalPrivacyControl)return;
  const endpoint='/p/'+config.slug+'/api/event';let visibleAt=document.visibilityState==='visible'?performance.now():null,stored=0;
  const elapsed=()=>Math.min(86400000,Math.round(stored+(visibleAt===null?0:performance.now()-visibleAt)));
  const event=(type)=>{const payload=JSON.stringify({type,id:type==='view'?config.visitId:crypto.randomUUID(),visitId:config.visitId,issued:config.issued,token:config.token,elapsed:elapsed()});if(!navigator.sendBeacon?.(endpoint,new Blob([payload],{type:'text/plain'})))fetch(endpoint,{method:'POST',body:payload,credentials:'omit',keepalive:true}).catch(()=>{});};

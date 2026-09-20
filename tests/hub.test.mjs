@@ -148,15 +148,18 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
  await t.test('each customer signs in only at their own entry',async()=>{ca=await signIn('/p/'+A.project.slug+'/api/login',A.credentials.username,A.credentials.password);cb=await signIn('/p/'+B.project.slug+'/api/login',B.credentials.username,B.credentials.password);assert.match(ca.headers.get('set-cookie'),new RegExp('path=/p/'+A.project.slug,'i'));assert.equal((await post('/p/'+B.project.slug+'/api/login',A.credentials)).status,401);});
  const aPath=()=>'/p/'+A.project.slug;
  const bPath=()=>'/p/'+B.project.slug;
- await t.test('both templates embed their own saved Pixel ID and one versioned shared tracking script',async()=>{
+ await t.test('both templates embed their own saved Pixel ID and versioned shared tracking scripts',async()=>{
   const version=createHash('sha256').update(readFileSync(root+'public/assets/brand-settings.js')).digest('hex').slice(0,12);
+  const collectorVersion=createHash('sha256').update(readFileSync(root+'public/assets/collector.js')).digest('hex').slice(0,12);
   try{
    for(const [p,ctx,id] of [[A,ca,'1000000000000001'],[B,cb,'2000000000000002']]){
     assert.equal((await post('/p/'+p.project.slug+'/api/settings',{pixelId:id},ctx)).status,200);
     const r=await request('/p/'+p.project.slug);assert.equal(r.status,200);
     const config=JSON.parse(r.text.match(/window\.HUB_PAGE=(.*?);window\.APP_CONFIG/s)[1]);assert.equal(config.pixelId,id);assert.equal(config.preview,false);
     assert.equal((r.text.match(/src="\/assets\/brand-settings\.js\?v=/g)||[]).length,1);assert.ok(r.text.includes('/assets/brand-settings.js?v='+version));
+    assert.equal((r.text.match(/src="\/assets\/collector\.js\?v=/g)||[]).length,1);assert.ok(r.text.includes('/assets/collector.js?v='+collectorVersion));
     const admin=await request('/p/'+p.project.slug+'/admin');assert.doesNotMatch(admin.text,/src="[^"]*(?:brand-settings|fbevents)\.js/);assert.match(admin.text,/PageView（访问）和 DownloadClick/);
+    assert.doesNotMatch(admin.text,/尊重浏览器 DNT/);assert.match(admin.text,/不因浏览器 DNT \/ GPC 信号自动停报/);
    }
    assert.doesNotMatch((await request('/')).text,/src="[^"]*(?:brand-settings|fbevents)\.js/);
   }finally{await post(aPath()+'/api/settings',{pixelId:''},ca);await post(bPath()+'/api/settings',{pixelId:''},cb);}
