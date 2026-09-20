@@ -43,13 +43,14 @@ function handle_api(string $realm,string $route):array {
    foreach($projects as &$item){$item['allowedTemplates']=project_templates($item);$item['credentialsAvailable']=(bool)$item['credentialsAvailable'];unset($item['allowed_templates']);}unset($item);
    return ['projects'=>$projects,'totals'=>totals(),'active'=>(int)query("SELECT COUNT(*) FROM projects WHERE status='active'")->fetchColumn()];
   }
-  if($super&&$route==='/audit')return ['rows'=>query('SELECT a.id,a.actor,a.action,a.detail,a.created_at,p.name project FROM audit a LEFT JOIN projects p ON p.id=a.project_id ORDER BY a.id DESC LIMIT 100')->fetchAll()];
+  if($super&&$route==='/audit')return ['rows'=>query("SELECT a.id,a.actor,a.action,a.detail,a.created_at,COALESCE(p.name,CASE WHEN d.id IS NOT NULL THEN '已删除 /p/'||d.slug END) project FROM audit a LEFT JOIN projects p ON p.id=a.project_id LEFT JOIN deleted_projects d ON d.id=a.project_id ORDER BY a.id DESC LIMIT 100")->fetchAll()];
   if($super&&preg_match('#^/projects/([a-z0-9]{7,12})$#D',$route,$m)){$p=project($m[1]);return ['project'=>admin_project($p),'stats'=>stats((int)$p['id'])];}
   if(!$super&&$route==='/dashboard')return ['project'=>admin_project($account,false),'stats'=>stats((int)$account['id'])];
  }elseif($method==='POST'){
   csrf();$b=body();
   if($route==='/logout'){$_SESSION=[];session_destroy();setcookie(session_name(),'', ['expires'=>time()-3600,'path'=>$super?'/':'/p/'.$realm,'httponly'=>true,'secure'=>strpos(origin(),'https:')===0,'samesite'=>'Strict']);return ['ok'=>true];}
   if($super&&$route==='/projects'){limit('create:'.$account['id'],30,3600);return create_project($b,$actor);}
+  if($super&&preg_match('#^/projects/([a-z0-9]{7,12})/delete$#D',$route,$m))return delete_project($m[1],$b,$actor);
   if($super&&preg_match('#^/projects/([a-z0-9]{7,12})(/status|/password|/credentials)?$#D',$route,$m)){
    $p=project($m[1]);$action=$m[2]??'';
    if($action==='/status'){$status=$b['status']??'';if(!in_array($status,['active','paused'],true))throw new HubError('项目状态格式错误');query('UPDATE projects SET status=?,version=version+1,updated_at=? WHERE id=?',[$status,now_ms(),$p['id']]);audit($actor,$status==='active'?'恢复项目':'暂停项目',(int)$p['id']);return ['project'=>admin_project(project($m[1]))];}

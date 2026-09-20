@@ -12,6 +12,7 @@ function db():PDO {
  $db->exec('PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL; PRAGMA busy_timeout=5000;');
  $db->exec('CREATE TABLE IF NOT EXISTS admins(id INTEGER PRIMARY KEY, username TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, version INTEGER NOT NULL DEFAULT 1);
  CREATE TABLE IF NOT EXISTS projects(id INTEGER PRIMARY KEY, slug TEXT NOT NULL UNIQUE, name TEXT NOT NULL, username TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, version INTEGER NOT NULL DEFAULT 1, status TEXT NOT NULL DEFAULT "active", template TEXT NOT NULL DEFAULT "feiyue", app_name TEXT NOT NULL, download_url TEXT NOT NULL DEFAULT "", pixel_id TEXT NOT NULL DEFAULT "", verify_code TEXT NOT NULL DEFAULT "", logo_data TEXT NOT NULL DEFAULT "", note TEXT NOT NULL DEFAULT "", created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL);
+ CREATE TABLE IF NOT EXISTS deleted_projects(id INTEGER PRIMARY KEY, slug TEXT NOT NULL UNIQUE, deleted_at INTEGER NOT NULL);
  CREATE TABLE IF NOT EXISTS visits(project_id INTEGER NOT NULL REFERENCES projects(id), id TEXT NOT NULL, started_at INTEGER NOT NULL, ip_address TEXT NOT NULL, country TEXT NOT NULL, region TEXT NOT NULL, city TEXT NOT NULL, device TEXT NOT NULL, os TEXT NOT NULL, browser TEXT NOT NULL, duration_ms INTEGER NOT NULL DEFAULT 0, clicked INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(project_id,id));
  CREATE INDEX IF NOT EXISTS visits_project_time ON visits(project_id,started_at DESC);
  CREATE TABLE IF NOT EXISTS events(project_id INTEGER NOT NULL REFERENCES projects(id), id TEXT NOT NULL, visit_id TEXT NOT NULL, type TEXT NOT NULL, created_at INTEGER NOT NULL, PRIMARY KEY(project_id,id));
@@ -126,10 +127,27 @@ function create_project(array $b,string $actor):array {
  $name=clean_text($b['name']??'',80,'项目名称');$app=clean_text($b['appName']??$name,80,'应用名');$url=url_value($b['downloadUrl']??'');$note=clean_text($b['note']??'',500,'备注',false);
  $allowed=validate_templates($b['allowedTemplates']??HUB_TEMPLATES);$template=$b['template']??$allowed[0];
  if(!in_array($template,$allowed,true))throw new HubError('初始模板需在开放模板中');
- $slug=substr(bin2hex(random_bytes(6)),0,9);$username=random_customer_credential(false);$password=random_customer_credential(true);$time=now_ms();
+ do{$slug=substr(bin2hex(random_bytes(6)),0,9);}while(query('SELECT 1 FROM projects WHERE slug=? UNION ALL SELECT 1 FROM deleted_projects WHERE slug=?',[$slug,$slug])->fetchColumn());
+ $username=random_customer_credential(false);$password=random_customer_credential(true);$time=now_ms();
  $cipher=seal_customer_password($password,$slug,$username);
- query('INSERT INTO projects(slug,name,username,password_hash,password_cipher,allowed_templates,template,app_name,download_url,note,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)',[$slug,$name,$username,password_hash($password,PASSWORD_DEFAULT),$cipher,json_encode($allowed),$template,$app,$url,$note,$time,$time]);
+ // Allocate inside the same INSERT, including retired IDs: old visit tokens must never match a new project.
+ query('INSERT INTO projects(id,slug,name,username,password_hash,password_cipher,allowed_templates,template,app_name,download_url,note,created_at,updated_at) VALUES((SELECT MAX(COALESCE((SELECT MAX(id) FROM projects),0),COALESCE((SELECT MAX(id) FROM deleted_projects),0))+1),?,?,?,?,?,?,?,?,?,?,?,?)',[$slug,$name,$username,password_hash($password,PASSWORD_DEFAULT),$cipher,json_encode($allowed),$template,$app,$url,$note,$time,$time]);
  $p=project($slug);audit($actor,'创建项目',(int)$p['id'],$name);return ['project'=>admin_project($p),'credentials'=>delivery_credentials($p,$password)];
+}
+function delete_project(string $slug,array $b,string $actor):array {
+ if(!is_string($b['confirmSlug']??null)||!hash_equals($slug,$b['confirmSlug']))throw new HubError('请输入完整项目编号确认删除');
+ $pdo=db();$pdo->exec('BEGIN IMMEDIATE');
+ try{
+  $p=project($slug);$id=(int)$p['id'];
+  // Only non-personal route/ID retirement metadata survives; never reuse deleted identities.
+  query('INSERT INTO deleted_projects(id,slug,deleted_at) VALUES(?,?,?)',[$id,$slug,now_ms()]);
+  query('DELETE FROM events WHERE project_id=?',[$id]);
+  query('DELETE FROM visits WHERE project_id=?',[$id]);
+  query('DELETE FROM projects WHERE id=?',[$id]);
+  audit($actor,'删除项目',$id,'项目：'.$p['name'].'；路径：/p/'.$slug.'；客户账号、配置与访问记录已删除');
+  $pdo->exec('COMMIT');
+  return ['ok'=>true,'deleted'=>$slug];
+ }catch(Throwable $e){$pdo->exec('ROLLBACK');throw $e;}
 }
 function save_project(array $p,array $b,string $actor,bool $super):array {
  db()->beginTransaction();

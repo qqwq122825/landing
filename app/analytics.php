@@ -24,6 +24,8 @@ function record_event(array $p,array $b):void {
  limit('event:'.$p['id'].':'.hub_ip(),240,60);$v=hub_visitor();
  db()->beginTransaction();
  try{
+  // The project may have been removed or paused after the route's initial lookup.
+  $p=project($p['slug'],true);
   if($type==='view')query('INSERT OR IGNORE INTO visits(project_id,id,started_at,ip_address,country,region,city,device,os,browser) VALUES(?,?,?,?,?,?,?,?,?,?)',[$p['id'],$visit,$now,$v['ip_address']??'',$v['country'],$v['region'],$v['city'],$v['device'],$v['os'],$v['browser']]);
   $exists=query('SELECT started_at FROM visits WHERE project_id=? AND id=?',[$p['id'],$visit])->fetchColumn();
   if($exists!==false){

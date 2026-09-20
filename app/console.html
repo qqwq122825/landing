@@ -73,6 +73,16 @@
 <div id="confirm-dialog" class="modal" tabindex="-1" aria-labelledby="confirm-title" aria-hidden="true"><div class="modal-dialog modal-sm modal-dialog-centered"><div class="modal-content">
   <div class="modal-header"><h2 id="confirm-title" class="modal-title"></h2><button class="btn-close" data-close aria-label="关闭"></button></div><div class="modal-body"><p id="confirm-text" class="text-secondary mb-0"></p></div><div class="modal-footer"><button class="btn me-auto" data-close>取消</button><button class="btn btn-primary" id="confirm-submit">确认</button></div>
 </div></div></div>
+<div id="delete-dialog" class="modal" tabindex="-1" aria-labelledby="delete-title" aria-describedby="delete-warning" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+  <div class="modal-header"><h2 class="modal-title text-danger" id="delete-title">永久删除项目</h2><button class="btn-close" type="button" data-close aria-label="取消删除"></button></div>
+  <form id="delete-form"><div class="modal-body">
+    <p class="mb-2">项目：<strong id="delete-project-name"></strong></p><p class="text-secondary">地址：<code id="delete-project-route"></code></p>
+    <div class="alert alert-danger" id="delete-warning">将永久删除该项目的客户账号、配置、访问与下载统计；落地页和子后台立即失效。操作日志保留，其他项目及共享模板不受影响。此操作没有撤销入口，请先备份；仅临时停用请使用“暂停”。</div>
+    <label class="form-label" for="delete-confirm-slug">输入项目编号 <code id="delete-project-slug"></code> 确认</label>
+    <input class="form-control font-monospace" id="delete-confirm-slug" name="confirmSlug" autocomplete="off" spellcheck="false" required maxlength="12" placeholder="请输入上方完整项目编号">
+    <p class="text-danger mt-2 mb-0" id="delete-error" role="alert"></p>
+  </div><div class="modal-footer"><button class="btn me-auto" type="button" data-close>取消</button><button class="btn btn-danger" id="delete-submit" type="submit" disabled>永久删除</button></div></form>
+</div></div></div>
 <div id="architecture-dialog" class="modal" tabindex="-1" aria-labelledby="architecture-title" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content">
   <div class="modal-header"><h2 class="modal-title" id="architecture-title">平台运行方式</h2><button class="btn-close" data-close aria-label="关闭"></button></div><div class="modal-body">
     <h3>一个总站，多个独立项目</h3><p class="text-secondary">每个项目拥有固定路径、账号、下载地址及访问数据。模板由总站逐账号开放。</p>
