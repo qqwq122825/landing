@@ -39,6 +39,20 @@ test('overview omits intro banner, onboarding and activity cards, while the dedi
  assert.match(js,/async function auditView\(\).*?api\('\/audit'\)/);
 });
 
+test('template catalog uses compact native typography without a separate blue banner',()=>{
+ const js=readFileSync(root+'public/assets/console.js','utf8');
+ const catalog=js.slice(js.indexOf(' async function templateLibrary(){'),js.indexOf(' function renderTemplateCards(){'));
+ assert.match(catalog,/<h1 class="page-title fw-semibold">模板管理<\/h1>/);
+ assert.match(catalog,/<p class="text-secondary fs-5 mt-1 mb-0">预览模板/);
+ assert.match(catalog,/<p class="text-secondary fs-5 mt-1 mb-0">仅预览/);
+ assert.match(catalog,/关联项目 <strong class="text-body fw-medium">\$\{n\(data.projectCount\)\}/);
+ assert.match(catalog,/全部模板.*?n\(data.templates.length\)/);
+ assert.doesNotMatch(catalog,/alert-info|所有模板集中查看/);
+ assert.match(catalog,/id="template-search"/);
+ assert.match(catalog,/id="template-library-count"[^>]*role="status"/);
+ assert.match(catalog,/renderTemplateCards\(\);renderTemplateProjects\(\)/);
+});
+
 test('vendored Tabler files match the pinned upstream distribution and have license notices',()=>{
  const base=root+'public/assets/vendor/tabler-1.5.1/';
  for(const [name,expected] of [['tabler.min.css','6aa5677e9cfc2620405bf97a98074ba43ff06a411cb35c5337acfb56d124c273'],['tabler.min.js','d4c4c2768f166c308391e0cea44db593056f12b84a4eeef46d55e35ca46d6e60']]){
