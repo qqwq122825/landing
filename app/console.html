@@ -35,7 +35,6 @@
           <div class="nav-item"><button data-view="analytics" class="nav-link" aria-label="访问分析" title="访问分析"><span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4v16h16M9 15v-4M14 15V7M19 15v-6"/></svg></span><span class="nav-link-title">访问分析</span></button></div>
           <div class="nav-item"><button data-view="audit" class="nav-link" aria-label="操作日志" title="操作日志"><span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3h8l4 4v14H4V3h4M15 3v5h5M8 12h8M8 16h6"/></svg></span><span class="nav-link-title">操作日志</span></button></div>
         </nav>
-        <div class="sidebar-footer mt-auto"><p class="sidebar-label text-secondary small mb-2">一个总站，多个独立项目</p><button class="btn btn-outline-light btn-sm" id="architecture-button" aria-label="平台说明" title="平台说明"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7h.01"/></svg><span class="sidebar-label">平台说明</span></button></div>
       </div>
     </div>
   </aside>
@@ -82,14 +81,6 @@
     <input class="form-control font-monospace" id="delete-confirm-slug" name="confirmSlug" autocomplete="off" spellcheck="false" required maxlength="12" placeholder="请输入上方完整项目编号">
     <p class="text-danger mt-2 mb-0" id="delete-error" role="alert"></p>
   </div><div class="modal-footer"><button class="btn me-auto" type="button" data-close>取消</button><button class="btn btn-danger" id="delete-submit" type="submit" disabled>永久删除</button></div></form>
-</div></div></div>
-<div id="architecture-dialog" class="modal" tabindex="-1" aria-labelledby="architecture-title" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content">
-  <div class="modal-header"><h2 class="modal-title" id="architecture-title">平台运行方式</h2><button class="btn-close" data-close aria-label="关闭"></button></div><div class="modal-body">
-    <h3>一个总站，多个独立项目</h3><p class="text-secondary">每个项目拥有固定路径、账号、下载地址及访问数据。模板由总站逐账号开放。</p>
-    <h3>现成 UI，直接部署</h3><p class="text-secondary">使用 Tabler / Bootstrap 组件与原生 JavaScript，没有 Vue、Vite 或前端编译步骤。组件库文件随源码提交，不依赖 CDN。</p>
-    <h3>Pixel 与预览</h3><p class="text-secondary">仅在子后台配置 Pixel ID；真实落地页内置 PageView 和 DownloadClick。后台与预览不统计。</p>
-    <h3>更新保留数据</h3><p class="text-secondary mb-0">服务器拉取代码后即可使用；保留 runtime 数据库、密钥及安装锁，不需要重新安装。暂停停用落地页与客户后台；重置密码撤销客户会话。</p>
-  </div><div class="modal-footer"><button class="btn btn-primary" data-close>知道了</button></div>
 </div></div></div>
 <div class="toast-container position-fixed bottom-0 end-0 p-3"><div id="toast" class="toast" role="status" aria-live="polite"><div class="d-flex"><div class="toast-body" id="toast-text"></div><button class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="关闭提示"></button></div></div></div>
 </body></html>

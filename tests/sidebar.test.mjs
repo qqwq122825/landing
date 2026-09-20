@@ -52,7 +52,7 @@ test('sidebar uses native Tabler folded layout, named icons and separate mobile 
   const css = readFileSync(new URL('../public/assets/console.css', import.meta.url), 'utf8');
   assert.match(html, /id="sidebar-toggle"[^>]*aria-controls="sidebar"/);
   assert.match(html, /id="sidebar-mobile-toggle"[^>]*data-bs-toggle="collapse"/);
-  for (const name of ['项目总览','模板管理','访问分析','操作日志','平台说明']) assert.ok(html.includes(`aria-label="${name}" title="${name}"`));
+  for (const name of ['项目总览','模板管理','访问分析','操作日志']) assert.ok(html.includes(`aria-label="${name}" title="${name}"`));
   assert.match(css, /--tblr-sidebar-width:14rem;--tblr-sidebar-folded-width:4rem/);
   assert.match(css, /html\[data-bs-sidebar=folded\]/);
 });

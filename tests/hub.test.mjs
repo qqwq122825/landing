@@ -24,6 +24,19 @@ test('master UI uses local Tabler components without Vue or a frontend build ste
  assert.equal(existsSync(root+'vite.config.mjs'),false);assert.equal(existsSync(root+'frontend/admin/App.vue'),false);
 });
 
+test('overview omits onboarding and activity cards, while the dedicated audit page remains',()=>{
+ const html=readFileSync(root+'app/console.html','utf8');
+ const js=readFileSync(root+'public/assets/console.js','utf8');
+ const css=readFileSync(root+'public/assets/console.css','utf8');
+ assert.doesNotMatch(html+js,/architecture-(?:button|dialog)|平台说明|从这里，开始一个新项目|最近动态/);
+ assert.doesNotMatch(css,/architecture-button|sidebar-footer|bottom-grid/);
+ const overview=js.slice(js.indexOf(' async function overview(){'),js.indexOf(' function renderRows(){'));
+ assert.match(overview,/api\('\/projects'\)/);
+ assert.doesNotMatch(overview,/api\('\/audit'\)|recent\(/);
+ assert.match(html,/data-view="audit"/);
+ assert.match(js,/async function auditView\(\).*?api\('\/audit'\)/);
+});
+
 test('vendored Tabler files match the pinned upstream distribution and have license notices',()=>{
  const base=root+'public/assets/vendor/tabler-1.5.1/';
  for(const [name,expected] of [['tabler.min.css','6aa5677e9cfc2620405bf97a98074ba43ff06a411cb35c5337acfb56d124c273'],['tabler.min.js','d4c4c2768f166c308391e0cea44db593056f12b84a4eeef46d55e35ca46d6e60']]){
