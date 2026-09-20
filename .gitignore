@@ -21,3 +21,14 @@
 # Local tooling and operating-system files.
 node_modules/
 .DS_Store
+Thumbs.db
+/.idea/
+/.vscode/
+
+# This PHP application serves committed public/ assets directly; no build output.
+/dist/
+/build/
+/coverage/
+/tmp/
+*.tgz
+*.tar.gz

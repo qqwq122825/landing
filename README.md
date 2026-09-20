@@ -20,9 +20,19 @@
 
 没有 Vue / Vite，也没有 `npm install`、`npm run build` 等生产部署步骤。固定版本的 CSS / JS 与许可证位于 `public/assets/vendor/tabler-1.5.1/`，随 Git 一起提交，浏览器不请求外部 CDN。业务 HTML / CSS / JS 修改后直接生效，不需要重新编译。Node 只用于可选的本地启动和自动测试。
 
-已安装站点且目录已绑定本仓库时：先备份代码与私有数据，在**总站程序目录**执行 `git pull --ff-only`。Web 根目录仍指向 `public/`；保留 `runtime/`、数据库、密钥和安装锁，无需重装。若 Git 提示本地修改，先核查差异，不使用强制覆盖命令。PHP OPcache 若关闭文件时间检查，按服务器配置刷新缓存 / PHP 服务；浏览器刷新后加载带内容版本号的业务资源。
+**部署入口：[Git 部署指南](deploy/README.md)**，包含首次安装、宝塔设置、旧站迁移、日常更新和验收。
 
-服务器尚未配置 Git 仓库时，先在新目录克隆并确认配置，再切换站点目录；不要直接覆盖已有数据目录。完整覆盖说明见 [总站 Tabler UI 更新说明](总站TablerUI更新说明.md)。
+首次在新目录克隆：
+
+```sh
+git clone --branch main --single-branch https://github.com/qqwq122825/landing.git landing-hub
+cd landing-hub
+php bin/check.php
+```
+
+然后将站点 Web 文档根目录设为这个仓库的 **`public/`**，按指南配置 PHP、数据目录权限、HTTPS 与伪静态，再访问 `/install.php` 初始化。`bin/check.php` 是只读预检，不读数据库内容、不创建文件。
+
+已安装且目录已绑定本仓库时：备份后在程序根目录执行 `git pull --ff-only origin main`。保留私有数据、密钥和 `install.lock`，无需重装；遇到本地修改先核对差异，不强制覆盖。推送 GitHub 不会自动触发服务器拉取。
 
 ## 入口设计
 
@@ -51,28 +61,23 @@ https://你的域名/p/随机项目编号/dl        跳转该项目配置的下�
 
 原有模板来自当前工作区的单站资源；本站设计为独立实现。没有获取参考站服务端代码或尝试其总站密码。原单站历史数据尚未迁入总站。模板中的宣传文案、剧图、商店文字与法律信息沿用原样，正式投放前应替换成项目实际内容。
 
-## 本地使用
+## 本地开发（可选）
 
-当前已初始化，预览地址：<http://127.0.0.1:57600/>。
-本机账号见 `runtime/初始账号.txt`。文件内含总站及演示客户凭据，请私下保管。演示项目不是生产客户；访客数据只来自实际本地测试，没有预置访问量。
-
-```sh
-cd "/Users/xxx/Documents/落地页设计/总站"
-npm run dev
-```
-
-默认监听 127.0.0.1:57600，不开放公网。端口被占用时先确认已有服务，或 `PORT=57601 npm run dev`。开发与测试使用 Node；生产只需要 PHP。
-
-从干净部署包首次部署，可直接访问 `/install.php` 使用网页安装向导。安装成功会生成数据目录内的 `install.lock`；再次安装需手动删除该锁文件。也可以用下面的 CLI 初始化：
+在自己的克隆目录内执行：
 
 ```sh
-php bin/setup.php              # 默认账号 mtx，密码 mtx123，不创建演示项目
-# 正式上线建议：php bin/setup.php --random-password
-# 可选：php bin/setup.php --username=你的账号 --demo
-npm run dev
+php bin/check.php
+# 仅限尚未安装的新本地实例，默认 mtx / mtx123：
+php bin/setup.php
+# 正式环境请在网页安装时设置独立密码，或 CLI 使用 --random-password。
+HUB_DEV=1 php -S 127.0.0.1:57600 -t public router.php
 ```
 
-重复初始化会保留现有管理员并退出。当前本机 PHP 8.1 验证通过；生产使用受支持的 PHP 版本（例如 8.4 / 8.5），并安装 PDO SQLite、mbstring、OpenSSL（AES-256-GCM）、标准会话与图像信息函数。版本维护周期见 [PHP 官方支持表](https://www.php.net/supported-versions.php)。
+浏览器打开 <http://127.0.0.1:57600/>。也可使用 `npm run dev`，会自动设置本地环境；Node 仅用于这个便捷启动和测试，不是生产依赖。内置开发服务器只监听本机，不用于正式部署。
+
+初始化凭据写入私有数据目录内的 `初始账号.txt`，勿提交或公开分享。已有实例不要重新初始化；默认不会创建演示项目，开发演示可单独传 `--demo`。指定独立 `HUB_DATA_DIR` 可隔离测试数据与已有项目，CLI 和服务进程必须使用同一个值。
+
+PHP 最低版本 8.1；生产请选用仍受维护的 PHP 版本，参见 [PHP 官方支持表](https://www.php.net/supported-versions.php)。安装与扩展要求见部署指南。
 
 ## 伪静态路由
 
@@ -86,21 +91,11 @@ npm run dev
 
 ## 部署要点
 
-1. 将程序放到 `/srv/landing-hub` 等应用目录，Web 站点根目录严格设为 **`public/`**。数据库、源码、账号文件均在公开目录之外。避免把整个项目作为公开目录。
-2. 配置 PHP-FPM、HTTPS 与路由。Nginx 示例在 `deploy/nginx.conf.example`；Apache 使用 `public/.htaccess`，需开启 rewrite 并允许对应覆盖项。Nginx 不读取 `.htaccess`。
-3. 建立只允许 PHP 进程用户读写的数据目录，例如 `/var/lib/landing-hub`，目录权限 0700。仅程序代码只读部署；数据目录可写。
-4. 在 PHP-FPM 池配置中设置 `HUB_ORIGIN=https://你的域名`、`HUB_DATA_DIR=/var/lib/landing-hub`、`HUB_DEV=0`，见 `deploy/php-fpm.env.example`。程序不会自动加载 `.env`。
-5. **推荐网页安装**：访问 `https://你的域名/install.php`，按环境检测提示处理扩展和目录权限，确认账号密码后安装。默认账号 `mtx`、密码 `mtx123`。服务器 PHP 进程直接写入数据目录，避免 CLI 与 PHP-FPM 用户不一致引起的数据库权限问题。
-
-   如需 CLI 初始化，用相同环境和 PHP 进程用户执行：
-
-   ```sh
-   HUB_ORIGIN=https://你的域名 HUB_DATA_DIR=/var/lib/landing-hub php bin/setup.php
-   ```
-
-   普通初始化使用默认账号 `mtx`、密码 `mtx123`。上线时建议给初始化命令加 `--random-password` 生成随机密码，或初始化后运行 `php bin/admin-password.php --username=mtx` 更换。部署包排除了本机数据库、会话、签名密钥和账号文件。
-6. 在浏览器登录总站，开通首个项目，再设置真实下载链接。新项目的 APK 下载地址默认留空，由客户自己填写；也支持清空已填写地址。空下载地址会显示“尚未配置”，没有默认或备用 APK 链接。
-7. 上线前验收 HTTPS、账号隔离、真实访问数据、下载地址、备份恢复、访问保护及隐私告知。当前 PHP 内置开发服务器只用于本地预览。
+- [Git 部署指南](deploy/README.md)：服务器拉仓库即可获取完整代码和本地 UI 资源；首次配置完成后不再上传 `dist` 或补丁包。
+- [网页安装说明](docs/网页安装说明.md)：首次安装、安装锁及明确需要时的主管理员恢复。
+- 站点根目录严格为 `public/`，PHP-FPM 只写私有数据目录；Git 不携带客户数据。可用 `HUB_DATA_DIR` 将数据放在代码仓库之外。
+- 新项目 APK 下载地址默认留空，客户自行填写；没有默认下载链接。原账号、项目编号和客户配置在代码更新时保留。
+- 部署不是编译：PHP、扩展、HTTPS、伪静态与数据权限仍需在服务器一次性配置。
 
 ### Cloudflare 与缓存
 
@@ -133,15 +128,16 @@ php bin/backup.php --output=/path/to/private-backups
 php bin/admin-password.php --username=mtx
 ```
 
-网页重新安装需先在服务器文件管理中删除数据目录的 `install.lock`。入口开放后请立即完成安装；确认勾选“保留数据并更新管理员”才会变更已有主管理员，其他客户及统计原样保留，旧总站会话失效。程序会先生成 `before-install-*.sqlite` 快照，安装成功后重新生成锁。已有管理员的数据库升级时也应及时完成这次安装并生成锁；没有任何在线删锁接口。详见 `网页安装说明.md`。
+网页重新安装需先在服务器文件管理中删除数据目录的 `install.lock`。入口开放后请立即完成安装；确认勾选“保留数据并更新管理员”才会变更已有主管理员，其他客户及统计原样保留，旧总站会话失效。程序会先生成 `before-install-*.sqlite` 快照，安装成功后重新生成锁。日常 Git 更新保留安装锁，不运行重新安装流程；没有任何在线删锁接口。详见 [网页安装说明](docs/网页安装说明.md)。
 
 备份使用 SQLite `VACUUM INTO` 一致性快照；另外备份数据目录的 `secret.key`、`credentials.key` 与部署环境配置。交付密钥与数据库分开妥善保管，恢复时必须匹配；密钥丢失不会自动重新生成覆盖旧密钥。不要只复制在线 WAL 模式的主数据库文件。恢复时暂停写入，以快照替换目标 `hub.sqlite`、移除对应旧 WAL / SHM 并恢复文件权限；停止服务后操作，保留恢复前完整副本。恢复后清理会话并重新登录。
 
 ## 测试
 
 ```sh
-npm run check
-npm test
+php bin/check.php        # 服务器也可使用的只读预检
+npm run check           # 开发机的 PHP 语法检查
+npm test                # 开发机集成测试，生产无需执行
 ```
 
 自动测试使用临时数据目录及独立端口，不修改演示或生产数据库。覆盖创建账号、CSRF / Origin、越权、内部备注隔离、输入校验、下载路由、预览隔离、访问签名、事件去重、可信代理边界、统计隔离、暂停恢复、重置撤销、审计、私有文件隔离、资源存在性、退出、限流。
@@ -156,14 +152,15 @@ public/assets/          总站 / 客户控制台、品牌与访问采集
 public/themes/          两套共享静态模板资源
 resources/pages/        非公开模板 HTML，按项目注入配置
 runtime/                私有 SQLite、会话、签名密钥、install.lock、本机初始凭据
-bin/                    初始化、开发服务、备份、管理员密码恢复
+bin/                    只读部署预检、初始化、开发服务、备份、管理员密码恢复
 tests/                  独立临时数据库集成测试
-deploy/                 Nginx / PHP-FPM 部署示例
+deploy/                 Git 部署指南、Nginx / PHP-FPM 示例
+docs/                   网页安装指南及 updates/ 历史更新记录
 ```
 
 ## 子账号后台更新
 
-2026-09-21：客户入口恢复原版深色布局，独立使用 `tenant.html / tenant.css / tenant.js`，总站继续使用 `console.*`。更新代码不修改数据库结构、现有账号或安装锁；下载地址继续默认留空。覆盖方法见 `子账号后台更新说明.md`。
+2026-09-21：客户入口恢复原版深色布局，独立使用 `tenant.html / tenant.css / tenant.js`，总站继续使用 `console.*`。更新代码不修改数据库结构、现有账号或安装锁；下载地址继续默认留空。历史记录见 [子账号后台更新说明](docs/updates/子账号后台更新说明.md)，新部署统一走 Git 流程。
 
 ## 客户交付信息与模板权限
 
@@ -171,4 +168,12 @@ deploy/                 Nginx / PHP-FPM 部署示例
 - 首次使用自动增加 `password_cipher` 和 `allowed_templates` 两个字段，不清空数据库、不删除安装锁。新账号及主动重置的客户密码加密保存；既有哈希账号提示先重置一次，不尝试恢复哈希。
 - OpenSSL AEAD 调用参考 [PHP 官方文档](https://www.php.net/manual/en/function.openssl-encrypt.php)。独立 32 字节随机密钥位于私有 `runtime/credentials.key`，每次加密使用独立 nonce，密文绑定项目和账号。应限制服务器文件权限、保护总站账号，并使用 HTTPS。
 - 模板开放范围默认保留现有两款。至少开放一款；取消当前使用模板时自动换成首个勾选项。已撤回模板的客户预览和保存接口也会检查权限。静态资源继续共享，不属于私有素材保护系统。
-- 代码补丁及部署步骤见 `账号交付与模板权限更新说明.md`。
+- 历史功能记录见 [账号交付与模板权限更新说明](docs/updates/账号交付与模板权限更新说明.md)；当前部署方式见 [Git 部署指南](deploy/README.md)。
+
+## 历史更新记录
+
+功能迭代说明已归档到 `docs/updates/`；其中的压缩包步骤与测试数量是当次记录。后续交付以 Git 为主，不再要求逐项上传旧补丁。
+
+- [总站 Tabler UI](docs/updates/总站TablerUI更新说明.md)
+- [Pixel 事件](docs/updates/Pixel事件更新说明.md)
+- [模板管理](docs/updates/模板管理更新说明.md)
