@@ -1,6 +1,17 @@
 <?php
 declare(strict_types=1);
 
+/** Equal-length customer credentials; no fixed prefix or ambiguous 0/O/1/I/l characters. */
+function random_customer_credential(bool $password):string {
+    $alphabet='abcdefghjkmnpqrstuvwxyz23456789'.($password?'ABCDEFGHJKLMNPQRSTUVWXYZ':'');
+    $last=strlen($alphabet)-1;
+    do{
+        $value='';
+        for($i=0;$i<10;$i++)$value.=$alphabet[random_int(0,$last)];
+    }while(!preg_match('/[a-z]/',$value)||!preg_match('/[2-9]/',$value)||($password&&!preg_match('/[A-Z]/',$value)));
+    return $value;
+}
+
 /** Separate private key for recoverable customer delivery credentials, not login verification. */
 function credential_key(bool $create=false):string {
     $path=runtime_dir().'/credentials.key';

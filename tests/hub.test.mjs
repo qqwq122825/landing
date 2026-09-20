@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {spawn,execFileSync} from 'node:child_process';
-import {mkdtempSync,rmSync,readFileSync,renameSync,statSync} from 'node:fs';
+import {mkdtempSync,rmSync,readFileSync,renameSync,statSync,existsSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -9,6 +9,60 @@ import net from 'node:net';
 import {randomUUID,createHash} from 'node:crypto';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
+
+test('master UI uses local Tabler components without Vue or a frontend build step',()=>{
+ const html=readFileSync(root+'app/console.html','utf8');
+ const js=readFileSync(root+'public/assets/console.js','utf8');
+ const pkg=JSON.parse(readFileSync(root+'package.json','utf8'));
+ assert.match(html,/vendor\/tabler-1\.5\.1\/tabler\.min\.css/);
+ assert.match(html,/vendor\/tabler-1\.5\.1\/tabler\.min\.js/);
+ assert.ok(html.indexOf('tabler.min.js')<html.indexOf('/assets/console.js'));
+ assert.doesNotMatch(html,/<dialog\b|<script[^>]+src="https?:|<link[^>]+href="https?:|<script[^>]+(?:vue|vite)/i);
+ assert.match(js,/tabler\.Modal\.getOrCreateInstance/);assert.match(js,/tabler\.Toast\.getOrCreateInstance/);
+ assert.match(js,/hide\.bs\.modal/);assert.doesNotMatch(js,/\.showModal\(\)/);
+ assert.equal(pkg.scripts.build,undefined);assert.equal(pkg.dependencies,undefined);assert.equal(pkg.devDependencies,undefined);
+ assert.equal(existsSync(root+'vite.config.mjs'),false);assert.equal(existsSync(root+'frontend/admin/App.vue'),false);
+});
+
+test('vendored Tabler files match the pinned upstream distribution and have license notices',()=>{
+ const base=root+'public/assets/vendor/tabler-1.5.1/';
+ for(const [name,expected] of [['tabler.min.css','6aa5677e9cfc2620405bf97a98074ba43ff06a411cb35c5337acfb56d124c273'],['tabler.min.js','d4c4c2768f166c308391e0cea44db593056f12b84a4eeef46d55e35ca46d6e60']]){
+  assert.equal(createHash('sha256').update(readFileSync(base+name)).digest('hex'),expected);
+ }
+ assert.match(readFileSync(base+'LICENSE','utf8'),/MIT License/);
+ const css=readFileSync(base+'tabler.min.css','utf8');
+ assert.doesNotMatch(css,/@import\s+(?:url\()?['"]?https?:/);
+ for(const match of css.matchAll(/url\(([^)]+)\)/g))assert.match(match[1],/^['"]?data:/);
+});
+
+test('customer credentials are matching-length random alphanumeric strings without a fixed prefix',()=>{
+ const result=JSON.parse(execFileSync('php',['-r',`require "app/credentials.php";
+  $valid=true;$prefixes=[];
+  for($i=0;$i<256;$i++){
+   $u=random_customer_credential(false);$p=random_customer_credential(true);$prefixes[substr($u,0,2)]=true;
+   $valid=$valid && strlen($u)===10 && strlen($p)===10
+    && preg_match('/^[a-z2-9]{10}$/D',$u) && preg_match('/[a-z]/',$u) && preg_match('/[2-9]/',$u)
+    && preg_match('/^[A-Za-z2-9]{10}$/D',$p) && preg_match('/[a-z]/',$p) && preg_match('/[A-Z]/',$p) && preg_match('/[2-9]/',$p)
+    && !preg_match('/[0O1Ilo]/',$u.$p) && !str_starts_with($u,'lp');
+  }
+  echo json_encode(['valid'=>(bool)$valid,'variedPrefix'=>count($prefixes)>1]);`],{cwd:root,encoding:'utf8'}));
+ assert.deepEqual(result,{valid:true,variedPrefix:true});
+});
+
+test('updating the credential generator preserves existing lp accounts and long passwords',()=>{
+ const runtime=mkdtempSync(join(tmpdir(),'landing-hub-legacy-credential-'));
+ const env={...process.env,HUB_DATA_DIR:runtime};
+ try{
+  const before=JSON.parse(execFileSync('php',['-r',`require "app/bootstrap.php";
+   $r=create_project(['name'=>'Legacy account fixture'],'fixture');$slug=$r['project']['slug'];
+   $u='lp12345678';$p=str_repeat('A',23).'9';$hash=password_hash($p,PASSWORD_DEFAULT);$cipher=seal_customer_password($p,$slug,$u);
+   query('UPDATE projects SET username=?,password_hash=?,password_cipher=? WHERE slug=?',[$u,$hash,$cipher,$slug]);
+   echo json_encode(project($slug));`],{cwd:root,env,encoding:'utf8'}));
+  const after=JSON.parse(execFileSync('php',['-r',`require "app/bootstrap.php";$p=project($argv[1]);
+   echo json_encode(['project'=>$p,'valid'=>password_verify(str_repeat('A',23).'9',$p['password_hash']),'deliveryValid'=>open_customer_password($p)===str_repeat('A',23).'9']);`,before.slug],{cwd:root,env,encoding:'utf8'}));
+  assert.deepEqual(after.project,before);assert.equal(after.valid,true);assert.equal(after.deliveryValid,true);
+ }finally{rmSync(runtime,{recursive:true,force:true});}
+});
 
 test('Landing Hub integration — isolated SQLite fixture',async t=>{
  const runtime=mkdtempSync(join(tmpdir(),'landing-hub-test-'));
@@ -33,6 +87,15 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
   for(const path of ['/api/templates','/templates/feiyue/preview','/templates/dptv/preview'])assert.equal((await request(path)).status,401,path);
  });
  await t.test('root renders a no-store master login with self-only CSP',async()=>{const r=await request('/');assert.equal(r.status,200);assert.match(r.text,/data-realm="super"/);assert.match(r.headers.get('cache-control'),/no-store/);assert.match(r.headers.get('content-security-policy'),/frame-ancestors 'none'/);assert.match(r.text,/facebook-domain-verification.*fixture_domain_code/);});
+ await t.test('plain PHP serves master UI and all local library assets without a build server',async()=>{
+  const page=await request('/');
+  assert.match(page.headers.get('content-security-policy'),/script-src 'self'/);
+  assert.doesNotMatch(page.headers.get('content-security-policy'),/unsafe-eval|unsafe-inline/);
+  for(const file of ['tabler.min.css','tabler.min.js']){
+   const path='/assets/vendor/tabler-1.5.1/'+file;assert.ok(page.text.includes(path));
+   const response=await request(path);assert.equal(response.status,200);assert.equal(response.text,readFileSync(root+'public'+path,'utf8'));
+  }
+ });
  await t.test('anonymous users and invalid credentials are denied',async()=>{assert.equal((await request('/api/projects')).status,401);assert.equal((await post('/api/login',{username:'fixture',password:'wrong'})).status,401);});
  await t.test('master login sets HttpOnly SameSite cookie and CSRF token',async()=>{master=await signIn('/api/login','fixture',password);assert.match(master.headers.get('set-cookie'),/HttpOnly/i);assert.match(master.headers.get('set-cookie'),/SameSite=Strict/i);assert.equal(master.csrf.length,48);});
  await t.test('mutation rejects missing CSRF and cross-origin requests',async()=>{assert.equal((await post('/api/projects',{name:'bad'},{cookie:master.cookie})).status,403);assert.equal((await post('/api/projects',{name:'bad'},{...master,origin:'https://other.example'})).status,403);});
@@ -50,7 +113,7 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
   const counts=JSON.parse(execFileSync('php',['-r','require "app/bootstrap.php"; echo json_encode([query("SELECT COUNT(*) FROM projects")->fetchColumn(),query("SELECT COUNT(*) FROM visits")->fetchColumn(),query("SELECT COUNT(*) FROM events")->fetchColumn()]);'],{cwd:root,env,encoding:'utf8'}));assert.deepEqual(counts,[0,0,0]);
   assert.equal((await request('/templates/missing/preview',master)).status,404);assert.equal((await post('/templates/dptv/preview',{},master)).status,404);assert.equal((await post('/api/templates',{},master)).status,404);
  });
- await t.test('project creation returns unique generated account, slug, one-time password',async()=>{A=(await post('/api/projects',{name:'客户 A',appName:'Alpha',note:'PRIVATE A',template:'feiyue'},master)).data;B=(await post('/api/projects',{name:'客户 B',appName:'Beta',note:'PRIVATE B',template:'dptv',username:'mtx',password:'mtx123',slug:'fixedslug'},master)).data;assert.match(A.project.slug,/^[a-f0-9]{9}$/);assert.match(A.credentials.username,/^lp[a-f0-9]{8}$/);assert.match(A.credentials.password,/^[A-Za-z0-9_-]{24}$/);assert.match(B.credentials.username,/^lp[a-f0-9]{8}$/);assert.notEqual(A.credentials.password,B.credentials.password);assert.notEqual(B.credentials.password,'mtx123');assert.notEqual(B.credentials.username,'mtx');assert.notEqual(B.project.slug,'fixedslug');assert.notEqual(A.project.slug,B.project.slug);assert.notEqual(A.credentials.username,B.credentials.username);assert.equal(A.credentials.adminUrl,base+'/p/'+A.project.slug+'/admin');assert.equal(A.project.password_hash,undefined);});
+ await t.test('project creation returns unique generated account, slug, one-time password',async()=>{A=(await post('/api/projects',{name:'客户 A',appName:'Alpha',note:'PRIVATE A',template:'feiyue'},master)).data;B=(await post('/api/projects',{name:'客户 B',appName:'Beta',note:'PRIVATE B',template:'dptv',username:'mtx',password:'mtx123',slug:'fixedslug'},master)).data;assert.match(A.project.slug,/^[a-f0-9]{9}$/);for(const item of [A,B]){assert.match(item.credentials.username,/^[a-z2-9]{10}$/);assert.doesNotMatch(item.credentials.username,/^lp/);assert.match(item.credentials.password,/^[A-Za-z2-9]{10}$/);assert.match(item.credentials.password,/[a-z]/);assert.match(item.credentials.password,/[A-Z]/);assert.match(item.credentials.password,/[2-9]/);assert.equal(item.credentials.username.length,item.credentials.password.length);}assert.notEqual(A.credentials.password,B.credentials.password);assert.notEqual(B.credentials.password,'mtx123');assert.notEqual(B.credentials.username,'mtx');assert.notEqual(B.project.slug,'fixedslug');assert.notEqual(A.project.slug,B.project.slug);assert.notEqual(A.credentials.username,B.credentials.username);assert.equal(A.credentials.adminUrl,base+'/p/'+A.project.slug+'/admin');assert.equal(A.project.password_hash,undefined);});
  await t.test('new projects have an empty APK URL without a fallback redirect',async()=>{for(const item of [A,B]){assert.equal(item.project.download_url,'');assert.equal(item.project.pixel_id,'');const r=await request('/p/'+item.project.slug+'/dl');assert.equal(r.status,404);assert.equal(r.headers.get('location'),null);assert.match(r.text,/下载地址尚未配置/);}});
  await t.test('project lists contain no credential hashes or passwords',async()=>{const r=await request('/api/projects',master);assert.equal(r.data.projects.length,2);assert.equal(r.data.totals.visits,0);assert.doesNotMatch(r.text,/password|\$2y\$/);assert.ok(!r.text.includes(A.credentials.password));});
  await t.test('each customer signs in only at their own entry',async()=>{ca=await signIn('/p/'+A.project.slug+'/api/login',A.credentials.username,A.credentials.password);cb=await signIn('/p/'+B.project.slug+'/api/login',B.credentials.username,B.credentials.password);assert.match(ca.headers.get('set-cookie'),new RegExp('path=/p/'+A.project.slug,'i'));assert.equal((await post('/p/'+B.project.slug+'/api/login',A.credentials)).status,401);});
@@ -163,7 +226,7 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
   const after=(await request('/api/projects/'+A.project.slug,master)).data;assert.deepEqual(after.project,before.project);assert.deepEqual(after.stats.totals,before.stats.totals);
  });
  await t.test('resume retains data and requires a fresh customer login',async()=>{assert.equal((await post('/api/projects/'+A.project.slug+'/status',{status:'active'},master)).status,200);assert.equal((await request(aPath())).status,200);assert.equal((await request(aPath()+'/api/dashboard',ca)).status,401);ca=await signIn(aPath()+'/api/login',A.credentials.username,A.credentials.password);assert.equal((await request(aPath()+'/api/dashboard',ca)).data.stats.totals.visits,1);});
- await t.test('password reset upgrades a legacy hash to viewable credentials and revokes old sessions',async()=>{execFileSync('php',['-r','require "app/bootstrap.php"; query("UPDATE projects SET password_cipher=? WHERE slug=?",["",$argv[1]]);',A.project.slug],{cwd:root,env});const r=await post('/api/projects/'+A.project.slug+'/password',{},master);assert.equal(r.status,200);assert.notEqual(r.data.credentials.password,A.credentials.password);const shown=await post('/api/projects/'+A.project.slug+'/credentials',{},master);assert.equal(shown.data.credentials.password,r.data.credentials.password);assert.equal((await request(aPath()+'/api/dashboard',ca)).status,401);assert.equal((await post(aPath()+'/api/login',A.credentials)).status,401);ca=await signIn(aPath()+'/api/login',r.data.credentials.username,r.data.credentials.password);});
+ await t.test('password reset upgrades a legacy hash to viewable credentials and revokes old sessions',async()=>{execFileSync('php',['-r','require "app/bootstrap.php"; query("UPDATE projects SET password_cipher=? WHERE slug=?",["",$argv[1]]);',A.project.slug],{cwd:root,env});const r=await post('/api/projects/'+A.project.slug+'/password',{},master);assert.equal(r.status,200);assert.notEqual(r.data.credentials.password,A.credentials.password);assert.equal(r.data.credentials.username,A.credentials.username);assert.match(r.data.credentials.password,/^[A-Za-z2-9]{10}$/);const shown=await post('/api/projects/'+A.project.slug+'/credentials',{},master);assert.equal(shown.data.credentials.password,r.data.credentials.password);assert.equal((await request(aPath()+'/api/dashboard',ca)).status,401);assert.equal((await post(aPath()+'/api/login',A.credentials)).status,401);ca=await signIn(aPath()+'/api/login',r.data.credentials.username,r.data.credentials.password);});
  await t.test('audit trail includes management actions but no credentials',async()=>{const r=await request('/api/audit',master);for(const action of ['创建项目','更新项目配置','暂停项目','恢复项目','重置客户密码'])assert.ok(r.data.rows.some(row=>row.action===action));assert.ok(!r.text.includes(password));assert.ok(!r.text.includes(A.credentials.password));assert.doesNotMatch(r.text,/password_hash/);});
  await t.test('private filesystem files and traversal attempts are not served',async()=>{for(const path of ['/runtime/hub.sqlite','/runtime/credentials.key','/runtime/secret.key','/runtime/初始账号.txt','/app/bootstrap.php','/bin/setup.php','/.env','/%2e%2e%2fapp/bootstrap.php','/themes/feiyue/%2e%2e%2f%2e%2e%2f%2e%2e%2fapp/bootstrap.php'])assert.equal((await request(path)).status,404,path);});
  await t.test('local theme assets referenced by HTML exist',async()=>{for(const theme of ['feiyue','dptv']){const html=readFileSync(root+`resources/pages/${theme}.html`,'utf8');const refs=[...html.matchAll(/(?:src|href)=["']([^"']+)["']/g)].map(m=>m[1]).filter(s=>!s.startsWith('http')&&!s.startsWith('//')&&!s.startsWith('#')&&!s.startsWith('data:')&&!s.startsWith('javascript:')&&!s.startsWith('mailto:')&&!s.endsWith('.html')&&!s.endsWith('.apk')&&!/(?:config|site-settings|brand-settings|analytics)\.js/.test(s));for(const ref of [...new Set(refs)]){const path=new URL(ref,base+`/themes/${theme}/`).pathname;if(/\.(css|js|png|jpg|jpeg|svg|webp|ico|avif)$/i.test(path))assert.equal((await request(path)).status,200,path);}}});

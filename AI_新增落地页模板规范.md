@@ -62,6 +62,8 @@
 
 ## 3. 模板与平台的接入结构
 
+总站管理界面使用本地 Tabler / Bootstrap 组件和原生 JavaScript，保持源码经 Git 拉取后直接运行，不引入 Vue 或前端编译步骤。参考站的 1:1 复刻范围是落地页模板；总站表单、卡片、弹窗等控件继续复用成熟组件库。
+
 ```text
 resources/pages/TEMPLATE_ID.html           模板页面
 public/themes/TEMPLATE_ID/                 模板静态资源、语言包、交互适配

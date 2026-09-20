@@ -54,7 +54,7 @@ function handle_api(string $realm,string $route):array {
    $p=project($m[1]);$action=$m[2]??'';
    if($action==='/status'){$status=$b['status']??'';if(!in_array($status,['active','paused'],true))throw new HubError('项目状态格式错误');query('UPDATE projects SET status=?,version=version+1,updated_at=? WHERE id=?',[$status,now_ms(),$p['id']]);audit($actor,$status==='active'?'恢复项目':'暂停项目',(int)$p['id']);return ['project'=>admin_project(project($m[1]))];}
    if($action==='/credentials'){limit('credentials:'.$account['id'],60,600);$password=open_customer_password($p);audit($actor,'查看客户交付信息',(int)$p['id']);return ['available'=>$password!==null,'credentials'=>delivery_credentials($p,$password)];}
-   if($action==='/password'){$password=rtrim(strtr(base64_encode(random_bytes(18)),'+/','-_'),'=');$cipher=seal_customer_password($password,$p['slug'],$p['username']);query('UPDATE projects SET password_hash=?,password_cipher=?,version=version+1,updated_at=? WHERE id=?',[password_hash($password,PASSWORD_DEFAULT),$cipher,now_ms(),$p['id']]);audit($actor,'重置客户密码',(int)$p['id']);return ['credentials'=>delivery_credentials($p,$password)];}
+   if($action==='/password'){$password=random_customer_credential(true);$cipher=seal_customer_password($password,$p['slug'],$p['username']);query('UPDATE projects SET password_hash=?,password_cipher=?,version=version+1,updated_at=? WHERE id=?',[password_hash($password,PASSWORD_DEFAULT),$cipher,now_ms(),$p['id']]);audit($actor,'重置客户密码',(int)$p['id']);return ['credentials'=>delivery_credentials($p,$password)];}
    return ['project'=>save_project($p,$b,$actor,true)];
   }
   if(!$super&&$route==='/settings')return ['project'=>save_project($account,$b,$actor,false)];

@@ -15,7 +15,7 @@ function hub_install_checks():array {
         ['label'=>'OpenSSL 加密扩展','ok'=>credentials_crypto_ready(),'detail'=>'用于加密保存客户交付密码（AES-256-GCM）'],
         ['label'=>'mbstring 字符串扩展','ok'=>extension_loaded('mbstring'),'detail'=>'用于中文与输入校验'],
         ['label'=>'数据目录可写','ok'=>is_dir($dir)&&is_writable($dir),'detail'=>'runtime 或 HUB_DATA_DIR 指定目录'],
-        ['label'=>'程序文件完整','ok'=>is_file(HUB_ROOT.'/app/console.html')&&is_file(HUB_ROOT.'/public/assets/console.js'),'detail'=>'app、public 文件夹位于同一总站目录'],
+        ['label'=>'程序文件完整','ok'=>is_file(HUB_ROOT.'/app/console.html')&&is_file(HUB_ROOT.'/public/assets/console.js')&&is_file(HUB_ROOT.'/public/assets/vendor/tabler-1.5.1/tabler.min.css')&&is_file(HUB_ROOT.'/public/assets/vendor/tabler-1.5.1/tabler.min.js'),'detail'=>'app、public 与本地 Tabler 组件库完整，无需前端编译'],
     ];
 }
 function hub_install_environment_ready(array $checks):bool {

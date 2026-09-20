@@ -1,11 +1,85 @@
-<!doctype html><html lang="zh-Hans"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#20242e"><title>{{TITLE}}</title><link rel="stylesheet" href="/assets/console.css?v={{CSS}}"><script src="/assets/console.js?v={{JS}}" defer></script></head><body data-realm="{{REALM}}" data-role="{{ROLE}}">
-<div id="boot" class="boot"><span class="logo-mark">L</span><p>正在连接控制台…</p></div>
-<section id="login" class="login-screen" hidden><div class="login-brand"><span class="logo-mark">L</span><span>LANDING <b>HUB</b></span></div><div class="login-layout"><div class="login-story"><div class="eyebrow">ONE PLATFORM. EVERY LANDING.</div><h1>让每个项目，<br>都有自己的主场。</h1><p>一个总控制台，管理所有落地页。<br>独立账号、独立配置、独立数据。</p><div class="route-art"><div><i></i><span>LANDING HUB</span><small>总管理平台</small></div><div class="route-line"></div><div class="route-children"><span>/p/项目 A<small>独立账号</small></span><span>/p/项目 B<small>独立数据</small></span><span>/p/项目 C<small>独立配置</small></span></div></div><span class="login-foot">为每一次增长，留一个清晰的入口。</span></div><div class="login-card"><div class="eyebrow" id="login-kind">总管理后台</div><h2>欢迎回来</h2><p id="login-description">使用总站管理员账号登录</p><form id="login-form"><label for="username">登录账号</label><input id="username" name="username" autocomplete="username" placeholder="请输入账号" required maxlength="80"><label for="password">登录密码</label><input id="password" name="password" type="password" autocomplete="current-password" placeholder="请输入密码" required maxlength="256"><button class="primary full" id="login-submit">登录控制台 <span>→</span></button><p class="form-error" id="login-error" role="alert"></p></form><div class="login-security">◈　账号验证 · 数据隔离 · 操作留痕</div></div></div></section>
-<div id="shell" class="shell" hidden><aside class="sidebar"><a class="wordmark" href="/" id="brand-home"><span class="logo-mark">L</span><span>LANDING<small>项目管理平台</small></span></a><div class="workspace-label">工作空间 <span>WORKSPACE</span></div><nav id="main-nav"><button data-view="overview" class="nav-item active"><span>▦</span>项目总览</button><button data-view="templates" class="nav-item"><span>◫</span>模板管理</button><button data-view="analytics" class="nav-item"><span>▥</span>访问分析</button><button data-view="audit" class="nav-item"><span>▤</span>操作日志</button></nav><div class="side-note"><span class="side-note-icon">◈</span><strong>一人一号，一项目一入口</strong><p>让管理集中，让数据独立。</p><button id="architecture-button">查看平台说明 <span>↗</span></button></div><div class="account"><div class="avatar" id="account-avatar">A</div><div><strong id="account-name">管理员</strong><small id="account-role">总站管理员</small></div><button id="logout" aria-label="退出登录" title="退出登录">↪</button></div></aside><div class="workspace"><header class="topbar"><div class="breadcrumbs"><span>工作空间</span><b>/</b><strong id="breadcrumb">项目总览</strong></div><div class="top-right"><span class="connection-dot"></span><span>服务已连接</span><span class="top-separator"></span><time id="today-label"></time></div></header><main id="main"></main><footer class="workspace-footer"><span>LANDING HUB <b>·</b> 每个项目，独立运行</span><span>北京时间 UTC+8</span></footer></div></div>
-<dialog id="create-dialog" class="modal"><div class="modal-header"><div><div class="eyebrow">NEW PROJECT</div><h2>开通一个新项目</h2></div><button class="icon-button" data-close aria-label="关闭">×</button></div><p class="modal-description">填写项目信息，系统将自动创建独立入口和客户账号。</p><form id="create-form"><div class="form-grid"><label>项目名称<input name="name" placeholder="例如：DPTV 全球投放" required maxlength="80"></label><label>应用显示名<input name="appName" placeholder="例如：DPTV" required maxlength="80"></label></div><fieldset class="template-permissions"><legend>对该账号开放的模板</legend><label class="template-option"><input type="checkbox" name="allowedTemplates" value="feiyue" checked> Feiyue / ReelShort</label><label class="template-option"><input type="checkbox" name="allowedTemplates" value="dptv" checked> DPTV / MinuteDrama</label><p class="form-note">至少开放一款，初始模板需在已勾选模板内。</p></fieldset><label>初始模板<select name="template"><option value="feiyue">Feiyue / ReelShort</option><option value="dptv">DPTV / MinuteDrama</option></select></label><label>下载地址 <small>默认留空，由客户自行填写</small><input name="downloadUrl" type="url" placeholder="请填写 APK 下载地址" maxlength="2048"></label><label>内部备注 <small>仅总站可见</small><textarea name="note" rows="2" placeholder="客户名称、渠道或用途" maxlength="500"></textarea></label><div class="info-strip">◈　自动生成项目编号、登录账号和高强度随机密码</div><p id="create-error" class="form-error" role="alert"></p><div class="modal-footer"><button class="secondary" type="button" data-close>取消</button><button class="primary" type="submit">创建项目并生成账号 →</button></div></form></dialog>
-<dialog id="credentials-dialog" class="modal"><div class="modal-header"><div><div class="eyebrow">READY TO SHARE</div><h2>客户交付信息</h2></div><button class="icon-button" data-close aria-label="关闭">×</button></div><p class="modal-description">仅总站管理员可查看密码。可一键复制完整信息，私下交给对应客户。</p><div id="credentials-content"></div><div id="credentials-note" class="info-strip warn">密码已加密保存，可在总站再次查看。此窗口将在 60 秒后自动关闭。</div><textarea id="credentials-text" class="credential-copy-text" aria-label="交付信息，手动复制" readonly hidden></textarea><div class="modal-footer"><button class="secondary" data-close>我已保存</button><button class="secondary" id="legacy-reset-credentials" hidden>重置后交付</button><button class="primary" id="copy-credentials">复制交付信息</button></div></dialog>
-<dialog id="preview-dialog" class="preview-modal"><div class="preview-toolbar"><strong id="preview-title">模板预览</strong><div class="preview-devices" role="group" aria-label="预览尺寸"><button type="button" data-preview-size="mobile" aria-pressed="true">手机</button><button type="button" data-preview-size="desktop" aria-pressed="false">桌面</button></div><div><button id="apply-template" class="primary">使用此模板</button><button data-close class="icon-button" aria-label="关闭预览">×</button></div></div><iframe id="preview-frame" title="落地页预览" sandbox="allow-scripts allow-same-origin"></iframe></dialog>
-<dialog id="confirm-dialog" class="modal compact"><div class="modal-header"><h2 id="confirm-title"></h2><button class="icon-button" data-close aria-label="关闭">×</button></div><p id="confirm-text" class="modal-description"></p><div class="modal-footer"><button class="secondary" data-close>取消</button><button class="primary" id="confirm-submit">确认</button></div></dialog>
-<dialog id="architecture-dialog" class="modal"><div class="modal-header"><h2>平台运行方式</h2><button class="icon-button" data-close aria-label="关闭">×</button></div><div class="architecture-copy"><h3>01 / 一个总站，多个独立项目</h3><p>根域名是总站管理入口。开户后生成 /p/项目编号 和对应客户账号。每个账号仅访问所属项目。</p><h3>02 / 配置与统计按项目隔离</h3><p>模板资源共享，下载地址、显示名、图标、Pixel 和访客数据分别保存；预览不写入访问统计。</p><h3>03 / 暂停立即生效</h3><p>暂停后，该客户的落地页和后台将停用。恢复项目保留已有数据；重置密码会使原客户登录会话失效。</p><h3>04 / 部署边界</h3><p>当前版本采用 PHP + SQLite，面向单机中小规模。对外上线前请配置 HTTPS、备份、访问保护及适用的隐私告知；大规模多节点部署需迁移数据库。</p><h3>05 / 域名验证与 Pixel</h3><p>同一根域名的验证由总站统一处理。各项目模板由总站逐账号开放，Pixel 由子账号独立配置：有效 ID 启用落地页访问和下载点击事件，留空不加载；后台与预览不统计，尊重 DNT / GPC。</p></div></dialog>
-<div id="toast" class="toast" role="status" hidden></div>
+<!doctype html>
+<html lang="zh-Hans" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+  <title>{{TITLE}}</title>
+  <link rel="stylesheet" href="/assets/vendor/tabler-1.5.1/tabler.min.css">
+  <link rel="stylesheet" href="/assets/console.css?v={{CSS}}">
+  <script src="/assets/vendor/tabler-1.5.1/tabler.min.js" defer></script>
+  <script src="/assets/console.js?v={{JS}}" defer></script>
+</head>
+<body data-realm="{{REALM}}" data-role="{{ROLE}}">
+<div id="boot" class="container-tight py-6 text-center"><div class="spinner-border text-primary" role="status" aria-label="加载中"></div><p class="text-secondary mt-3">正在连接控制台…</p></div>
+<section id="login" class="page page-center" hidden>
+  <div class="container-tight py-4">
+    <div class="text-center mb-4"><span class="avatar bg-primary text-white me-2">L</span><strong class="h2">LANDING HUB</strong></div>
+    <div class="card card-md"><div class="card-body">
+      <div class="subheader mb-2" id="login-kind">总站管理平台</div><h1 class="h2 mb-2">登录管理后台</h1><p class="text-secondary mb-4" id="login-description">使用总站管理员账号登录</p>
+      <form id="login-form">
+        <div class="mb-3"><label class="form-label" for="username">登录账号</label><input class="form-control" id="username" name="username" autocomplete="username" placeholder="请输入账号" required maxlength="80"></div>
+        <div class="mb-3"><label class="form-label" for="password">登录密码</label><input class="form-control" id="password" name="password" type="password" autocomplete="current-password" placeholder="请输入密码" required maxlength="256"></div>
+        <p class="text-danger" id="login-error" role="alert"></p><button class="btn btn-primary w-100" id="login-submit" type="submit">登录控制台 →</button>
+      </form>
+    </div></div><div class="text-center text-secondary mt-4">Tabler UI · 无需前端编译 · PHP + SQLite</div>
+  </div>
+</section>
+<div id="shell" class="page" hidden>
+  <aside class="navbar navbar-vertical navbar-expand-lg" data-bs-theme="dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/" id="brand-home"><span class="avatar avatar-sm bg-primary text-white me-2">L</span>LANDING HUB</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu" aria-controls="sidebar-menu" aria-expanded="false" aria-label="展开导航"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="sidebar-menu">
+        <nav class="navbar-nav pt-lg-3" id="main-nav" aria-label="总站导航">
+          <div class="nav-item"><button data-view="overview" class="nav-link active"><span class="nav-link-icon">▦</span><span class="nav-link-title">项目总览</span></button></div>
+          <div class="nav-item"><button data-view="templates" class="nav-link"><span class="nav-link-icon">◫</span><span class="nav-link-title">模板管理</span></button></div>
+          <div class="nav-item"><button data-view="analytics" class="nav-link"><span class="nav-link-icon">▥</span><span class="nav-link-title">访问分析</span></button></div>
+          <div class="nav-item"><button data-view="audit" class="nav-link"><span class="nav-link-icon">▤</span><span class="nav-link-title">操作日志</span></button></div>
+        </nav>
+        <div class="mt-auto p-3"><p class="text-secondary small mb-2">一个总站，多个独立项目</p><button class="btn btn-outline-light btn-sm" id="architecture-button">平台说明</button></div>
+      </div>
+    </div>
+  </aside>
+  <div class="page-wrapper">
+    <header class="navbar navbar-expand-md"><div class="container-fluid">
+      <ol class="breadcrumb mb-0"><li class="breadcrumb-item">工作空间</li><li class="breadcrumb-item active" id="breadcrumb">项目总览</li></ol>
+      <div class="d-flex align-items-center gap-3"><time id="today-label" class="text-secondary d-none d-md-block"></time><span class="avatar avatar-sm bg-primary-lt" id="account-avatar">A</span><div><strong id="account-name">管理员</strong><div class="text-secondary small" id="account-role">总站管理员</div></div><button class="btn btn-sm" id="logout" aria-label="退出登录">退出</button></div>
+    </div></header>
+    <div class="page-body"><main class="container-fluid" id="main"></main></div>
+    <footer class="footer footer-transparent"><div class="container-fluid d-flex justify-content-between flex-wrap gap-2 text-secondary"><span>LANDING HUB · Tabler 1.5.1</span><span>北京时间 UTC+8 · 无需 npm / 编译</span></div></footer>
+  </div>
+</div>
+<div id="create-dialog" class="modal" tabindex="-1" aria-labelledby="create-title" aria-hidden="true"><div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content">
+  <div class="modal-header"><h2 class="modal-title" id="create-title">开通新项目</h2><button class="btn-close" data-close aria-label="关闭"></button></div>
+  <form id="create-form"><div class="modal-body">
+    <p class="text-secondary">填写项目信息，系统将自动创建独立入口和客户账号。</p>
+    <div class="row"><div class="col-md-6 mb-3"><label class="form-label">项目名称<input class="form-control" name="name" placeholder="例如：DPTV 全球站" required maxlength="80"></label></div><div class="col-md-6 mb-3"><label class="form-label">应用显示名<input class="form-control" name="appName" placeholder="例如：DPTV" required maxlength="80"></label></div></div>
+    <fieldset class="form-fieldset"><legend class="form-label">对该账号开放的模板</legend><label class="form-check"><input class="form-check-input" type="checkbox" name="allowedTemplates" value="feiyue" checked><span class="form-check-label">Feiyue / ReelShort</span></label><label class="form-check"><input class="form-check-input" type="checkbox" name="allowedTemplates" value="dptv" checked><span class="form-check-label">DPTV / MinuteDrama</span></label><p class="form-hint mb-0">至少开放一款，初始模板需在已勾选模板内。</p></fieldset>
+    <label class="form-label mb-3">初始模板<select class="form-select" name="template"><option value="feiyue">Feiyue / ReelShort</option><option value="dptv">DPTV / MinuteDrama</option></select></label>
+    <label class="form-label mb-3">下载地址 <small class="text-secondary">默认留空，由客户自行填写</small><input class="form-control" name="downloadUrl" type="url" placeholder="请填写 APK 下载地址" maxlength="2048"></label>
+    <label class="form-label mb-3">内部备注 <small class="text-secondary">仅总站可见</small><textarea class="form-control" name="note" rows="2" placeholder="客户名称、渠道或用途" maxlength="500"></textarea></label>
+    <div class="alert alert-info mb-0">账号、密码均为 10 位随机字符，用户名无固定前缀。</div><p id="create-error" class="text-danger mt-3 mb-0" role="alert"></p>
+  </div><div class="modal-footer"><button class="btn me-auto" type="button" data-close>取消</button><button class="btn btn-primary" type="submit">创建项目并生成账号 →</button></div></form>
+</div></div></div>
+<div id="credentials-dialog" class="modal" tabindex="-1" aria-labelledby="credentials-title" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+  <div class="modal-header"><h2 class="modal-title" id="credentials-title">客户交付信息</h2><button class="btn-close" data-close aria-label="关闭"></button></div>
+  <div class="modal-body"><p class="text-secondary">仅总站可查看密码，请私下交给对应客户。</p><div id="credentials-content" class="list-group list-group-flush mb-3"></div><div id="credentials-note" class="alert alert-info"></div><textarea id="credentials-text" class="form-control" rows="5" aria-label="交付信息，手动复制" readonly hidden></textarea></div>
+  <div class="modal-footer"><button class="btn me-auto" data-close>我已保存</button><button class="btn btn-warning" id="legacy-reset-credentials" hidden>重置后交付</button><button class="btn btn-primary" id="copy-credentials">复制交付信息</button></div>
+</div></div></div>
+<div id="preview-dialog" class="modal" tabindex="-1" aria-labelledby="preview-title" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+  <div class="modal-header"><h2 class="modal-title" id="preview-title">模板预览</h2><button data-close class="btn-close" aria-label="关闭预览"></button></div>
+  <div class="modal-body"><div class="btn-group mb-3" role="group" aria-label="预览尺寸"><button class="btn btn-outline-primary" type="button" data-preview-size="mobile" aria-pressed="true">手机</button><button class="btn btn-outline-primary" type="button" data-preview-size="desktop" aria-pressed="false">桌面</button></div><iframe id="preview-frame" title="落地页预览" sandbox="allow-scripts allow-same-origin"></iframe><p class="text-secondary small mt-2 mb-0">预览不记访问、不触发 Pixel、不执行下载。</p></div>
+  <div class="modal-footer"><button class="btn me-auto" data-close>关闭</button><button id="apply-template" class="btn btn-primary">使用此模板</button></div>
+</div></div></div>
+<div id="confirm-dialog" class="modal" tabindex="-1" aria-labelledby="confirm-title" aria-hidden="true"><div class="modal-dialog modal-sm modal-dialog-centered"><div class="modal-content">
+  <div class="modal-header"><h2 id="confirm-title" class="modal-title"></h2><button class="btn-close" data-close aria-label="关闭"></button></div><div class="modal-body"><p id="confirm-text" class="text-secondary mb-0"></p></div><div class="modal-footer"><button class="btn me-auto" data-close>取消</button><button class="btn btn-primary" id="confirm-submit">确认</button></div>
+</div></div></div>
+<div id="architecture-dialog" class="modal" tabindex="-1" aria-labelledby="architecture-title" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+  <div class="modal-header"><h2 class="modal-title" id="architecture-title">平台运行方式</h2><button class="btn-close" data-close aria-label="关闭"></button></div><div class="modal-body">
+    <h3>一个总站，多个独立项目</h3><p class="text-secondary">每个项目拥有固定路径、账号、下载地址及访问数据。模板由总站逐账号开放。</p>
+    <h3>现成 UI，直接部署</h3><p class="text-secondary">使用 Tabler / Bootstrap 组件与原生 JavaScript，没有 Vue、Vite 或前端编译步骤。组件库文件随源码提交，不依赖 CDN。</p>
+    <h3>Pixel 与预览</h3><p class="text-secondary">仅在子后台配置 Pixel ID；真实落地页内置 PageView 和 DownloadClick。后台与预览不统计。</p>
+    <h3>更新保留数据</h3><p class="text-secondary mb-0">服务器拉取代码后即可使用；保留 runtime 数据库、密钥及安装锁，不需要重新安装。暂停停用落地页与客户后台；重置密码撤销客户会话。</p>
+  </div><div class="modal-footer"><button class="btn btn-primary" data-close>知道了</button></div>
+</div></div></div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3"><div id="toast" class="toast" role="status" aria-live="polite"><div class="d-flex"><div class="toast-body" id="toast-text"></div><button class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="关闭提示"></button></div></div></div>
 </body></html>
