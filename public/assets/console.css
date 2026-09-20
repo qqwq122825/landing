@@ -27,7 +27,6 @@ body{font-family:system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaH
 .detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.detail-grid>div>.card{margin-bottom:24px}
 .filters{display:flex;gap:12px;max-width:100%;margin-left:auto}.filters .input-icon{width:280px;max-width:100%}.filters .form-select{width:140px}
 .card-header{gap:16px;flex-wrap:wrap}.card-header .card-title{margin:0}.card-header .input-icon{width:280px;max-width:100%}
-.hub-intro{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}.hub-intro h3{margin:0 0 8px}.hub-intro p{margin:0}
 .template-grid,.template-library-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}.template-library-grid{padding:24px}
 .template-grid .card{position:relative;overflow:hidden}.template-grid .card>.badge{position:absolute;top:12px;right:12px;z-index:1}
 .template-grid .card-header,.template-library-grid .card-header{position:relative;min-height:150px;font-size:24px;gap:12px}.template-library-grid .card-header{flex-direction:column}

@@ -24,14 +24,16 @@ test('master UI uses local Tabler components without Vue or a frontend build ste
  assert.equal(existsSync(root+'vite.config.mjs'),false);assert.equal(existsSync(root+'frontend/admin/App.vue'),false);
 });
 
-test('overview omits onboarding and activity cards, while the dedicated audit page remains',()=>{
+test('overview omits intro banner, onboarding and activity cards, while the dedicated audit page remains',()=>{
  const html=readFileSync(root+'app/console.html','utf8');
  const js=readFileSync(root+'public/assets/console.js','utf8');
  const css=readFileSync(root+'public/assets/console.css','utf8');
- assert.doesNotMatch(html+js,/architecture-(?:button|dialog)|平台说明|从这里，开始一个新项目|最近动态/);
- assert.doesNotMatch(css,/architecture-button|sidebar-footer|bottom-grid/);
+ assert.doesNotMatch(html+js,/architecture-(?:button|dialog)|平台说明|从这里，开始一个新项目|最近动态|从开户到上线|自动生成项目地址和客户账号|hub-intro/);
+ assert.doesNotMatch(css,/architecture-button|sidebar-footer|bottom-grid|hub-intro/);
  const overview=js.slice(js.indexOf(' async function overview(){'),js.indexOf(' function renderRows(){'));
  assert.match(overview,/api\('\/projects'\)/);
+ assert.ok(overview.includes('metrics(data.totals,true)+`<section class="card">'));
+ assert.match(overview,/全部项目/);
  assert.doesNotMatch(overview,/api\('\/audit'\)|recent\(/);
  assert.match(html,/data-view="audit"/);
  assert.match(js,/async function auditView\(\).*?api\('\/audit'\)/);
