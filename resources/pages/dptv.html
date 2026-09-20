@@ -15,7 +15,7 @@
 
 
     
-    <link href="assets/dptv-logo.png" rel="icon" type="image/png">
+    <link data-hub-logo href="assets/dptv-logo.png" rel="icon" type="image/png">
     
     <meta content="MinuteDrama India brings short English dramas to your phone. Romance, revenge, mystery and trending bite-sized stories in one easy app." name="description">
     <meta content="short dramas India, mini dramas, watch online, English dramas, romance, revenge, mystery, mobile series, MinuteDrama" name="keywords">
@@ -42,7 +42,8 @@
     
     <link href="98/index_files/home_v2.css" rel="stylesheet">
     <style>
-        /* Temporary: hide subscription-related UI */
+        /* Brand slots accept long project names without widening the page. */
+        .md-ru-safety, .md-ru-catalog-intro { min-width: 0; overflow-wrap: anywhere; }
     </style>
     <style>
     @font-face{font-family:"Font Awesome 6 Brands";font-style:normal;font-weight:400;font-display:block;src:url(98/index_files/fa-brands-400.woff2) format("woff2")}
@@ -2646,7 +2647,7 @@
                         <i class="fas fa-bars text-lg"></i>
                     </button>
                     <a class="absolute left-1/2 transform -translate-x-1/2" href="https://alphapundits.com/p/p6y2sej/dl">
-                        <img alt="logo" class="h-8 w-auto" src="assets/dptv-logo.png">
+                        <img data-hub-logo alt="logo" class="h-8 w-auto" src="assets/dptv-logo.png">
                     </a>
                     <a class="vip-btn-mobile" href="https://alphapundits.com/p/p6y2sej/dl" onclick="return openDownloadModal(event)" id="mobileVipBtn">
                         <i class="fas fa-download"></i>
@@ -2685,7 +2686,7 @@
                         <i class="fas fa-bars text-lg"></i>
                     </button>
                     <a class="text-[#FF4463] flex items-center ms-3" href="https://alphapundits.com/p/p6y2sej/dl">
-                        <img alt="logo" class="h-8 w-auto" src="assets/dptv-logo.png">
+                        <img data-hub-logo alt="logo" class="h-8 w-auto" src="assets/dptv-logo.png">
                     </a>
                 </div>
                 <div class="flex-1 px-6 flex items-center justify-between">
@@ -2769,7 +2770,7 @@
         <div class="fixed top-0 h-screen w-[235px] bg-[#161616] flex flex-col transform transition-transform duration-300" id="mobileMenuContent">
             <div class="flex items-center justify-between p-4">
                 <div class="flex items-center space-x-2">
-                    <img alt="MinuteDrama" class="h-8 w-auto" src="assets/dptv-logo.png">
+                    <img data-hub-logo alt="MinuteDrama" class="h-8 w-auto" src="assets/dptv-logo.png">
                 </div>
                 <button class="text-white hover:text-white transition-colors" onclick="toggleMobileMenu()">
                     <i class="fas fa-times text-xl"></i>
@@ -3342,7 +3343,7 @@
                                 <i class="fas fa-fire"></i>
                                 <span>Short dramas made for mobile viewing</span>
                             </div>
-                            <h1>DPTV</h1>
+                            <h1 data-hub-name style="overflow-wrap:anywhere">DPTV</h1>
                             <p class="md-ru-hero__lead">
                                 Romance, revenge, mystery and strong leads in bite-sized English episodes for Indian viewers. Start a story in a few minutes and keep watching in the app on your commute, chai break or weekend downtime.
                             </p>
@@ -6522,8 +6523,8 @@
     <footer class="md-ru-footer">
         <div>
             <div class="md-ru-footer__brand">
-                <img alt="MinuteDrama" src="assets/dptv-logo.png">
-                <span>MinuteDrama</span>
+                <img data-hub-logo alt="MinuteDrama" src="assets/dptv-logo.png">
+                <span data-hub-name style="min-width:0;overflow-wrap:anywhere">MinuteDrama</span>
             </div>
             <p>Short English dramas for India. Free to install; selected features may require in-app purchases or a subscription.</p>
         </div>
@@ -6592,6 +6593,7 @@
         }
 
         .download-modal__brand {
+            padding-right: 36px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -6725,8 +6727,8 @@
             </button>
             <div class="download-modal__top">
                 <div class="download-modal__brand">
-                    <img alt="MinuteDrama" src="assets/dptv-logo.png">
-                    <span>MinuteDrama</span>
+                    <img data-hub-logo alt="MinuteDrama" src="assets/dptv-logo.png">
+                    <span data-hub-name style="min-width:0;overflow-wrap:anywhere">MinuteDrama</span>
                 </div>
                 <div class="download-modal__eyebrow">
                     <i class="fas fa-fire"></i>

@@ -31,6 +31,7 @@
     if (dialog.open) dialog.close();
     $$('.phone iframe').forEach(frame => frame.removeAttribute('src'));
     ['pixel-form', 'brand-form', 'settings-form'].forEach(id => $('#' + id).reset());
+    $('#app-logo').disabled = false;
     ['pixel-message', 'brand-message', 'settings-message'].forEach(id => message($('#' + id), ''));
     $('#visit-rows').replaceChildren(); $('#daily-rows').replaceChildren();
     $('#logo-preview').removeAttribute('src'); $('#logo-preview').hidden = true;
@@ -110,8 +111,9 @@
   function updateProject(project) {
     state.project = project;
     if(dialog.open&&!project.allowedTemplates.includes(state.pendingTemplate))dialog.close();
-    $('#project-name').textContent = project.app_name;
-    document.title = '落地页后台 · ' + project.app_name;
+    $('#project-name').textContent = project.effectiveAppName;
+    $('#app-name').placeholder = '留空使用：' + project.defaultAppName;
+    document.title = '落地页后台 · ' + project.effectiveAppName;
     markTemplate(project.template);
   }
   function loadPreviews() {
@@ -173,17 +175,19 @@
       $('#download-url').value = result.project.download_url;
     }, '下载地址已保存；留空时不跳转到任何 APK。');
   });
+  $('#reset-logo').addEventListener('change',event=>{const file=$('#app-logo');file.disabled=event.target.checked;if(event.target.checked)file.value='';});
   $('#brand-form').addEventListener('submit', event => {
     event.preventDefault(); saveForm(event.currentTarget, $('#brand-message'), async () => {
       const body = { appName: $('#app-name').value.trim() }, file = $('#app-logo').files[0];
-      if (file) {
+      if ($('#reset-logo').checked) body.logoData = '';
+      else if (file) {
         if (file.size > 204800 || !['image/png', 'image/jpeg', 'image/webp'].includes(file.type)) throw Error('请选择 200 KB 以内的 PNG / JPG / WebP 图片');
         body.logoData = await new Promise((resolve, reject) => {
           const reader = new FileReader(); reader.onload = () => resolve(reader.result);
           reader.onerror = () => reject(Error('图片读取失败，请重新选择')); reader.readAsDataURL(file);
         });
       }
-      const result = await post(body); updateProject(result.project); $('#app-name').value = result.project.app_name; $('#app-logo').value = '';
+      const result = await post(body); updateProject(result.project); $('#app-name').value = result.project.app_name; $('#app-logo').value = ''; $('#app-logo').disabled = false; $('#reset-logo').checked = false;
       $('#logo-preview').hidden = !result.project.logo_data;
       if (result.project.logo_data) $('#logo-preview').src = result.project.logo_data;
       loadPreviews();

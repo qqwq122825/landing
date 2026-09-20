@@ -105,8 +105,10 @@ function url_value($value):string {
  $value=clean_text($value,2048,'下载地址',false);if($value==='')return '';$parts=parse_url($value);
  if(!filter_var($value,FILTER_VALIDATE_URL)||!in_array(strtolower($parts['scheme']??''),['https','http'],true)||isset($parts['user'])||isset($parts['pass'])||preg_match('/\s/',$value))throw new HubError('下载地址需为完整 HTTP / HTTPS 链接');return $value;
 }
-function public_settings(array $p):array {return ['slug'=>$p['slug'],'appName'=>$p['app_name'],'template'=>$p['template'],'downloadUrl'=>'/p/'.$p['slug'].'/dl','pixelId'=>$p['pixel_id'],'verifyCode'=>$p['verify_code'],'logoData'=>$p['logo_data']];}
 const HUB_TEMPLATES=['feiyue','dptv'];
+const HUB_TEMPLATE_NAMES=['feiyue'=>'ReelShort','dptv'=>'DPTV'];
+function effective_app_name(array $p,?string $template=null):string {$name=trim($p['app_name']??'');return $name!==''?$name:HUB_TEMPLATE_NAMES[$template??$p['template']];}
+function public_settings(array $p,?string $template=null):array {$template=$template??$p['template'];return ['slug'=>$p['slug'],'appName'=>effective_app_name($p,$template),'appNameOverride'=>$p['app_name'],'template'=>$template,'downloadUrl'=>'/p/'.$p['slug'].'/dl','pixelId'=>$p['pixel_id'],'verifyCode'=>$p['verify_code'],'logoData'=>$p['logo_data']];}
 function validate_templates($value):array {
  if(!is_array($value)||!array_is_list($value)||!$value||count($value)>count(HUB_TEMPLATES))throw new HubError('请至少开放一款模板');
  foreach($value as $id)if(!is_string($id)||!in_array($id,HUB_TEMPLATES,true))throw new HubError('请选择已有模板');
@@ -120,11 +122,12 @@ function project_templates(array $p):array {
 }
 function admin_project(array $p,bool $super=true):array {
  $p['allowedTemplates']=project_templates($p);
+ $p['effectiveAppName']=effective_app_name($p);$p['defaultAppName']=HUB_TEMPLATE_NAMES[$p['template']];
  if($super)$p['credentialsAvailable']=($p['password_cipher']??'')!=='';
  unset($p['password_hash'],$p['password_cipher'],$p['allowed_templates'],$p['version']);if(!$super)unset($p['note']);$p['id']=(int)$p['id'];return $p;
 }
 function create_project(array $b,string $actor):array {
- $name=clean_text($b['name']??'',80,'项目名称');$app=clean_text($b['appName']??$name,80,'应用名');$url=url_value($b['downloadUrl']??'');$note=clean_text($b['note']??'',500,'备注',false);
+ $name=clean_text($b['name']??'',80,'项目名称');$app=clean_text($b['appName']??'',80,'应用名',false);$url=url_value($b['downloadUrl']??'');$note=clean_text($b['note']??'',500,'备注',false);
  $allowed=validate_templates($b['allowedTemplates']??HUB_TEMPLATES);$template=$b['template']??$allowed[0];
  if(!in_array($template,$allowed,true))throw new HubError('初始模板需在开放模板中');
  do{$slug=substr(bin2hex(random_bytes(6)),0,9);}while(query('SELECT 1 FROM projects WHERE slug=? UNION ALL SELECT 1 FROM deleted_projects WHERE slug=?',[$slug,$slug])->fetchColumn());
@@ -161,7 +164,7 @@ function save_project(array $p,array $b,string $actor,bool $super):array {
   if(!isset($b['template'])&&!in_array($p['template'],$allowed,true))$b['template']=$allowed[0];
  }
 
- foreach(['appName'=>['app_name',80,'应用名',true],'note'=>['note',500,'备注',false],'name'=>['name',80,'项目名称',true]] as $key=>$spec){if(!array_key_exists($key,$b)||(!$super&&in_array($key,['name','note'],true)))continue;$fields[]=$spec[0].'=?';$args[]=clean_text($b[$key],$spec[1],$spec[2],$spec[3]);}
+ foreach(['appName'=>['app_name',80,'应用名',false],'note'=>['note',500,'备注',false],'name'=>['name',80,'项目名称',true]] as $key=>$spec){if(!array_key_exists($key,$b)||(!$super&&in_array($key,['name','note'],true)))continue;$fields[]=$spec[0].'=?';$args[]=clean_text($b[$key],$spec[1],$spec[2],$spec[3]);}
  if(array_key_exists('downloadUrl',$b)){$fields[]='download_url=?';$args[]=url_value($b['downloadUrl']);}
  if(isset($b['template'])){if(!in_array($b['template'],HUB_TEMPLATES,true))throw new HubError('模板不存在');if(!in_array($b['template'],$allowed,true))throw new HubError('该模板尚未对当前账号开放',403);$fields[]='template=?';$args[]=$b['template'];}
  foreach(['pixelId'=>['pixel_id','/^[0-9]{5,30}$/D']] as $key=>$spec){if(!array_key_exists($key,$b))continue;$v=$b[$key];if(!is_string($v)||($v!==''&&!preg_match($spec[1],$v)))throw new HubError('Pixel ID 格式错误');$fields[]=$spec[0].'=?';$args[]=$v;}

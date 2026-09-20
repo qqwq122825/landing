@@ -80,7 +80,7 @@ app/tenant.html + public/assets/tenant.*   子后台入口与模板权限界面
 
 渲染器提供：
 
-- `window.HUB_PAGE`：当前项目配置，含 `slug`、`appName`、`pixelId`、`downloadUrl`、`logoData`、`preview` 及统计参数。
+- `window.HUB_PAGE`：当前项目配置，含 `slug`、`appName`（已按目标模板回退）、`appNameOverride`（原始名称覆盖值，可空）、`pixelId`、`downloadUrl`、`logoData`、`preview` 及统计参数。
 - `window.APP_CONFIG`：现有模板兼容的应用名和下载入口。
 - `window.TV_SETTINGS_READY`：配置就绪 Promise。
 - `tv:settings`：配置通知，`event.detail` 为配置数据。
@@ -92,7 +92,7 @@ app/tenant.html + public/assets/tenant.*   子后台入口与模板权限界面
 
 当前项目仍有两模板写死的分支，单纯复制 HTML 文件不够：
 
-- `app/bootstrap.php`：`HUB_TEMPLATES`、配置验证和默认开放逻辑。
+- `app/bootstrap.php`：`HUB_TEMPLATES`、`HUB_TEMPLATE_NAMES` 默认应用名、配置验证和默认开放逻辑。
 - `app/routes.php`：`template_catalog()` 元数据、`render_landing()` 白名单、全局预览样例。
 - `public/index.php`：项目模板预览路由目前明确列出 `feiyue|dptv`。
 - `app/console.html`：开户模板选项、开放复选框。
@@ -145,6 +145,54 @@ app/tenant.html + public/assets/tenant.*   子后台入口与模板权限界面
 ### 4.3 第一方统计
 
 继续使用 `public/assets/collector.js` 与现有项目 API / 签名参数，避免新增一套重复的访问请求。预览不生成有效访问令牌，也不创建项目、点击或停留记录。保留真实 IP / 地区的可信代理判断逻辑。
+
+### 4.4 品牌插槽：名称与图标独立可选
+
+品牌适配与视觉复刻同次交付，不只替换首屏的一张图片。逐模板登记默认名称和原始图标资源；没有项目覆盖值时保留模板默认外观。
+
+| 名称覆盖 | 图标覆盖 | 行为 |
+| --- | --- | --- |
+| 空 | 空 | 当前模板默认名称与原图 |
+| 已填 | 空 | 自定义名称，图标仍为原图 |
+| 空 | 已上传 | 默认文本名称，自定义品牌图片 |
+| 已填 | 已上传 | 自定义名称与品牌图片 |
+
+- `app/bootstrap.php` 的 `HUB_TEMPLATE_NAMES` 是模板默认名称表；`effective_app_name()` / `public_settings($project, $targetTemplate)` 统一解析。内部项目名不是应用默认名。
+- `app_name` 存原始覆盖值（允许空字符串）；`HUB_PAGE.appName` 是最终显示名，`appNameOverride` 是原始覆盖值，`logoData` 为空表示模板原图。后台输入保持原始空值，用 placeholder 提示默认名；别把默认名写回项目配置。
+- 总站新开户、总站详情、子后台都允许名称留空。没选新文件应保留已有图标；明确“恢复模板默认图标”才提交 `logoData: ''`。不修改其他项目的配置。
+- 实际页面按当前模板回退；项目模板预览按**预览目标**回退；全局模板预览不带任何客户覆盖值。切换模板不会清空用户主动设置的名称或图标。
+
+#### 显式标记，而不是按文件名批量替换
+
+```html
+<h1 data-hub-name>模板默认应用名</h1>
+<img data-hub-logo src="assets/default-logo.png" alt="模板应用图标" width="48" height="48">
+<link data-hub-logo rel="icon" href="assets/default-icon.png" type="image/png">
+<link data-hub-logo rel="apple-touch-icon" href="assets/default-touch.png">
+<!-- 图内烘焙了名称的字标：有自定义名称时切换为文字，清空时恢复原结构 -->
+<span data-hub-wordmark><img data-hub-logo src="assets/default-wordmark.png" alt="模板默认应用名"></span>
+<!-- 背景图片图标也可接入；容器尺寸、contain/no-repeat 由模板 CSS 定义 -->
+<div data-hub-logo="background" class="brand-background"></div>
+```
+
+- 名称标记只放在纯品牌文本容器，不放在同时包含按钮、图标和复杂布局的父容器上。
+- 字标包含品牌文字，不是海报；自定义名称优先替换其文字展示。清空名称时恢复模板结构，内部标记的品牌图片仍受独立图标设置控制。字标容器需验证长名称和手机排版，保留原图时不改变默认图片比例。
+- 图标清单须覆盖：桌面 / 手机页头、导航、侧栏、首屏、浮动下载区、下载弹窗、页脚、favicon、apple-touch-icon、picture / srcset、延迟加载及 CSS 背景图。模板没有某一项时记为不适用。
+- 公共 `brand-settings.js` 负责重复更新、源属性 / 比例处理、清空恢复，以及新插入的已标记节点。`picture` 的 `source` 随内部带标记图片一起处理；无覆盖时保留模板自己的响应式和延迟加载行为。
+- 动态生成的品牌节点也要带标记，复用同一份公共逻辑；模板自己的语言与延迟加载脚本不要另建品牌覆盖规则。
+- 搜索、播放、关闭、Android / Apple 商店按钮、海报、剧情图片不是应用图标插槽，保持原样。正文宣传、版权、法律与第三方品牌不做任意全页字符串替换。
+- 原始 HTML 已有下载弹窗时直接标记；后插入弹窗时检查其生成代码。不要只检查一张截图就认定全部图标已接入。
+
+#### 品牌验收
+
+- [ ] 空 / 仅名称 / 仅图标 / 两项都有，四种组合通过。
+- [ ] 图标 A → B → 恢复默认；名称 A → B → 清空；旧值不残留。
+- [ ] 竖图、横图不拉伸；长名称不挤坏导航或弹窗。
+- [ ] 桌面与手机的导航、侧栏、页脚、下载弹窗和浏览器图标逐项核对。
+- [ ] 切换语言、再次打开弹窗、动态插入节点、srcset / 延迟加载不会复原旧品牌。
+- [ ] 默认状态下模板原图的响应式 / 延迟加载照常工作。
+- [ ] 两个项目互不影响；项目预览带项目配置，全局预览保持模板默认。
+- [ ] 名称为空时预览 / 切换不同模板使用各自默认名；旧客户已保存值保持。
 
 ## 5. 多语言实现与验收规则
 
@@ -233,6 +281,8 @@ node --check public/assets/brand-settings.js
 - 已观察事实 / 推测 / 待验证部分：
 
 ## 本地实现
+- 品牌默认名 / 原始图标资源与全部插槽位置清单：
+- 独立空值回退、图标恢复、动态节点与语言切换验证：
 - 本次支持语言、默认与回退：
 - 文案字典 / 动态弹窗 / RTL 处理：
 - 保留原名或原图文字的部分：

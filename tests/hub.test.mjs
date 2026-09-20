@@ -187,6 +187,30 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
  await t.test('customer APIs omit the master-only private note and password hash',async()=>{for(const route of ['/session','/dashboard']){const r=await request(aPath()+'/api'+route,ca);assert.equal(r.status,200);assert.equal(r.data.project.note,undefined);assert.equal(r.data.project.password_hash,undefined);assert.ok(!r.text.includes('PRIVATE A'));}});
  await t.test('tenant session has no access to another tenant or master APIs',async()=>{assert.equal((await request(bPath()+'/api/dashboard',ca)).status,401);assert.equal((await request('/api/projects',ca)).status,401);assert.equal((await request(aPath()+'/api/projects',ca)).status,404);});
  await t.test('tenant cannot elevate role or change the project identity / private note',async()=>{const r=await post(aPath()+'/api/settings',{appName:'Alpha Updated',note:'stolen',name:'renamed',slug:B.project.slug,id:B.project.id,status:'paused',role:'super',downloadUrl:'https://example.com/alpha.apk'},ca);assert.equal(r.status,200,r.text);assert.equal(r.data.project.slug,A.project.slug);assert.equal(r.data.project.name,'客户 A');assert.equal(r.data.project.status,'active');assert.equal(r.data.project.note,undefined);const all=await request('/api/projects/'+A.project.slug,master);assert.equal(all.data.project.note,'PRIVATE A');assert.equal((await request(bPath()+'/api/dashboard',cb)).data.project.download_url,'');});
+ await t.test('optional branding slots resolve per template, preserve icons unless cleared and stay isolated',async()=>{
+  const path=aPath()+'/api/settings';
+  const config=async(route,ctx)=>JSON.parse((await request(route,ctx)).text.match(/window\.HUB_PAGE=(.*?);window\.APP_CONFIG/s)[1]);
+  const original=(await request(aPath()+'/api/dashboard',ca)).data.project;
+  const logo='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jY5kAAAAASUVORK5CYII=';
+  try{
+   let r=await post(path,{appName:'Slot App',logoData:logo},ca);assert.equal(r.status,200,r.text);
+   assert.equal(r.data.project.effectiveAppName,'Slot App');assert.equal((await config(aPath())).logoData,logo);
+   assert.equal((await config(aPath()+'/preview/dptv',ca)).appName,'Slot App');
+   r=await post(path,{appName:'  '},ca);assert.equal(r.status,200);assert.equal(r.data.project.app_name,'');
+   assert.equal(r.data.project.effectiveAppName,'ReelShort');assert.equal(r.data.project.defaultAppName,'ReelShort');assert.equal(r.data.project.logo_data,logo);
+   for(const [template,name] of [['feiyue','ReelShort'],['dptv','DPTV']]){
+    const c=await config(aPath()+'/preview/'+template,ca);assert.equal(c.template,template);assert.equal(c.appName,name);assert.equal(c.appNameOverride,'');assert.equal(c.logoData,logo);assert.equal(c.token,'');
+    const global=await config('/templates/'+template+'/preview',master);assert.equal(global.appName,name);assert.equal(global.appNameOverride,'');assert.equal(global.logoData,'');
+   }
+   r=await post(path,{template:'dptv',logoData:''},ca);assert.equal(r.status,200);
+   assert.equal(r.data.project.effectiveAppName,'DPTV');assert.equal(r.data.project.logo_data,'');
+   let c=await config(aPath());assert.equal(c.appName,'DPTV');assert.equal(c.logoData,'');
+   r=await post(path,{appName:'0'},ca);assert.equal(r.data.project.effectiveAppName,'0');
+   const other=await config(bPath());assert.equal(other.appName,'Beta');assert.equal(other.logoData,'');
+   assert.equal((await post(path,{appName:'x'.repeat(81)},ca)).status,400);
+   assert.equal((await post(path,{appName:[]},ca)).status,400);
+  }finally{await post(path,{appName:original.app_name,logoData:original.logo_data,template:original.template},ca);}
+ });
  await t.test('rejects script URLs, unsupported templates, malicious branding and image data',async()=>{for(const b of [{downloadUrl:'javascript:alert(1)'},{downloadUrl:'https://name:pass@example.com/'},{appName:'<script>alert(1)</script>'},{template:'../app/bootstrap'},{pixelId:'abc'},{logoData:'data:image/svg+xml;base64,PHN2Zz4='}])assert.equal((await post(aPath()+'/api/settings',b,ca)).status,400);});
  await t.test('download redirect is scoped to the selected project',async()=>{const r=await request(aPath()+'/dl');assert.equal(r.status,302);assert.equal(r.headers.get('location'),'https://example.com/alpha.apk');assert.equal((await request(bPath()+'/dl')).status,404);});
  await t.test('customer can clear a saved APK URL without restoring any default',async()=>{assert.equal((await post(bPath()+'/api/settings',{downloadUrl:'https://example.com/customer.apk'},cb)).status,200);assert.equal((await request(bPath()+'/dl')).headers.get('location'),'https://example.com/customer.apk');const cleared=await post(bPath()+'/api/settings',{downloadUrl:''},cb);assert.equal(cleared.status,200);assert.equal(cleared.data.project.download_url,'');assert.equal((await request(bPath()+'/api/dashboard',cb)).data.project.download_url,'');const r=await request(bPath()+'/dl');assert.equal(r.status,404);assert.equal(r.headers.get('location'),null);});
@@ -316,4 +340,20 @@ test('Pixel input belongs to the tenant console, not the master console',()=>{
  const tenant=readFileSync(root+'app/tenant.html','utf8');
  assert.match(tenant,/id="pixel-form"/);assert.match(tenant,/id="pixel-id"/);
  assert.match(readFileSync(root+'public/assets/tenant.js','utf8'),/post\(\{ pixelId:/);
+});
+
+test('new projects store empty optional app names rather than copying internal project names',()=>{
+ const dir=mkdtempSync(join(tmpdir(),'hub-brand-defaults-'));
+ try{
+  const result=JSON.parse(execFileSync('php',['-r',`
+   require 'app/bootstrap.php';
+   $out=[];
+   foreach([['name'=>'Internal A','template'=>'feiyue'],['name'=>'Internal B','template'=>'dptv','appName'=>' '],['name'=>'Internal C','appName'=>'Customer Name']] as $body){
+    $p=create_project($body,'fixture')['project'];
+    $out[]=[$p['app_name'],$p['effectiveAppName'],$p['defaultAppName']];
+   }
+   echo json_encode($out);
+  `],{cwd:root,env:{...process.env,HUB_DATA_DIR:dir,HUB_DEV:'1',HUB_ORIGIN:'http://127.0.0.1'},encoding:'utf8'}));
+  assert.deepEqual(result,[['','ReelShort','ReelShort'],['','DPTV','DPTV'],['Customer Name','Customer Name','ReelShort']]);
+ }finally{rmSync(dir,{recursive:true,force:true});}
 });

@@ -3,8 +3,8 @@ declare(strict_types=1);
 require __DIR__.'/analytics.php';
 function template_catalog():array {
  return [
-  ['id'=>'feiyue','name'=>'Feiyue / ReelShort','brand'=>'ReelShort','description'=>'深色短剧风格，包含剧集推荐与悬浮下载入口。','tags'=>['短剧推荐','深色风格','自适应'],'appName'=>'ReelShort'],
-  ['id'=>'dptv','name'=>'DPTV / MinuteDrama','brand'=>'DPTV','description'=>'影音展示风格，包含内容海报与应用下载区域。','tags'=>['影音展示','海报布局','自适应'],'appName'=>'DPTV'],
+  ['id'=>'feiyue','name'=>'Feiyue / ReelShort','brand'=>'ReelShort','description'=>'深色短剧风格，包含剧集推荐与悬浮下载入口。','tags'=>['短剧推荐','深色风格','自适应'],'appName'=>HUB_TEMPLATE_NAMES['feiyue']],
+  ['id'=>'dptv','name'=>'DPTV / MinuteDrama','brand'=>'DPTV','description'=>'影音展示风格，包含内容海报与应用下载区域。','tags'=>['影音展示','海报布局','自适应'],'appName'=>HUB_TEMPLATE_NAMES['dptv']],
  ];
 }
 function template_inventory():array {
@@ -26,7 +26,7 @@ function render_catalog_preview(string $id):void {
  $templates=array_column(template_catalog(),null,'id');
  if(!isset($templates[$id]))throw new HubError('模板不存在',404);
  // No project is created and no real account settings enter the preview.
- $p=['id'=>0,'slug'=>'template-demo','template'=>$id,'app_name'=>$templates[$id]['appName'],'pixel_id'=>'','verify_code'=>'','logo_data'=>''];
+ $p=['id'=>0,'slug'=>'template-demo','template'=>$id,'app_name'=>'','pixel_id'=>'','verify_code'=>'','logo_data'=>''];
  header('X-Frame-Options: SAMEORIGIN');header('X-Robots-Tag: noindex, nofollow');
  render_landing($p,true,$id);
 }
@@ -68,10 +68,10 @@ function render_landing(array $p,bool $preview=false,?string $template=null):voi
  $html=str_replace('https://alphapundits.com/p/p6y2sej/dl','/p/'.$p['slug'].'/dl',$html);
  $html=preg_replace('#<script\b[^>]*src=["\'][^"\']*(?:config|site-settings|brand-settings|analytics)\.js[^"\']*["\'][^>]*>\s*</script>#i','',$html);
  $html=preg_replace('#<base\b[^>]*>#i','',$html);
- $data=public_settings($p);$visit=bin2hex(random_bytes(16));$issued=time();$data['preview']=$preview;$data['visitId']=$visit;$data['issued']=$issued;$data['token']=$preview?'':page_token((int)$p['id'],$visit,$issued);
+ $data=public_settings($p,$template);$visit=bin2hex(random_bytes(16));$issued=time();$data['preview']=$preview;$data['visitId']=$visit;$data['issued']=$issued;$data['token']=$preview?'':page_token((int)$p['id'],$visit,$issued);
  $encoded=json_encode($data,JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
  $head='<base href="/themes/'.$template.'/"><script>window.HUB_PAGE='.$encoded.';window.APP_CONFIG=Object.freeze({appName:HUB_PAGE.appName,apkUrl:HUB_PAGE.downloadUrl});window.TV_PREVIEW=HUB_PAGE.preview;window.TV_SETTINGS_READY=Promise.resolve(HUB_PAGE);</script>';
- $html=preg_replace_callback('#<title>.*?</title>#s',function()use($p){return '<title>'.htmlspecialchars($p['app_name'],ENT_QUOTES,'UTF-8').'</title>';},$html,1);
+ $html=preg_replace_callback('#<title>.*?</title>#s',function()use($data){return '<title>'.htmlspecialchars($data['appName'],ENT_QUOTES,'UTF-8').'</title>';},$html,1);
  $html=preg_replace_callback('#(<head[^>]*>)#i',function($m)use($head){return $m[1].$head;},$html,1);
  $brandVersion=substr(hash_file('sha256',HUB_ROOT.'/public/assets/brand-settings.js'),0,12);
  $collectorVersion=substr(hash_file('sha256',HUB_ROOT.'/public/assets/collector.js'),0,12);
@@ -79,7 +79,7 @@ function render_landing(array $p,bool $preview=false,?string $template=null):voi
  header('Content-Type: text/html; charset=utf-8');header('Cache-Control: no-store');header('Referrer-Policy: strict-origin-when-cross-origin');echo $html;
 }
 function render_console(string $realm):void {
- $role=$realm==='super'?'super':'customer';$title=$role==='super'?'LANDING · 总管理后台':project($realm,true)['app_name'].' · 项目后台';
+ $role=$realm==='super'?'super':'customer';$title=$role==='super'?'LANDING · 总管理后台':effective_app_name(project($realm,true)).' · 项目后台';
  header('Content-Type: text/html; charset=utf-8');header('Cache-Control: no-store');header('X-Frame-Options: DENY');header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; frame-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'");
  // Tenant pages use the original compact dark admin; the master stays separate.
  $view=$role==='super'?'console':'tenant';

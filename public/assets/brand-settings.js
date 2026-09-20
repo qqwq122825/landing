@@ -1,6 +1,71 @@
 (() => {
   'use strict';
   let pixelStarted=false;
+  let branding={},brandingQueued=false;
+  const originals=new WeakMap();
+  const wordmarks=new WeakMap();
+  const logoSelector='[data-hub-logo]',nameSelector='[data-hub-name]',brandSelector='[data-hub-logo],[data-hub-name],[data-hub-wordmark]';
+  const imageAttrs=['src','srcset','sizes','alt','data-src','data-srcset','data-sizes','data-original','data-lazy-src'];
+  function remember(el,attrs,styles=[]) {
+    if(!originals.has(el))originals.set(el,{attrs:Object.fromEntries(attrs.map(key=>[key,el.getAttribute(key)])),styles:Object.fromEntries(styles.map(key=>[key,el.style[key]]))});
+    return originals.get(el);
+  }
+  function attr(el,key,value) {
+    if(value===null){if(el.hasAttribute(key))el.removeAttribute(key);}
+    else if(el.getAttribute(key)!==value)el.setAttribute(key,value);
+  }
+  function restore(el) {
+    const original=originals.get(el);if(!original)return;
+    Object.entries(original.attrs).forEach(([key,value])=>attr(el,key,value));
+    Object.entries(original.styles).forEach(([key,value])=>{if(el.style[key]!==value)el.style[key]=value;});
+    originals.delete(el);
+  }
+  function paintBranding() {
+    const {appName,logoData}=branding;
+    // Image-based brand lettering is a name slot, not a poster or a generic icon.
+    document.querySelectorAll('[data-hub-wordmark]').forEach(el=>{
+      if(!wordmarks.has(el))wordmarks.set(el,{html:el.innerHTML,active:false});
+      const state=wordmarks.get(el),name=branding.appNameOverride;
+      if(name){if(!state.active||el.textContent!==name)el.textContent=name;state.active=true;}
+      else if(state.active){el.innerHTML=state.html;state.active=false;}
+    });
+    if(appName)document.querySelectorAll(nameSelector).forEach(el=>{if(el.textContent!==appName)el.textContent=appName;});
+    document.querySelectorAll(logoSelector).forEach(el=>{
+      if(el.tagName==='IMG'){
+        const sources=el.closest('picture')?.querySelectorAll('source')||[];
+        if(logoData){
+          remember(el,imageAttrs,['objectFit']);
+          sources.forEach(source=>remember(source,['srcset','sizes','data-srcset','data-sizes']));
+          // Remove responsive/lazy sources so they cannot restore the template image.
+          imageAttrs.filter(key=>!['src','alt'].includes(key)).forEach(key=>attr(el,key,null));
+          sources.forEach(source=>['srcset','sizes','data-srcset','data-sizes'].forEach(key=>attr(source,key,null)));
+          attr(el,'src',logoData);attr(el,'alt',appName||'应用图标');
+          if(el.style.objectFit!=='contain')el.style.objectFit='contain';
+        }else{restore(el);sources.forEach(restore);}
+      }else if(el.tagName==='LINK'){
+        if(logoData){remember(el,['href','type','sizes']);attr(el,'href',logoData);attr(el,'type',/^data:([^;,]+)/.exec(logoData)?.[1]||null);attr(el,'sizes',null);}else restore(el);
+      }else if(el.getAttribute('data-hub-logo')==='background'){
+        if(logoData){
+          remember(el,[],['backgroundImage']);
+          const value=`url("${logoData}")`;
+          if(el.style.backgroundImage!==value)el.style.backgroundImage=value;
+        }else restore(el);
+      }
+    });
+  }
+  function isBrandNode(node) {
+    return node?.nodeType===1&&(node.matches(brandSelector)||node.querySelector(brandSelector));
+  }
+  // Language switches, lazy loading and newly inserted dialogs reuse the current brand.
+  if(typeof MutationObserver!=='undefined')new MutationObserver(records=>{
+    const changed=records.some(record=>record.type==='attributes'
+      ?record.target.matches(brandSelector)||(record.target.tagName==='SOURCE'&&record.target.closest('picture')?.querySelector(logoSelector))
+      :(record.target.nodeType===1?record.target:record.target.parentElement)?.closest(`${nameSelector},[data-hub-wordmark]`)
+        ||record.target.closest?.('picture')?.querySelector(logoSelector)
+        ||Array.from(record.addedNodes||[]).some(isBrandNode));
+    if(!changed||brandingQueued)return;
+    brandingQueued=true;queueMicrotask(()=>{brandingQueued=false;paintBranding();});
+  }).observe(document.documentElement,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['data-hub-logo','data-hub-name','data-hub-wordmark','src','srcset','sizes','data-src','data-srcset','data-sizes','data-original','data-lazy-src','alt','href','type','style']});
   // Browser preference signals do not gate tracking; retain the explicit site-level pause.
   const trackingAllowed=()=>window.HUB_TRACKING_CONSENT!==false;
   function startPixel(data) {
@@ -29,11 +94,9 @@
   }
   function apply(data) {
     if(!data || typeof data!=='object')return;
-    if(data.appName){document.title=data.appName;document.querySelectorAll('[data-i18n="nav.brand"],.download-modal__brand h2,#download h1,.md-ru-footer__brand span').forEach(el=>el.textContent=data.appName);}
-    if(data.logoData){
-      document.querySelectorAll('img[alt="logo"],img[src*="dptv-logo.png"],img[class*="Footer_logo"]').forEach(img=>{img.removeAttribute('srcset');img.src=data.logoData;img.alt=data.appName||'logo';});
-      let icon=document.querySelector('link[rel="icon"]');if(!icon){icon=document.createElement('link');icon.rel='icon';document.head.append(icon);}icon.href=data.logoData;
-    }
+    branding={...branding,...data};
+    if(branding.appName)document.title=branding.appName;
+    paintBranding();
     startPixel(data);
   }
   window.addEventListener('tv:settings',e=>apply(e.detail));
