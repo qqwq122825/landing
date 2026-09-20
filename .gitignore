@@ -1,0 +1,23 @@
+# Private application data (keep only the directory placeholder).
+/runtime/*
+!/runtime/.gitkeep
+
+# Local environment, secrets and database backups.
+.env
+.env.*
+!.env.example
+!*.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+*.sqlite*
+*.db
+*.db-*
+*.sql
+*.log
+*.zip
+
+# Local tooling and operating-system files.
+node_modules/
+.DS_Store

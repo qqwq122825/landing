@@ -1,0 +1,1 @@
+{"name":"landing-hub","private":true,"type":"module","scripts":{"dev":"node bin/dev.mjs","test":"node --test tests/*.test.mjs","setup":"php bin/setup.php","check":"find app public bin -name '*.php' -not -path '*/themes/*' -exec php -l {} \\;"}}
