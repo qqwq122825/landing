@@ -24,25 +24,25 @@
   </div>
 </section>
 <div id="shell" class="page" hidden>
-  <aside class="navbar navbar-vertical navbar-expand-lg" data-bs-theme="dark">
+  <aside id="sidebar" class="navbar navbar-vertical navbar-expand-lg" data-bs-theme="dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="/" id="brand-home"><span class="avatar avatar-sm bg-primary text-white me-2">L</span>LANDING HUB</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu" aria-controls="sidebar-menu" aria-expanded="false" aria-label="展开导航"><span class="navbar-toggler-icon"></span></button>
+      <a class="navbar-brand" href="/" id="brand-home" aria-label="LANDING HUB 首页" title="LANDING HUB"><span class="avatar avatar-sm bg-primary text-white flex-shrink-0">L</span><span class="sidebar-label">LANDING HUB</span></a>
+      <button id="sidebar-mobile-toggle" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu" aria-controls="sidebar-menu" aria-expanded="false" aria-label="展开导航菜单"><span class="navbar-toggler-icon"></span></button>
       <div class="collapse navbar-collapse" id="sidebar-menu">
         <nav class="navbar-nav pt-lg-3" id="main-nav" aria-label="总站导航">
-          <div class="nav-item"><button data-view="overview" class="nav-link active"><span class="nav-link-icon">▦</span><span class="nav-link-title">项目总览</span></button></div>
-          <div class="nav-item"><button data-view="templates" class="nav-link"><span class="nav-link-icon">◫</span><span class="nav-link-title">模板管理</span></button></div>
-          <div class="nav-item"><button data-view="analytics" class="nav-link"><span class="nav-link-icon">▥</span><span class="nav-link-title">访问分析</span></button></div>
-          <div class="nav-item"><button data-view="audit" class="nav-link"><span class="nav-link-icon">▤</span><span class="nav-link-title">操作日志</span></button></div>
+          <div class="nav-item"><button data-view="overview" class="nav-link active" aria-label="项目总览" title="项目总览"><span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg></span><span class="nav-link-title">项目总览</span></button></div>
+          <div class="nav-item"><button data-view="templates" class="nav-link" aria-label="模板管理" title="模板管理"><span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 9v11"/></svg></span><span class="nav-link-title">模板管理</span></button></div>
+          <div class="nav-item"><button data-view="analytics" class="nav-link" aria-label="访问分析" title="访问分析"><span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4v16h16M9 15v-4M14 15V7M19 15v-6"/></svg></span><span class="nav-link-title">访问分析</span></button></div>
+          <div class="nav-item"><button data-view="audit" class="nav-link" aria-label="操作日志" title="操作日志"><span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3h8l4 4v14H4V3h4M15 3v5h5M8 12h8M8 16h6"/></svg></span><span class="nav-link-title">操作日志</span></button></div>
         </nav>
-        <div class="mt-auto p-3"><p class="text-secondary small mb-2">一个总站，多个独立项目</p><button class="btn btn-outline-light btn-sm" id="architecture-button">平台说明</button></div>
+        <div class="sidebar-footer mt-auto"><p class="sidebar-label text-secondary small mb-2">一个总站，多个独立项目</p><button class="btn btn-outline-light btn-sm" id="architecture-button" aria-label="平台说明" title="平台说明"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7h.01"/></svg><span class="sidebar-label">平台说明</span></button></div>
       </div>
     </div>
   </aside>
   <div class="page-wrapper">
     <header class="navbar navbar-expand-md"><div class="container-fluid">
-      <ol class="breadcrumb mb-0"><li class="breadcrumb-item">工作空间</li><li class="breadcrumb-item active" id="breadcrumb">项目总览</li></ol>
-      <div class="d-flex align-items-center gap-3"><time id="today-label" class="text-secondary d-none d-md-block"></time><span class="avatar avatar-sm bg-primary-lt" id="account-avatar">A</span><div><strong id="account-name">管理员</strong><div class="text-secondary small" id="account-role">总站管理员</div></div><button class="btn btn-sm" id="logout" aria-label="退出登录">退出</button></div>
+      <div class="d-flex align-items-center gap-3 hub-breadcrumb"><button class="btn btn-icon d-none d-lg-inline-flex" id="sidebar-toggle" type="button" aria-controls="sidebar" aria-expanded="true" aria-label="收起侧栏" title="收起侧栏"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M16 9l-3 3 3 3"/></svg></button><ol class="breadcrumb mb-0"><li class="breadcrumb-item">工作空间</li><li class="breadcrumb-item active" id="breadcrumb">项目总览</li></ol></div>
+      <div class="d-flex align-items-center gap-3 hub-account"><time id="today-label" class="text-secondary d-none d-md-block"></time><span class="avatar avatar-sm bg-primary-lt" id="account-avatar">A</span><div><strong id="account-name">管理员</strong><div class="text-secondary small" id="account-role">总站管理员</div></div><button class="btn btn-sm" id="logout" aria-label="退出登录">退出</button></div>
     </div></header>
     <div class="page-body"><main class="container-fluid" id="main"></main></div>
     <footer class="footer footer-transparent"><div class="container-fluid d-flex justify-content-between flex-wrap gap-2 text-secondary"><span>LANDING HUB · Tabler 1.5.1</span><span>北京时间 UTC+8 · 无需 npm / 编译</span></div></footer>

@@ -17,6 +17,31 @@
  function showModal(selector){const el=typeof selector==='string'?$(selector):selector;if(!el.classList.contains('show'))modalFocus.set(el,document.activeElement);$$('.modal.show').filter(d=>d!==el).forEach(hideModal);tabler.Modal.getOrCreateInstance(el).show();}
  function hideModal(selector){const el=typeof selector==='string'?$(selector):selector;if(!el?.classList.contains('show'))return;document.activeElement?.blur();tabler.Modal.getOrCreateInstance(el).hide();const trigger=modalFocus.get(el);if(trigger?.isConnected&&!trigger.closest('[hidden],.modal:not(.show)'))trigger.focus();}
  function toast(message,error=false){const el=$('#toast');$('#toast-text').textContent=message;el.classList.toggle('bg-danger-lt',error);tabler.Toast.getOrCreateInstance(el,{delay:4500}).show();}
+ function setupSidebar(){
+  const key='landing-hub:sidebar',desktop=window.matchMedia('(min-width: 992px)'),compact=window.matchMedia('(max-width: 1279.98px)');
+  const root=document.documentElement,toggle=$('#sidebar-toggle'),mobileToggle=$('#sidebar-mobile-toggle'),menu=$('#sidebar-menu');
+  let preference=null;
+  try{const saved=localStorage.getItem(key);if(saved==='collapsed'||saved==='expanded')preference=saved;}catch{}
+  function render(){
+   const folded=desktop.matches&&(preference?preference==='collapsed':compact.matches);
+   if(folded)root.setAttribute('data-bs-sidebar','folded');else root.removeAttribute('data-bs-sidebar');
+   const label=folded?'展开侧栏':'收起侧栏';
+   toggle.setAttribute('aria-expanded',String(!folded));toggle.setAttribute('aria-label',label);toggle.setAttribute('title',label);
+  }
+  toggle.addEventListener('click',()=>{
+   preference=root.getAttribute('data-bs-sidebar')==='folded'?'expanded':'collapsed';
+   try{localStorage.setItem(key,preference);}catch{}
+   render();
+  });
+  function closeMobileMenu(){if(!desktop.matches)tabler.Collapse.getInstance(menu)?.hide();}
+  desktop.addEventListener('change',()=>{render();tabler.Collapse.getInstance(menu)?.hide();});
+  compact.addEventListener('change',render);
+  for(const event of ['shown.bs.collapse','hidden.bs.collapse'])menu.addEventListener(event,()=>{
+   mobileToggle.setAttribute('aria-label',menu.classList.contains('show')?'收起导航菜单':'展开导航菜单');
+  });
+  render();
+  return {closeMobileMenu};
+ }
  async function api(path,options={}){
   let response;try{response=await fetch(base+path,{credentials:'same-origin',cache:'no-store',...options,headers:{'Content-Type':'application/json','X-CSRF-Token':state.csrf,...options.headers}});}catch{throw Error('服务连接失败，请检查本地服务或网络');}
   let data;try{data=await response.json();}catch{throw Error('服务响应格式错误，请检查 PHP 和路由配置');}
@@ -105,7 +130,7 @@
  document.addEventListener('click',e=>{
   const close=e.target.closest('[data-close]');if(close){hideModal(close.closest('.modal'));return;}
   const size=e.target.closest('[data-preview-size]');if(size){setPreviewSize(size.dataset.previewSize);return;}
-  const nav=e.target.closest('[data-view]');if(nav&&isSuper){tabler.Collapse.getInstance($('#sidebar-menu'))?.hide();busy(nav,()=>({overview,templates:templateLibrary,analytics,audit:auditView}[nav.dataset.view])());return;}
+  const nav=e.target.closest('[data-view]');if(nav&&isSuper){sidebar.closeMobileMenu();busy(nav,()=>({overview,templates:templateLibrary,analytics,audit:auditView}[nav.dataset.view])());return;}
   const el=e.target.closest('[data-action]');if(!el)return;const a=el.dataset.action;
   if(a==='create'){$('#create-form').reset();$('#create-error').textContent='';showModal('#create-dialog');}
   if(a==='reload')busy(el,refresh);
@@ -129,5 +154,6 @@
  $('#preview-dialog').addEventListener('hide.bs.modal',()=>{$('#preview-frame').removeAttribute('src');state.previewMode=null;state.pendingTemplate=null;});
  $('#apply-template').addEventListener('click',()=>busy($('#apply-template'),async()=>{if(state.previewMode!=='project'||!state.project)return;await post(settingsPath(),{template:state.pendingTemplate});hideModal('#preview-dialog');toast('模板已应用');await detail(state.project.slug,true);}));
  $('#architecture-button').addEventListener('click',()=>showModal('#architecture-dialog'));
+ const sidebar=setupSidebar();
  initialize();
 })();

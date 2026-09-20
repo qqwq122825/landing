@@ -18,6 +18,8 @@
 
 总站使用 **Tabler 1.5.1（Bootstrap 组件）+ 原生 JavaScript + PHP**。表格、卡片、表单、菜单、弹窗、提示与进度条使用组件库，不再维护自绘控件；子账号后台和落地页保持独立。官方资料：[Tabler 安装文档](https://docs.tabler.io/ui/getting-started/installation)。
 
+侧栏使用 Tabler 原生折叠布局：展开 224px，收起 64px 仅显示图标，点击顶部面包屑左侧的按钮切换。首次使用时，992–1279px 的窗口默认收起，1280px 起默认展开；更窄的屏幕使用手机菜单，点击导航后自动关闭。手动选择保存在当前浏览器，刷新保留；手机模式不会覆盖桌面偏好，浏览器禁用本地存储也不影响操作。
+
 没有 Vue / Vite，也没有 `npm install`、`npm run build` 等生产部署步骤。固定版本的 CSS / JS 与许可证位于 `public/assets/vendor/tabler-1.5.1/`，随 Git 一起提交，浏览器不请求外部 CDN。业务 HTML / CSS / JS 修改后直接生效，不需要重新编译。Node 只用于可选的本地启动和自动测试。
 
 **部署入口：[Git 部署指南](deploy/README.md)**，包含首次安装、宝塔设置、旧站迁移、日常更新和验收。
@@ -175,5 +177,6 @@ docs/                   网页安装指南及 updates/ 历史更新记录
 功能迭代说明已归档到 `docs/updates/`；其中的压缩包步骤与测试数量是当次记录。后续交付以 Git 为主，不再要求逐项上传旧补丁。
 
 - [总站 Tabler UI](docs/updates/总站TablerUI更新说明.md)
+- [侧栏响应式与折叠](docs/updates/侧栏响应式更新说明.md)
 - [Pixel 事件](docs/updates/Pixel事件更新说明.md)
 - [模板管理](docs/updates/模板管理更新说明.md)

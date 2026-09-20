@@ -1,8 +1,31 @@
 /* Only page layout and project-specific preview sizing. UI components come from Tabler. */
+:root{--tblr-sidebar-width:14rem;--tblr-sidebar-folded-width:4rem}
 [hidden]{display:none!important}
 body{font-family:system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
 #main{max-width:1640px}#main>.card,#main>.alert,#main>.stats-grid,#main>.detail-grid,#main>.bottom-grid{margin-bottom:24px}
 #main-nav .nav-link{width:100%;background:none;border:0;text-align:left}#main-nav .nav-link.active{background:rgba(255,255,255,.08)}
+/* Use Tabler's native folded sidebar; these rules only size our brand/footer/header. */
+#brand-home{justify-content:flex-start;gap:12px;font-size:1rem;min-width:0;white-space:nowrap}
+#brand-home .sidebar-label{overflow:hidden;text-overflow:ellipsis}
+#shell>.page-wrapper{min-width:0}
+#shell>.page-wrapper>.navbar>.container-fluid{gap:12px}
+.hub-breadcrumb,.hub-account{min-width:0}
+#account-name{display:block;max-width:10rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sidebar-footer{padding:12px}
+@media(min-width:992px){
+ #sidebar-menu{overflow-x:hidden;overflow-y:auto}
+ #sidebar .navbar-nav{flex-grow:0}
+ #sidebar .nav-link-icon{flex-shrink:0}
+ #brand-home{width:100%;margin:0;padding:16px}
+ html[data-bs-sidebar=folded] #sidebar .sidebar-label{display:none}
+ html[data-bs-sidebar=folded] #sidebar .nav-link-icon{margin-inline-end:0}
+ html[data-bs-sidebar=folded] #architecture-button{width:40px;padding-left:0;padding-right:0}
+ html[data-bs-sidebar=folded] #architecture-button .icon{margin:0}
+ html[data-bs-sidebar=folded] #sidebar-toggle .icon{transform:scaleX(-1)}
+}
+@media(max-width:991.98px){#sidebar-menu{max-height:calc(100dvh - 64px);overflow-y:auto}.sidebar-footer{padding:12px 0}.hub-breadcrumb{flex-wrap:wrap}}
+@media(max-width:575.98px){.hub-account{gap:8px!important}#account-name{max-width:7rem}.hub-breadcrumb .breadcrumb-item:first-child{display:none}.hub-breadcrumb .breadcrumb-item+.breadcrumb-item:before{display:none}}
+
 .stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
 .bottom-grid,.detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.detail-grid>div>.card{margin-bottom:24px}
 .filters{display:flex;gap:12px;max-width:100%;margin-left:auto}.filters .input-icon{width:280px;max-width:100%}.filters .form-select{width:140px}
