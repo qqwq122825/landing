@@ -10,9 +10,9 @@ const end=source.indexOf('\n function setupSidebar(',start);
 const bindStart=source.indexOf(" $('#create-form').addEventListener('change'");
 const bindEnd=source.indexOf(" $('#copy-credentials')",bindStart);
 assert.ok(start>=0&&end>start&&bindStart>=0&&bindEnd>bindStart);
-const ids=['feiyue','dptv','quest'];
+const ids=['feiyue','dptv','quest','aivideo'];
 function fixture(post){
- const elements=new Map(),calls=[],checks=ids.map(value=>({value,checked:value!=='quest'}));
+ const elements=new Map(),calls=[],checks=ids.map(value=>({value,checked:['feiyue','dptv'].includes(value)}));
  const element=selector=>{
   if(!elements.has(selector))elements.set(selector,{value:'',innerHTML:'',textContent:'',disabled:false,listeners:new Map(),
    addEventListener(name,fn){this.listeners.set(name,fn);},
@@ -37,7 +37,7 @@ function fixture(post){
  return {select,button,hint,state,calls,element,
   options:()=>[...select.innerHTML.matchAll(/<option value="([^"]*)"/g)].map(m=>m[1]),
   allow(values){checks.forEach(c=>c.checked=values.includes(c.value));form.emit('change',{target:{name:'allowedTemplates'}});},
-  reset(){checks.forEach(c=>c.checked=c.value!=='quest');sync(true);},
+  reset(){checks.forEach(c=>c.checked=['feiyue','dptv'].includes(c.value));sync(true);},
   submit:()=>form.emit('submit'),
  };
 }
@@ -48,7 +48,7 @@ test('initial template choices follow grants, preserve valid selections and auto
  f.allow(['feiyue','quest']);assert.equal(f.select.value,'quest','adding another grant preserves the choice');
  f.allow(['feiyue']);assert.equal(f.select.value,'feiyue');
  f.allow(ids);f.select.value='dptv';f.allow(['dptv','quest']);assert.equal(f.select.value,'dptv');
- for(let mask=1;mask<8;mask++){
+ for(let mask=1;mask<(1<<ids.length);mask++){
   const allowed=ids.filter((_,i)=>mask&(1<<i));f.allow(allowed);
   assert.deepEqual(f.options(),allowed);assert.ok(allowed.includes(f.select.value));assert.equal(f.button.disabled,false);
  }
@@ -89,6 +89,6 @@ test('request errors preserve the selected allowed template and allow retry',asy
 test('create form uses a required select and an accessible live hint with no ungranted initial option',()=>{
  const select=html.match(/<select[^>]*name="template"[^>]*>(.*?)<\/select>/s);
  assert.ok(select);assert.match(select[0],/required aria-describedby="create-template-hint"/);
- assert.doesNotMatch(select[1],/value="quest"/);
+ assert.doesNotMatch(select[1],/value="(?:quest|aivideo)"/);
  assert.match(html,/id="create-template-hint"[^>]*role="status"/);
 });

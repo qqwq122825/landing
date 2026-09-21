@@ -130,7 +130,7 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
  await t.test('mutation rejects missing CSRF and cross-origin requests',async()=>{assert.equal((await post('/api/projects',{name:'bad'},{cookie:master.cookie})).status,403);assert.equal((await post('/api/projects',{name:'bad'},{...master,origin:'https://other.example'})).status,403);});
  await t.test('master sees the complete template catalog before creating any project',async()=>{
   const r=await request('/api/templates',master);assert.equal(r.status,200);assert.match(r.headers.get('cache-control'),/no-store/);assert.equal(r.data.projectCount,0);
-  assert.deepEqual(r.data.templates.map(t=>t.id),['feiyue','dptv','quest']);
+  assert.deepEqual(r.data.templates.map(t=>t.id),['feiyue','dptv','quest','aivideo']);
   for(const item of r.data.templates){assert.equal(item.usedCount,0);assert.equal(item.allowedCount,0);assert.deepEqual(item.projects,[]);assert.equal(item.previewUrl,'/templates/'+item.id+'/preview');}
   const page=await request('/');assert.match(page.text,/data-view="templates"/);assert.match(page.text,/data-preview-size="desktop"/);
  });
@@ -166,7 +166,7 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
  });
  await t.test('inventory counts and associated projects reflect usage and per-account grants without secrets',async()=>{
   const r=await request('/api/templates',master);assert.equal(r.data.projectCount,2);
-  for(const item of r.data.templates.filter(t=>t.id!=='quest')){assert.equal(item.usedCount,1);assert.equal(item.allowedCount,2);assert.equal(item.projects.length,2);assert.equal(item.projects.filter(p=>p.using).length,1);assert.ok(item.projects.every(p=>p.allowed));}
+  for(const item of r.data.templates.filter(t=>['feiyue','dptv'].includes(t.id))){assert.equal(item.usedCount,1);assert.equal(item.allowedCount,2);assert.equal(item.projects.length,2);assert.equal(item.projects.filter(p=>p.using).length,1);assert.ok(item.projects.every(p=>p.allowed));}
   assert.doesNotMatch(r.text,/password|cipher|PRIVATE A|PRIVATE B|download_url|pixel_id/);assert.ok(!r.text.includes(A.credentials.password));
  });
  await t.test('tenant sessions have no access to global catalog or standalone previews',async()=>{
@@ -277,7 +277,7 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
  await t.test('master pause disables public pages, downloads, analytics and tenant sessions',async()=>{assert.equal((await post('/api/projects/'+A.project.slug+'/status',{status:'paused'},master)).status,200);for(const path of [aPath(),aPath()+'/admin',aPath()+'/dl',aPath()+'/api/dashboard'])assert.equal((await request(path,ca)).status,403);assert.equal((await post(aPath()+'/api/event',event('stay'))).status,403);assert.equal((await request(bPath())).status,200);});
  await t.test('template inventory includes paused projects and preview leaves account settings untouched',async()=>{
   const before=(await request('/api/projects/'+A.project.slug,master)).data;
-  const catalog=(await request('/api/templates',master)).data.templates;assert.ok(catalog.filter(t=>t.id!=='quest').every(t=>t.projects.some(p=>p.slug===A.project.slug&&p.status==='paused')));
+  const catalog=(await request('/api/templates',master)).data.templates;assert.ok(catalog.filter(t=>['feiyue','dptv'].includes(t.id)).every(t=>t.projects.some(p=>p.slug===A.project.slug&&p.status==='paused')));
   assert.equal((await request('/templates/dptv/preview',master)).status,200);
   const after=(await request('/api/projects/'+A.project.slug,master)).data;assert.deepEqual(after.project,before.project);assert.deepEqual(after.stats.totals,before.stats.totals);
  });

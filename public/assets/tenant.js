@@ -10,7 +10,7 @@
   const regionNames = typeof Intl.DisplayNames === 'function' ? new Intl.DisplayNames(['zh-CN'], { type: 'region' }) : null;
   const country = code => { try { return code ? regionNames?.of(code) || code : '未知'; } catch { return '未知'; } };
   const devices = { mobile: '手机', desktop: '电脑', tablet: '平板', other: '其他' };
-  const templateName = id => ({feiyue:'Feiyue / ReelShort',dptv:'DPTV / MinuteDrama',quest:'Quest / Pasion TV'})[id] || id;
+  const templateName = id => ({feiyue:'Feiyue / ReelShort',dptv:'DPTV / MinuteDrama',quest:'Quest / Pasion TV',aivideo:'AI Video / 阿语短视频'})[id] || id;
   const previewUrl = id => '/p/' + realm + '/preview/' + id + '?lang=zh';
   const dialog = $('#template-preview');
 

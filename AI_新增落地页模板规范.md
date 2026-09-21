@@ -208,7 +208,7 @@ app/tenant.html + public/assets/tenant.*   子后台入口与模板权限界面
 
 ### 当前旧模板基线：并非“全语言完成”
 
-以下为 2026-09-21 的旧模板源码核对结果，后续完成补齐后更新此表。新增 Quest 的独立四语界面验证见 `docs/templates/quest.md`：
+以下为 2026-09-21 的旧模板源码核对结果，后续完成补齐后更新此表。新增 Quest 的独立四语界面验证见 `docs/templates/quest.md`，AI Video 的阿语 RTL / 中英西葡界面验证见 `docs/templates/aivideo.md`；原视频字幕与海报文字不随界面翻译：
 
 | 模板 | 当前基线 | 已知待补齐 |
 | --- | --- | --- |

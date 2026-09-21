@@ -51,3 +51,5 @@ body{font-family:system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaH
 /* Quest's preview tile reflects the landing theme; controls remain native Tabler. */
 .card-header.quest{background:linear-gradient(135deg,#171717,#34302a)!important;color:#ffb435}
 .card-header.quest strong{color:#ffb435}
+.card-header.aivideo{background:linear-gradient(135deg,#11110f,#342b0d)!important;color:#ffd419}
+.card-header.aivideo strong{color:#ffd419}

@@ -6,6 +6,7 @@ function template_catalog():array {
   ['id'=>'feiyue','name'=>'Feiyue / ReelShort','brand'=>'ReelShort','description'=>'深色短剧风格，包含剧集推荐与悬浮下载入口。','tags'=>['短剧推荐','深色风格','自适应'],'appName'=>HUB_TEMPLATE_NAMES['feiyue']],
   ['id'=>'dptv','name'=>'DPTV / MinuteDrama','brand'=>'DPTV','description'=>'影音展示风格，包含内容海报与应用下载区域。','tags'=>['影音展示','海报布局','自适应'],'appName'=>HUB_TEMPLATE_NAMES['dptv']],
   ['id'=>'quest','name'=>'Quest / Pasion TV','brand'=>'Pasion TV','description'=>'黑橙色视频目录，竖版卡片、搜索与下载弹窗；内置中英西葡四语界面。','tags'=>['黑橙风格','视频卡片','四语界面'],'appName'=>HUB_TEMPLATE_NAMES['quest']],
+  ['id'=>'aivideo','name'=>'AI Video / 阿语短视频','brand'=>'AI Video','description'=>'黑黄竖屏视频风格，原生阿语 RTL，扩展中英西葡界面，含下载浮层。','tags'=>['竖屏视频','阿语 RTL','五语界面'],'appName'=>HUB_TEMPLATE_NAMES['aivideo']],
  ];
 }
 function template_inventory():array {
