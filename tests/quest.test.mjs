@@ -23,10 +23,12 @@ test('Quest has complete ES/EN/ZH/PT interface dictionaries and local assets',()
   for(const match of page.matchAll(/data-i18n(?:-aria|-placeholder)?="([^"]+)"/g))assert.ok(dict[match[1]],locale+': '+match[1]);
  }
  for(const match of page.matchAll(/(?:src|href)="([^"#]+)"/g))assert.ok(existsSync(root+'public/themes/quest/'+match[1].split('?')[0]),match[1]);
- for(let i=1;i<=10;i++)assert.ok(existsSync(root+'public/themes/quest/posters/'+String(i).padStart(2,'0')+'.jpg'));
+ assert.match(script,/imagex1\.sx\.cdn\.live\/images\/pinporn\//);
+ assert.equal((script.match(/https:\/\/imagex1\.sx\.cdn\.live\/images\/pinporn\/[^'"\s]+/g)||[]).length,10);
  assert.equal((page.match(/class="[^"]*download-link/g)||[]).length,2);
  assert.match(page,/data-hub-wordmark/);assert.equal((page.match(/data-hub-logo/g)||[]).length,6);assert.match(page,/data-hub-name/);
- assert.doesNotMatch(page+script,/(?:src|href)="https?:\/\/|fbq\(|fbevents|\.apk|location\.(?:replace|assign)|onclick=/);
+ assert.doesNotMatch(page+script,/\bfbq\(|fbevents|\.apk|location\.(?:replace|assign)|onclick=/);
+ assert.doesNotMatch(page,/(?:src|href)="https?:\/\//);
  assert.match(script,/hub:quest:language:/);assert.match(script,/history\.replaceState/);
  assert.match(script,/showModal\(\)/);assert.match(script,/event\.key==='Escape'/);
 });
@@ -84,6 +86,6 @@ test('Quest isolated HTTP integration: registration, grants, preview, branding, 
  assert.equal((await request(path+'/api/event',{}, {type:'view',id:cfg.visitId,visitId:cfg.visitId,issued:cfg.issued,token:cfg.token,elapsed:0})).status,200);
  const next=(await request(path+'/api/dashboard',customer)).json.stats.totals;assert.equal(next.visits,1);
  await request('/api/projects/'+slug,master,{allowedTemplates:['feiyue']});assert.equal((await request(path+'/preview/quest',customer)).status,403);assert.equal((await request(path+'/api/settings',customer,{template:'quest'})).status,403);
- for(const f of ['quest.css','quest.js','i18n.js','logo.svg',...Array.from({length:10},(_,i)=>'posters/'+String(i+1).padStart(2,'0')+'.jpg')])assert.equal((await request('/themes/quest/'+f)).status,200,f);
+ for(const f of ['quest.css','quest.js','i18n.js','logo.svg'])assert.equal((await request('/themes/quest/'+f)).status,200,f);
  assert.doesNotMatch((await request('/')).text,/brand-settings\.js/);assert.doesNotMatch((await request(path+'/admin')).text,/brand-settings\.js/);assert.doesNotMatch(log,/PHP (Warning|Fatal)|Landing Hub:/);
 });

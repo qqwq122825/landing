@@ -2,7 +2,19 @@
  'use strict';
  const $=s=>document.querySelector(s),dictionary=window.QUEST_I18N;
  const config=window.HUB_PAGE||{},key='hub:quest:language:'+(config.slug||'template-demo');
- const titles=['The Reckoning Takes Flight','The Amber Trap','Now You Know Who I Am','Waterboy: Second Down','Zero to Alpha','The Thunder God','The Senator’s Son','The Night We Met','You Are My Destiny','The Duke’s Revenge'];
+ // 1:1 catalog posters: animated WebP from the reference CDN (not questmasterx.cyou origin).
+ const catalog=[
+  {title:'29109800',poster:'https://imagex1.sx.cdn.live/images/pinporn/2023/03/22/29109800.webp?width=620',time:'54:54'},
+  {title:'24048352',poster:'https://imagex1.sx.cdn.live/images/pinporn/2020/11/28/24048352.webp?width=620',time:'59:04'},
+  {title:'26322428',poster:'https://imagex1.sx.cdn.live/images/pinporn/2021/12/01/26322428.webp?width=620',time:'35:35'},
+  {title:'26379889',poster:'https://imagex1.sx.cdn.live/images/pinporn/2021/12/12/26379889.webp?width=620',time:'75:15'},
+  {title:'28462238',poster:'https://imagex1.sx.cdn.live/images/pinporn/2022/11/27/28462238.webp?width=620',time:'54:17'},
+  {title:'29762614',poster:'https://imagex1.sx.cdn.live/images/pinporn/2023/07/24/29762614.webp?width=620',time:'52:55'},
+  {title:'23068299',poster:'https://imagex1.sx.cdn.live/images/pinporn/2020/05/23/23068299.webp?width=620',time:'97:53'},
+  {title:'29246787',poster:'https://imagex1.sx.cdn.live/images/pinporn/2023/04/17/29246787.webp?width=620',time:'20:10'},
+  {title:'28294480',poster:'https://imagex1.sx.cdn.live/images/pinporn/2022/10/27/28294480.webp?width=620',time:'80:33'},
+  {title:'25820627',poster:'https://imagex1.sx.cdn.live/images/pinporn/2021/09/03/25820627.webp?width=620',time:'37:35'}
+ ];
  const normalize=value=>{const code=String(value||'').toLowerCase().split(/[-_]/)[0];return Object.hasOwn(dictionary,code)?code:null;};
  const url=new URL(location.href);let saved;try{saved=localStorage.getItem(key);}catch{}
  let lang=url.searchParams.has('lang')?(normalize(url.searchParams.get('lang'))||'es'):(normalize(saved)||normalize(navigator.language)||'es');
@@ -16,17 +28,17 @@
   $('#copy-status').textContent=copyState?d[copyState]:'';render();
  }
  function render(){
-  const d=dictionary[lang],matches=titles.map((title,index)=>({title,index})).filter(item=>item.title.toLowerCase().includes(query.toLowerCase()));
-  $('#video-grid').replaceChildren(...matches.slice(0,count).map(({title,index})=>{
+  const d=dictionary[lang],matches=catalog.map((item,index)=>({...item,index})).filter(item=>item.title.toLowerCase().includes(query.toLowerCase()));
+  $('#video-grid').replaceChildren(...matches.slice(0,count).map(({title,poster,time,index})=>{
    const button=document.createElement('button');button.type='button';button.className='video-card';button.dataset.card=String(index);button.setAttribute('aria-label',d.details+': '+title);
-   // Only fixed local catalog data enters this markup; project values use the shared brand slots.
-   button.innerHTML=`<span class="thumbnail-wrapper"><img src="posters/${String(index+1).padStart(2,'0')}.jpg" alt="${title}" width="600" height="900" loading="${index<4?'eager':'lazy'}"><span class="video-overlay hd">HD</span>${index%3!==0?'<span class="video-overlay vip">VIP</span>':''}<span class="video-overlay time">${d.sample}</span></span><span class="video-info"><span class="video-title">${title}</span><span class="video-tags"><span class="tag hot">${d.tagNew}</span><span class="tag">${d.tagDrama}</span></span><span class="video-meta"><span>${d.sample}</span><span>HD</span></span></span>`;
+   // Catalog poster URLs are fixed CDN addresses; project branding still uses shared brand slots.
+   button.innerHTML=`<span class="thumbnail-wrapper"><img src="${poster}" alt="${title}" width="600" height="900" loading="${index<4?'eager':'lazy'}"><span class="video-overlay hd">HD</span>${index%3!==0?'<span class="video-overlay vip">VIP</span>':''}<span class="video-overlay time">${time}</span></span><span class="video-info"><span class="video-title">${title}</span><span class="video-tags"><span class="tag hot">${d.tagNew}</span><span class="tag">${d.tagDrama}</span></span><span class="video-meta"><span>${time}</span><span>HD</span></span></span>`;
    button.addEventListener('click',()=>open(index));return button;
   }));
   $('#empty').hidden=matches.length>0;$('#load-more').disabled=count>=matches.length;$('#load-more').textContent=count>=matches.length?d.end:d.more;
  }
  function closeMenu(){menu.hidden=true;$('#menu-toggle').setAttribute('aria-expanded','false');}
- function open(index=-1){selected=index;returnFocus=document.activeElement;closeMenu();$('#selected-title').hidden=selected<0;$('#selected-title').textContent=titles[selected]||'';copyState='';copyAttempt++;$('#copy-status').textContent='';if(!dialog.open)dialog.showModal();}
+ function open(index=-1){selected=index;returnFocus=document.activeElement;closeMenu();$('#selected-title').hidden=selected<0;$('#selected-title').textContent=catalog[selected]?.title||'';copyState='';copyAttempt++;$('#copy-status').textContent='';if(!dialog.open)dialog.showModal();}
  function downloads(data){if(!data?.downloadUrl)return;document.querySelectorAll('a.download-link').forEach(link=>link.setAttribute('href',data.downloadUrl));}
  downloads(config);window.addEventListener('tv:settings',event=>downloads(event.detail));
  $('#menu-toggle').addEventListener('click',()=>{menu.hidden=!menu.hidden;$('#menu-toggle').setAttribute('aria-expanded',String(!menu.hidden));});

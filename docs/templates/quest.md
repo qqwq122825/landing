@@ -4,10 +4,11 @@
 - 来源：https://questmasterx.cyou/；核查日期：2026-09-21。
 - 模板 ID：`quest`；默认应用名称：`Pasion TV`；资源：`public/themes/quest/`。
 - 浏览器检查了首页 DOM、可见桌面页面、390px 手机断点、下载弹窗的 DOM 结构和页面样式。未取得或使用服务端源码。
-- 复刻范围：黑橙配色、50px 固定页头、滚动公告、三项特点、2:3 竖版卡片、HD/VIP 角标、底部下载条、深色圆角下载弹窗。布局断点与原站保持：320px 一列、390px 两列、550–767px 三列、768px 起四列，内容最大宽度 1200px。
-- 差异：页面独立实现，不携带原站成人图片、外链、固定 Pixel ID、下载脚本或第三方运行时。使用已有普通短剧示例图；新增真实的标题搜索、语言菜单、键盘可操作的原生 dialog。没有伪造播放进度、认证标识、热度/点赞统计或上门服务宣传。点击海报打开内容/下载提示，不播放视频。
+- 复刻范围：黑橙配色、50px 固定页头、滚动公告、三项特点、2:3 竖版卡片、HD/VIP 角标、底部下载条、深色圆角下载弹窗；目录海报按原站 1:1 使用其 CDN 动图地址。布局断点与原站保持：320px 一列、390px 两列、550–767px 三列、768px 起四列，内容最大宽度 1200px。
+- 海报：原站缩略图托管在第三方 CDN `imagex1.sx.cdn.live`（CDN77），不是 `questmasterx.cyou` 本机；格式为 **动态 WebP**（非 GIF）。模板直接热链该 CDN（带 `?width=620`），以保留动效并与参考站视觉一致。仍不携带原站固定 Pixel ID、APK / 下载脚本或其他第三方运行时；下载与 Pixel 继续走本站公共实现。
+- 差异：页面独立实现；新增真实的标题搜索、语言菜单、键盘可操作的原生 dialog。没有伪造播放进度、认证标识、热度/点赞统计或上门服务宣传。点击海报打开内容/下载提示，不播放视频。CDN 图源若防盗链、变更或下线，预览会出现破图，属热链风险。
 - 首屏 8 张示例卡片，加载更多后共 10 张；角标 `VIP` 仅为模板视觉示例，不接入收费会员系统。底部明确标注示例目录。
-- CSS、JS、播放图标 SVG 为本站实现。示例海报从工作区已有 Feiyue 资源复制，保留图内原名与署名；未找到额外素材授权证明，商业使用前由部署方核验已有素材授权或替换。默认播放图标不含参考站的图像素材。
+- CSS、JS、功能图标 SVG 为本站实现。默认播放图标不含参考站的图像素材。
 
 ## 原站语言核查
 - 首页 `lang="es"`；桌面及手机可见文案为西班牙语。
@@ -33,29 +34,24 @@
 - `HUB_DEFAULT_TEMPLATES` 固定历史默认的 Feiyue/DPTV；既有 `allowed_templates` 与历史迁移保持不变。新模板需总站主动勾选开放，新开户选 Quest 时同时勾选其开放权限。没有批量修改现有客户。
 
 ## 验证与交付
-- `npm test`：139 项通过（含独立 SQLite 的 Quest 注册、权限、预览、品牌四组合、下载、实际渲染配置和公共 SDK 替身测试）。
+- 海报改为 CDN 热链后，本地不再保留 `public/themes/quest/posters/`；自动测试只检查主题 CSS / JS / i18n / logo 与 CDN 地址写入。
 - 修改的 PHP / JS 逐文件语法检查；`php bin/check.php` 只读预检；`git diff --check`。
-- 浏览器验证实际落地页、总站全局预览、项目预览、子账号新模板卡片和预览；测试全部使用独立临时数据，不改现有客户数据。
-- 桌面与手机截图人工核对；320 / 390 / 768 / 1440px 宽度检查无横向溢出，已载入海报无破图。葡语长文案与中文长品牌名弹窗检查通过。
-- 浏览器本地 SDK 替身：首次 1 次 `PageView`；底栏/弹窗各点击一次，各 1 次 `DownloadClick`。四语切换、搜索与加载更多不增加事件。全局/项目/客户预览事件为 0；显式暂停后 PageView 和下载事件均为 0。空 ID、DNT/GPC、项目隔离同时有自动测试覆盖。
-- 第一方统计在隔离实例显示 1 次访问、2 次点击、1 次下载转化；符合点击与转化不同的既有口径。
-- 测试替身仅注入临时 localhost 测试路由，不进入程序或部署资源。未向 Meta 实际发送验收事件，真实 Meta 接收未验证。
-- 交付以 Git 源码为准，不生成 dist、ZIP，不修改数据目录或安装锁；线上站点部署需服务器拉取本次代码，当前验证为本地状态。
-- 补充浏览器验收：名称/图标四组合及清空恢复通过；手动选择语言后去掉 URL 参数仍保留该项目语言，未知 URL 语言回退 es；空 Pixel ID 页面没有 SDK 事件。浏览器控制台无新增错误。
+- 浏览器验证实际落地页、总站全局预览、项目预览；确认热链动图可加载。测试全部使用独立临时数据，不改现有客户数据。
+- 交付以 Git 源码为准；线上站点部署需服务器拉取本次代码。CDN 图源若防盗链、变更或下线会导致破图，属已知热链风险。
 
-### 海报素材对应（工作区已有 Feiyue 资源）
+### 海报素材对应（参考站 CDN 热链）
 
-原目录：`public/themes/feiyue/template/qqdj003/static/picture/`，文件尾缀均为 `-imageresizew_600h_800m_fillqualityq_80.jpg`。复制为 Quest 自包含资源，原文件保持原样。
+来源页：[questmasterx.cyou](https://questmasterx.cyou/)。图片主机：`imagex1.sx.cdn.live`（响应头可见 CDN77）。模板目录卡片在 `quest.js` 的 `catalog` 中写死以下地址，运行时不再请求本地 `posters/`。
 
-| Quest 文件 | 原素材编号 |
-| --- | --- |
-| posters/01.jpg | 6ffd6b6b-e47c-4500-81ad-afd7fceb6724 |
-| posters/02.jpg | c96cd9c0-42f9-11f1-acb2-c14bef828c82 |
-| posters/03.jpg | 246ba742-51de-407f-bc76-14a2d5940afb |
-| posters/04.jpg | 3d5e00f2-a57b-4298-9484-3cb2231f6df5 |
-| posters/05.jpg | 36129862-e015-4070-a2be-9d41bd3ece5d |
-| posters/06.jpg | fc25da7d-ff0b-46ca-a128-fa75c8e7655f |
-| posters/07.jpg | a0f3f261-bf15-4986-ba81-8b4a37726708 |
-| posters/08.jpg | 14bbc16e-6eca-4683-8a5d-4856f1c51607 |
-| posters/09.jpg | c291d24d-14bb-475d-9982-7488abe7fc32 |
-| posters/10.jpg | 0169937b-3dad-441c-984f-9c2c2a47fedb |
+| 序号 | 标题 / ID | CDN 地址 |
+| --- | --- | --- |
+| 1 | 29109800 | `https://imagex1.sx.cdn.live/images/pinporn/2023/03/22/29109800.webp?width=620` |
+| 2 | 24048352 | `https://imagex1.sx.cdn.live/images/pinporn/2020/11/28/24048352.webp?width=620` |
+| 3 | 26322428 | `https://imagex1.sx.cdn.live/images/pinporn/2021/12/01/26322428.webp?width=620` |
+| 4 | 26379889 | `https://imagex1.sx.cdn.live/images/pinporn/2021/12/12/26379889.webp?width=620` |
+| 5 | 28462238 | `https://imagex1.sx.cdn.live/images/pinporn/2022/11/27/28462238.webp?width=620` |
+| 6 | 29762614 | `https://imagex1.sx.cdn.live/images/pinporn/2023/07/24/29762614.webp?width=620` |
+| 7 | 23068299 | `https://imagex1.sx.cdn.live/images/pinporn/2020/05/23/23068299.webp?width=620` |
+| 8 | 29246787 | `https://imagex1.sx.cdn.live/images/pinporn/2023/04/17/29246787.webp?width=620` |
+| 9 | 28294480 | `https://imagex1.sx.cdn.live/images/pinporn/2022/10/27/28294480.webp?width=620` |
+| 10 | 25820627 | `https://imagex1.sx.cdn.live/images/pinporn/2021/09/03/25820627.webp?width=620` |

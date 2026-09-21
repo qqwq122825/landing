@@ -202,6 +202,6 @@ docs/                   网页安装指南及 updates/ 历史更新记录
 
 ## Quest / Pasion TV 模板（2026-09-21）
 
-新增黑橙色视频卡片模板，对标 [questmasterx.cyou](https://questmasterx.cyou/) 的布局与配色，使用普通短剧示例海报。支持简中 / 英语 / 西语 / 葡语界面、搜索、加载更多与下载弹窗；剧名及海报文字保留原文。原站当前观察范围仅验证西语，其他语言属于平台扩展。详见 [接入与测试记录](docs/templates/quest.md)。
+新增黑橙色视频卡片模板，对标 [questmasterx.cyou](https://questmasterx.cyou/) 的布局与配色；目录海报按原站 1:1 热链其 CDN 动态 WebP（`imagex1.sx.cdn.live`），不落本地、不改 Pixel / APK。支持简中 / 英语 / 西语 / 葡语界面、搜索、加载更多与下载弹窗。原站当前观察范围仅验证西语，其他语言属于平台扩展。详见 [接入与测试记录](docs/templates/quest.md)。
 
 总站「模板管理」可直接预览；在开户或项目管理的「开放模板」勾选 **Quest / Pasion TV** 后，该子账号才会显示和使用。既有账号权限保持不变，未自动开放。名称/图标可留空回退默认品牌，APK 与 Pixel ID 仍默认空；下载和 `PageView` / `DownloadClick` 使用本站公共实现。源码 Git 拉取后直接由 PHP 运行，无新增构建步骤。
