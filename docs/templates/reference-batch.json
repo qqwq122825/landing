@@ -194,5 +194,271 @@
       "图片热链"
     ],
     "appName": "StockVault"
+  },
+  {
+    "id": "kuaibo",
+    "name": "KuaiBo",
+    "brand": "KuaiBo",
+    "sourceNumber": "70",
+    "lang": "en",
+    "description": "参考后台 70 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 70",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "KuaiBo"
+  },
+  {
+    "id": "tikapk",
+    "name": "Tik APK",
+    "brand": "Tik APK",
+    "sourceNumber": "73",
+    "lang": "en",
+    "description": "参考后台 73 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 73",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "Tik APK"
+  },
+  {
+    "id": "jiaoyou",
+    "name": "交友",
+    "brand": "交友",
+    "sourceNumber": "76",
+    "lang": "en",
+    "description": "参考后台 76 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 76",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "交友"
+  },
+  {
+    "id": "cyberheart",
+    "name": "Cyber Heart Show",
+    "brand": "Cyber Heart Show",
+    "sourceNumber": "82",
+    "lang": "en",
+    "description": "参考后台 82 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 82",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "Cyber Heart Show"
+  },
+  {
+    "id": "promotions",
+    "name": "Promotions",
+    "brand": "VELOCITY GAMING",
+    "sourceNumber": "86",
+    "lang": "en",
+    "description": "参考后台 86 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 86",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "VELOCITY GAMING"
+  },
+  {
+    "id": "india",
+    "name": "印度",
+    "brand": "印度",
+    "sourceNumber": "89",
+    "lang": "en",
+    "description": "参考后台 89 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 89",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "印度"
+  },
+  {
+    "id": "apuestamx",
+    "name": "ApuestaMX",
+    "brand": "ApuestaMX",
+    "sourceNumber": "95",
+    "lang": "es",
+    "description": "参考后台 95 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 95",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "ApuestaMX"
+  },
+  {
+    "id": "loveapp",
+    "name": "LoveApp",
+    "brand": "LoveApp",
+    "sourceNumber": "71",
+    "lang": "en",
+    "description": "参考后台 71 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 71",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "LoveApp"
+  },
+  {
+    "id": "qiyou",
+    "name": "qiyou",
+    "brand": "qiyou",
+    "sourceNumber": "75",
+    "lang": "en",
+    "description": "参考后台 75 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 75",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "qiyou"
+  },
+  {
+    "id": "stripchat",
+    "name": "STRIPCHAT",
+    "brand": "STRIPCHAT",
+    "sourceNumber": "78",
+    "lang": "en",
+    "description": "参考后台 78 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 78",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "STRIPCHAT"
+  },
+  {
+    "id": "pornparadise",
+    "name": "Porm Paradise",
+    "brand": "Porm Paradise",
+    "sourceNumber": "79",
+    "lang": "en",
+    "description": "参考后台 79 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 79",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "Porm Paradise"
+  },
+  {
+    "id": "pornhub",
+    "name": "Pornhub",
+    "brand": "Pornhub",
+    "sourceNumber": "80",
+    "lang": "en",
+    "description": "参考后台 80 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 80",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "Pornhub"
+  },
+  {
+    "id": "chatee",
+    "name": "Chatee Live Now",
+    "brand": "Chatee",
+    "sourceNumber": "81",
+    "lang": "en",
+    "description": "参考后台 81 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 81",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "Chatee"
+  },
+  {
+    "id": "cosplay",
+    "name": "Cosplay",
+    "brand": "Cosplay",
+    "sourceNumber": "84",
+    "lang": "en",
+    "description": "参考后台 84 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 84",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "Cosplay"
+  },
+  {
+    "id": "lustylive",
+    "name": "Lusty Live",
+    "brand": "Lusty Live",
+    "sourceNumber": "87",
+    "lang": "en",
+    "description": "参考后台 87 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 87",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "Lusty Live"
+  },
+  {
+    "id": "nightplay",
+    "name": "NightPlay",
+    "brand": "NightPlay",
+    "sourceNumber": "91",
+    "lang": "en",
+    "description": "参考后台 91 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 91",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "NightPlay"
+  },
+  {
+    "id": "bokep",
+    "name": "Website Bokep",
+    "brand": "Website Bokep",
+    "sourceNumber": "94",
+    "lang": "en",
+    "description": "参考后台 94 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 94",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "Website Bokep"
+  },
+  {
+    "id": "xhamster",
+    "name": "XHAMSTER",
+    "brand": "XHAMSTER",
+    "sourceNumber": "97",
+    "lang": "en",
+    "description": "参考后台 97 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 97",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "XHAMSTER"
+  },
+  {
+    "id": "mylive",
+    "name": "MyLive",
+    "brand": "MyLive",
+    "sourceNumber": "99",
+    "lang": "en",
+    "description": "参考后台 99 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 99",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "MyLive"
   }
 ]

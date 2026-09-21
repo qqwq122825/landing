@@ -44,7 +44,7 @@ $required = [
 // Imported templates retain local CSS/JS; display media use documented hotlinks.
 $required[] = 'public/themes/reference/common.js';
 $required[] = 'public/themes/reference/common.css';
-foreach (['ggtv', 'appstore', 'ultraplay', 'yacinetv', 'dptvplus', 'fizzio', 'kyss', 'sparkle', 'newf', 'soccerqueens', 'cinema', 'noxxtv', 'smarttrade', 'stockvault'] as $template) {
+foreach (['ggtv', 'appstore', 'ultraplay', 'yacinetv', 'dptvplus', 'fizzio', 'kyss', 'sparkle', 'newf', 'soccerqueens', 'cinema', 'noxxtv', 'smarttrade', 'stockvault', 'kuaibo', 'tikapk', 'jiaoyou', 'cyberheart', 'promotions', 'india', 'apuestamx', 'loveapp', 'qiyou', 'stripchat', 'pornparadise', 'pornhub', 'chatee', 'cosplay', 'lustylive', 'nightplay', 'bokep', 'xhamster', 'mylive'] as $template) {
     $required[] = 'resources/pages/'.$template.'.html';
     foreach (['theme.css', 'reference-data.js', 'logo.svg'] as $asset) {
         $required[] = 'public/themes/'.$template.'/'.$asset;
@@ -55,7 +55,7 @@ $missing = array_filter($required, static function (string $file) use ($root): b
 });
 $check('核心程序与本地 UI 资源', !$missing);
 foreach ($missing as $file) echo '       缺失或不可读：'.$file.PHP_EOL;
-foreach (['feiyue', 'dptv', 'quest', 'aivideo', 'ggtv','appstore','ultraplay','yacinetv','dptvplus','fizzio','kyss','sparkle','newf','soccerqueens','cinema','noxxtv','smarttrade','stockvault'] as $template) {
+foreach (['feiyue', 'dptv', 'quest', 'aivideo', 'ggtv', 'appstore', 'ultraplay', 'yacinetv', 'dptvplus', 'fizzio', 'kyss', 'sparkle', 'newf', 'soccerqueens', 'cinema', 'noxxtv', 'smarttrade', 'stockvault', 'kuaibo', 'tikapk', 'jiaoyou', 'cyberheart', 'promotions', 'india', 'apuestamx', 'loveapp', 'qiyou', 'stripchat', 'pornparadise', 'pornhub', 'chatee', 'cosplay', 'lustylive', 'nightplay', 'bokep', 'xhamster', 'mylive'] as $template) {
     $check('模板资源目录：'.$template, is_dir($root.'/public/themes/'.$template)
         && is_readable($root.'/public/themes/'.$template));
 }

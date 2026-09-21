@@ -1,0 +1,57 @@
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .site-title {
+      display: inline-block;
+      margin: 0;
+      padding: 0;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      color: #fff;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .download-btn {
+      display: block;
+      width: 62%;
+      max-width: 280px;
+      margin: 0 auto 58px;
+      padding: 12px 14px;
+      border: 1.5px solid #fff;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      background: transparent;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+      cursor: pointer;
+    }
+
+    .tip-text {
+      width: 100%;
+      margin: 0;
+      padding: 6px 10px;
+      border-radius: 0;
+      font-size: 8px;
+      line-height: 1.35;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.45);
+      text-align: center;
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      z-index: 20;
+      box-sizing: border-box;
+    }
+  
+
+/* hub adaptations */
+a.download-link.hub-fallback-cta{position:fixed;right:16px;bottom:16px;z-index:800;padding:12px 18px;border-radius:999px;background:#5665df;color:#fff;font:600 14px system-ui;text-decoration:none}
+.hub-brand-fallback{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}

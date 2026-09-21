@@ -10,7 +10,7 @@
   const regionNames = typeof Intl.DisplayNames === 'function' ? new Intl.DisplayNames(['zh-CN'], { type: 'region' }) : null;
   const country = code => { try { return code ? regionNames?.of(code) || code : '未知'; } catch { return '未知'; } };
   const devices = { mobile: '手机', desktop: '电脑', tablet: '平板', other: '其他' };
-  const templateName = id => ({feiyue:'Feiyue / ReelShort',dptv:'DPTV / MinuteDrama',quest:'Quest / Pasion TV',aivideo:'AI Video / 阿语短视频',ggtv:'GGTV',appstore:'Google Play / 应用详情',ultraplay:'Ultra Play',yacinetv:'Yacine TV',dptvplus:'DPTV / 电视介绍',fizzio:'Fizzio Live',kyss:'KYSS',sparkle:'Sparkle',newf:'NEW-F',soccerqueens:'Soccer Queens',cinema:'Netflix Gratis / 影视目录',noxxtv:'NOXX TV',smarttrade:'SmartTrade',stockvault:'StockVault'})[id] || id;
+  const templateName = id => ({feiyue:'Feiyue / ReelShort',dptv:'DPTV / MinuteDrama',quest:'Quest / Pasion TV',aivideo:'AI Video / 阿语短视频',ggtv:'GGTV',appstore:'Google Play / 应用详情',ultraplay:'Ultra Play',yacinetv:'Yacine TV',dptvplus:'DPTV / 电视介绍',fizzio:'Fizzio Live',kyss:'KYSS',sparkle:'Sparkle',newf:'NEW-F',soccerqueens:'Soccer Queens',cinema:'Netflix Gratis / 影视目录',noxxtv:'NOXX TV',smarttrade:'SmartTrade',stockvault:'StockVault',kuaibo:'KuaiBo',tikapk:'Tik APK',jiaoyou:'交友',cyberheart:'Cyber Heart Show',promotions:'Promotions',india:'印度',apuestamx:'ApuestaMX',loveapp:'LoveApp',qiyou:'qiyou',stripchat:'STRIPCHAT',pornparadise:'Porm Paradise',pornhub:'Pornhub',chatee:'Chatee Live Now',cosplay:'Cosplay',lustylive:'Lusty Live',nightplay:'NightPlay',bokep:'Website Bokep',xhamster:'XHAMSTER',mylive:'MyLive'})[id] || id;
   const previewUrl = id => '/p/' + realm + '/preview/' + id + '?lang=zh';
   const dialog = $('#template-preview');
 

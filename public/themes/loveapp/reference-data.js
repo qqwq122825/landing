@@ -1,0 +1,1 @@
+window.HUB_REFERENCE={"id":"loveapp","sourceNumber":"71","defaultLanguage":"en","brand":"LoveApp","translations":{"t1":{"original":"Download","zh":"下载"},"t2":{"original":"Download the Love App and log in to video chat with real women (the women here are very straightforward, and nearby women can be met offline).","zh":"下载恋爱应用并登录，与真实女性视频聊天（这里的女性非常直接，附近的女性也可以线下见面）。"}}};

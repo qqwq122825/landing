@@ -1,0 +1,1 @@
+window.HUB_REFERENCE={"id":"qiyou","sourceNumber":"75","defaultLanguage":"zh","brand":"qiyou","translations":{"t1":{"original":"Popular","zh":"热门"},"t2":{"original":"Promiscuous","zh":"开放"},"t3":{"original":"Making friends","zh":"交友"},"t4":{"original":"High-speed download","zh":"高速下载"},"t5":{"original":"Alternative Download","zh":"备用下载"}}};

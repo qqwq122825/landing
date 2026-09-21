@@ -1,0 +1,6 @@
+/* adapted theme */
+
+
+/* hub adaptations */
+a.download-link.hub-fallback-cta{position:fixed;right:16px;bottom:16px;z-index:800;padding:12px 18px;border-radius:999px;background:#5665df;color:#fff;font:600 14px system-ui;text-decoration:none}
+.hub-brand-fallback{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}

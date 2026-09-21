@@ -1,0 +1,163 @@
+
+        :root {
+            --neon-pink: #ff2d55;
+            --neon-purple: #bc13fe;
+            --neon-heart: #ff007f;
+            --safe-bottom: env(safe-area-inset-bottom);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+        
+        body { 
+            font-family: -apple-system, sans-serif; 
+            background: #000; 
+            color: #fff; 
+            overflow: hidden; 
+            height: 100vh;
+            width: 100vw;
+            position: fixed;
+        }
+
+        /* === 1. 副落地页 (入口层) === */
+        #entry-layer {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background: #050505;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .check-icon {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            background: #111;
+            border: 2px solid #0f0;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 30px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+        }
+        .check-icon svg { width: 40px; height: 40px; stroke: #0f0; stroke-width: 3; fill: none; }
+
+        .entry-title { font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #eee; }
+        .entry-tip { font-size: 14px; color: #666; margin-bottom: 50px; }
+
+        .enter-btn {
+            width: 200px; height: 50px;
+            background: #fff; color: #000;
+            border-radius: 25px;
+            font-size: 16px; font-weight: bold;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+            transition: transform 0.1s;
+        }
+        .enter-btn:active { transform: scale(0.95); }
+
+        /* === 2. 主界面 (隐藏层) === */
+        #main-layer {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease;
+            position: fixed; inset: 0; z-index: 100;
+        }
+
+        /* 微信/QQ 引导遮罩 */
+        #safetyGuide {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.95); z-index: 99999;
+            flex-direction: column; align-items: center; padding-top: 40px;
+        }
+        .arrow-box { position: absolute; top: 10px; right: 20px; animation: bounce 1s infinite alternate; }
+        @keyframes bounce { to { transform: translateY(10px); } }
+        .guide-text { margin-top: 100px; color: #ccc; text-align: center; line-height: 2; font-size: 15px; }
+
+        /* 背景网格 */
+        .grid-background {
+            position: fixed; inset: 0; display: grid;
+            grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr);
+            gap: 2px; z-index: 0; background: #000;
+        }
+        .grid-item {
+            position: relative; overflow: hidden; background: #111;
+            background: radial-gradient(circle, #1a000d 0%, #000 100%);
+        }
+        .grid-item video {
+            width: 100%; height: 100%; object-fit: cover;
+            opacity: 0; transition: opacity 1s;
+            filter: brightness(0.7) contrast(1.1);
+        }
+        .v-ready video { opacity: 0.6; }
+        .grid-item:nth-child(5) {
+            z-index: 5; border: 2px solid var(--neon-heart);
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.4);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 50% { transform: scale(1.02); box-shadow: 0 0 40px rgba(255, 0, 127, 0.6); } }
+
+        /* 装饰元素 */
+        #heartCanvas { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+        .video-mask {
+            position: fixed; inset: 0; z-index: 3; pointer-events: none;
+            background: linear-gradient(to top, #000 10%, transparent 60%);
+        }
+
+        /* 内容布局 */
+        .main-content {
+            position: relative; z-index: 10; height: 100vh;
+            display: flex; flex-direction: column; justify-content: flex-end;
+            padding: 0 24px 130px; pointer-events: none;
+        }
+        .app-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; pointer-events: auto; }
+        .app-logo {
+            width: 70px; height: 70px; border-radius: 18px;
+            border: 2px solid var(--neon-heart);
+            background: #222; object-fit: cover;
+        }
+        .text-group h1 { font-size: 28px; font-weight: 800; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        .text-group p { font-size: 13px; color: var(--neon-pink); letter-spacing: 2px; margin-top: 5px; }
+        
+        .desc-box {
+            background: rgba(20,20,20,0.8);
+            border-left: 4px solid var(--neon-heart);
+            padding: 12px; border-radius: 0 8px 8px 0;
+            color: #ccc; font-size: 14px; line-height: 1.5;
+            backdrop-filter: blur(5px);
+            pointer-events: auto;
+        }
+
+        /* 底部下载按钮 */
+        .download-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            padding: 20px 24px calc(20px + var(--safe-bottom));
+            background: linear-gradient(to top, #000 80%, transparent);
+            z-index: 20;
+        }
+        .btn-row { display: flex; gap: 12px; }
+        .main-btn {
+            display: block; flex: 1; height: 56px; line-height: 56px;
+            text-align: center; border-radius: 32px;
+            background: var(--neon-heart); color: #fff;
+            font-size: 17px; font-weight: bold; text-decoration: none;
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.5);
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+        .footer-tag { text-align: center; font-size: 12px; color: #666; margin-top: 10px; }
+
+        .status-badge {
+            position: absolute; top: 40px; left: 20px; z-index: 10;
+            background: rgba(0,0,0,0.6); border: 1px solid var(--neon-heart);
+            padding: 6px 12px; border-radius: 20px; font-size: 12px;
+            display: flex; align-items: center; gap: 5px;
+        }
+
+#heartCanvas{position:fixed;inset:0;z-index:2;pointer-events:none}
+#main-layer{opacity:1!important;pointer-events:auto!important;position:relative;z-index:1;height:100%}
+.grid-item video{width:100%;height:100%;object-fit:cover;opacity:.45}
+.grid-item.v-ready video{opacity:.6}
+.grid-item:nth-child(5){outline:2px solid var(--neon-pink);outline-offset:-2px;z-index:1}
+

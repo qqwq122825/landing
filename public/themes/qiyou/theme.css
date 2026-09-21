@@ -1,0 +1,138 @@
+
+    :root {
+      --bg: #050505;
+      --panel: #2a2a2f;
+      --active: #19c7c1;
+      --text: #f5f7fa;
+      --radius: 16px;
+      --banner-radius: 12px;
+      font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      background: #000;
+      color: var(--text);
+    }
+
+    .app {
+      width: min(100vw, 390px);
+      height: 100vh;
+      margin: 0 auto;
+      padding: 12px 8px 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .hero-frame {
+      margin-bottom: 12px;
+    }
+
+    .hero-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: var(--banner-radius);
+    }
+
+    .tab-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding: 8px;
+      background: var(--panel);
+      border-radius: var(--radius);
+    }
+
+    .tab-button {
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1;
+      padding: 12px 8px;
+      cursor: pointer;
+      transition: background-color 180ms ease, color 180ms ease;
+    }
+
+    .tab-button.is-active {
+      background: #67d4d0;
+      color: #0b1111;
+    }
+
+    .banner-frame {
+      margin-top: 12px;
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 84px;
+    }
+
+    .banner-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 0;
+    }
+
+    .download-bar {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      position: fixed;
+      left: 50%;
+      bottom: 12px;
+      transform: translateX(-50%);
+      width: min(calc(100vw - 16px), 374px);
+      padding: 0 10px;
+      z-index: 10;
+    }
+
+    .bottom-mask {
+      position: fixed;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: min(100vw, 390px);
+      height: 72px;
+      background: #000;
+      pointer-events: none;
+      z-index: 6;
+    }
+
+    .download-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      border: 0;
+      border-radius: 999px;
+      background: #61d8d3;
+      color: #051011;
+      font-size: 1rem;
+      font-weight: 800;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+
+    @media (max-width: 640px) {
+      .tab-button {
+        font-size: 0.98rem;
+      }
+    }
+  
+
+/* hub adaptations */
+a.download-link.hub-fallback-cta{position:fixed;right:16px;bottom:16px;z-index:800;padding:12px 18px;border-radius:999px;background:#5665df;color:#fff;font:600 14px system-ui;text-decoration:none}
+.hub-brand-fallback{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}

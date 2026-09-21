@@ -1,0 +1,16 @@
+
+  .imageye-selected {
+    outline: 2px solid black !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5) !important;
+  }
+  body.has-bg{
+  background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(255, 209, 226, .55) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(255, 246, 250, .55) 0%, rgba(255, 233, 242, .5) 40%, rgba(255, 217, 232, .55) 100%),
+    url("https://alphapundits.com/landing-static/84/84/index_files/bg.png") center / cover no-repeat fixed;
+}
+
+
+/* hub adaptations */
+a.download-link.hub-fallback-cta{position:fixed;right:16px;bottom:16px;z-index:800;padding:12px 18px;border-radius:999px;background:#5665df;color:#fff;font:600 14px system-ui;text-decoration:none}
+.hub-brand-fallback{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}

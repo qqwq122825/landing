@@ -1,0 +1,167 @@
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      min-height: 100%;
+      background: #0a1628;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "PingFang SC", "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .page {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      min-height: 100dvh;
+      margin: 0 auto;
+      background: #0a1628;
+      overflow: hidden;
+    }
+
+    /* 背景图：铺满整个视口 */
+    .bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .bg img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+    }
+
+    /* 下载按钮：固定在视口底部，始终可见 */
+    .cta-wrap {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      max-width: 480px;
+      padding: 0 1.5rem;
+      z-index: 10;
+      opacity: 0;
+      animation: fadeIn 0.9s 0.3s ease forwards;
+    }
+
+    .cta-btn {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 1.05rem 1.25rem;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      overflow: hidden;
+      font-family: inherit;
+      text-decoration: none;
+      color: #fff;
+      background: linear-gradient(135deg, #1677ff 0%, #4096ff 45%, #69b1ff 100%);
+      box-shadow:
+        0 6px 22px rgba(22, 119, 255, 0.5),
+        0 0 0 0 rgba(22, 119, 255, 0.4);
+      animation: pulseGlow 2.2s ease-in-out infinite;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .cta-btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.4),
+        transparent
+      );
+      animation: shine 2.8s ease-in-out infinite;
+    }
+    .cta-btn:active {
+      transform: scale(0.97);
+      box-shadow: 0 3px 14px rgba(22, 119, 255, 0.55);
+    }
+
+    .cta-btn .icon {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      animation: iconBounce 1.6s ease-in-out infinite;
+    }
+    .cta-btn .text { text-align: left; line-height: 1.2; }
+    .cta-btn .zh {
+      display: block;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
+    .cta-btn .sub {
+      display: block;
+      margin-top: 3px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      opacity: 0.92;
+    }
+
+    .cta-hint {
+      margin-top: 0.9rem;
+      text-align: center;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      color: rgba(255, 255, 255, 0.55);
+    }
+    .cta-hint .dot {
+      display: inline-block;
+      width: 6px; height: 6px;
+      margin-right: 6px;
+      border-radius: 50%;
+      background: #34d399;
+      box-shadow: 0 0 10px #34d399;
+      vertical-align: middle;
+      animation: blink 1.6s ease-in-out infinite;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translate(-50%, calc(-50% + 20px)); }
+      to { opacity: 1; transform: translate(-50%, -50%); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% {
+        box-shadow:
+          0 6px 22px rgba(22, 119, 255, 0.5),
+          0 0 0 0 rgba(22, 119, 255, 0.45);
+      }
+      50% {
+        box-shadow:
+          0 8px 32px rgba(22, 119, 255, 0.65),
+          0 0 0 10px rgba(22, 119, 255, 0);
+      }
+    }
+    @keyframes shine {
+      0% { left: -100%; }
+      45%, 100% { left: 150%; }
+    }
+    @keyframes iconBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cta-btn, .cta-btn::before, .cta-btn .icon, .cta-hint .dot { animation: none; }
+      .cta-wrap { opacity: 1; animation: none; transform: translate(-50%, -50%); }
+    }
+  
+html,body{margin:0;min-height:100%}.page,.bg,img{width:100%;min-height:100vh;object-fit:cover;display:block}.cta-wrap{position:fixed;left:0;right:0;bottom:28px;display:flex;flex-direction:column;align-items:center;gap:10px;z-index:3;pointer-events:none}.cta-btn{pointer-events:auto;display:inline-flex;align-items:center;gap:12px;padding:14px 22px;border-radius:16px;background:linear-gradient(135deg,#ffb347,#ff5e62);color:#111;text-decoration:none;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.35)}.cta-btn .sub{display:block;font-size:12px;font-weight:500;opacity:.8}.cta-hint{color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6);font-size:13px;display:flex;align-items:center;gap:6px}.cta-hint .dot{width:8px;height:8px;border-radius:50%;background:#3ddc84}

@@ -1,0 +1,201 @@
+
+    :root {
+      --bg-1: #6e2b8f;
+      --bg-2: #df5f77;
+      --panel: #171c2b;
+      --panel-2: #0f1220;
+      --text: #f5f7ff;
+      --muted: #a6acc2;
+      --accent: #ff3d94;
+      --line: #2a3148;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background: radial-gradient(circle at 20% 0%, #ba5d73 0, transparent 45%),
+                  linear-gradient(160deg, var(--bg-1), var(--bg-2));
+      display: flex;
+      justify-content: center;
+      padding: 18px 10px;
+    }
+    .app { width: 100%; max-width: 430px; position: relative; }
+    .header {
+      position: sticky; top: 0; z-index: 10; padding-bottom: 10px;
+      backdrop-filter: blur(8px);
+    }
+    .tabs { display: flex; gap: 8px; }
+    .tab-btn {
+      flex: 1; padding: 0; border: 0; background: transparent; border-radius: 12px;
+      overflow: hidden; cursor: pointer; line-height: 0; opacity: 0.85;
+    }
+    .tab-btn.active { opacity: 1; outline: 2px solid #ff5ea8; }
+    .tab-img { width: 100%; display: block; aspect-ratio: 3 / 1; object-fit: cover; }
+
+    /* ===== List View ===== */
+    .list-view { margin-top: 10px; }
+    .masonry { column-count: 2; column-gap: 10px; transition: opacity 0.22s ease, transform 0.22s ease; }
+    .masonry.switching { opacity: 0.2; transform: translateX(10px); }
+    .card {
+      break-inside: avoid; margin-bottom: 10px;
+      background: var(--panel); border: 1px solid #3d4563; border-radius: 12px; overflow: hidden;
+      transition: transform 0.2s ease; cursor: pointer;
+    }
+    .card:active { transform: scale(0.98); }
+    .thumb { width: 100%; display: block; aspect-ratio: 3 / 4; object-fit: cover; background: #31374d; }
+    .meta { padding: 10px; }
+    .name { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+    .row { display: flex; justify-content: space-between; color: #d8dcf2; font-size: 12px; margin-bottom: 10px; }
+    .view-btn {
+      width: 100%; border: 0; border-radius: 10px; padding: 10px;
+      color: #fff; cursor: pointer;
+      background: linear-gradient(90deg, #2ec4ff, #d45fff);
+      font-size: 14px;
+    }
+
+    /* ===== Detail View ===== */
+    .detail-view {
+      display: none; margin-top: 6px;
+      background: var(--panel-2); border-radius: 12px;
+      border: 1px solid var(--line); overflow: hidden;
+    }
+    .detail-cover {
+      width: 100%; aspect-ratio: 4 / 3; object-fit: cover;
+      display: block; background: #232a3d;
+    }
+    .detail-body { padding: 14px 12px 14px; }
+    .detail-title { font-size: 20px; margin-bottom: 8px; }
+    .detail-meta {
+      display: flex; justify-content: space-between;
+      color: var(--muted); font-size: 14px; margin-bottom: 12px;
+    }
+    }
+    .actions { display: flex; gap: 10px; }
+    .btn {
+      flex: 1; border: 0; border-radius: 999px; padding: 12px 8px;
+      color: #fff; cursor: pointer; font-size: 14px;
+    }
+    .btn-primary-custom { background: linear-gradient(90deg, #2ec4ff, #d45fff); }
+    .btn-back { background: #2b324a; }
+
+    /* ===== Loading ===== */
+    .page-loading {
+      position: fixed; inset: 0; z-index: 999;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(160deg, var(--bg-1), var(--bg-2));
+      transition: opacity 0.4s;
+    }
+    .page-loading.hide { opacity: 0; pointer-events: none; }
+    .loader {
+      width: 40px; height: 40px; border: 3px solid rgba(255,255,255,.15);
+      border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ===== Google Play 风格下载页 ===== */
+    .download-view {
+      display: none; background: #fff; border-radius: 12px; overflow: hidden;
+      animation: fadeIn 0.3s ease; color: #333; min-height: 90vh;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* 顶部返回条 */
+    .dl-topbar {
+      display: flex; align-items: center; padding: 8px 12px;
+      border-bottom: 1px solid #eee;
+    }
+    .dl-topbar .back-icon {
+      width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: #555; font-size: 20px; margin-right: 8px;
+    }
+    .dl-topbar .back-icon:hover { background: #f0f0f0; }
+    .dl-topbar span { font-size: 14px; color: #555; }
+
+    /* 应用头部 - 仿 Google Play */
+    .dl-app-header {
+      display: flex; gap: 14px; padding: 16px;
+      background: #fff; border-bottom: 1px solid #f0f0f0;
+    }
+    .dl-app-icon {
+      width: 72px; height: 72px; border-radius: 16px; overflow: hidden;
+      flex-shrink: 0; background: #f5f5f5;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    }
+    .dl-app-icon img { width: 100%; height: 100%; object-fit: cover; }
+    .dl-app-icon .noimg { font-size: 30px; }
+    .dl-app-info { flex: 1; }
+    .dl-app-name {
+      font-size: 18px; font-weight: 700; color: #1a1a1a;
+      margin-bottom: 2px; line-height: 1.2;
+    }
+    .dl-app-dev {
+      font-size: 12px; color: #666; margin-bottom: 6px
+    }
+    .dl-app-rating {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: #888;
+    }
+    .dl-app-rating .stars { color: #f4b740; font-size: 14px; letter-spacing: 1px; }
+
+    /* 安装按钮 - Google Play 绿色 */
+    .dl-install-wrap {
+      padding: 12px 16px 16px;
+      background: #fff;
+    }
+    .dl-install-btn {
+      width: 100%; padding: 14px; border: 0; border-radius: 8px;
+      background: #1a73e8; color: #fff;
+      font-size: 16px; font-weight: 600; cursor: pointer;
+      transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .dl-install-btn:active { transform: scale(0.98); background: #1557b0; }
+    .dl-install-btn i { font-size: 18px; }
+    .dl-install-size {
+      text-align: center; margin-top: 8px; font-size: 12px; color: #888;
+    }
+
+    /* 截图区域 - Google Play 风格 */
+    .dl-section {
+      padding: 16px; border-bottom: 1px solid #f0f0f0;
+    }
+    .dl-section:last-child { border-bottom: none; }
+    .dl-section h6 {
+      font-size: 14px; font-weight: 600; color: #1a1a1a;
+      margin-bottom: 10px;
+    }
+    .dl-screenshots {
+      display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .dl-screenshots img {
+      width: 130px; height: 230px; border-radius: 8px; flex-shrink: 0;
+      border: 1px solid #e0e0e0; background: #f5f5f5; object-fit: cover;
+    }
+
+    /* 应用信息 */
+    .dl-info-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    }
+    .dl-info-item { font-size: 12px; }
+    .dl-info-item .label { color: #888; margin-bottom: 2px; }
+    .dl-info-item .value { color: #333; font-weight: 500; }
+
+    /* 安全认证 */
+    .dl-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 4px 10px; background: #e8f5e9; color: #2e7d32;
+      border-radius: 12px; font-size: 11px; font-weight: 500;
+    }
+
+    /* Back button */
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 4px;
+      color: var(--muted); font-size: 13px; cursor: pointer;
+      padding: 8px 0; transition: color 0.2s;
+    }
+    .back-btn:hover { color: var(--text); }
+  
+.tab-fallback{background:linear-gradient(90deg,#2ec4ff,#d45fff);height:72px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff}.brand-row{color:#fff}.download-view{background:#fff;border-radius:12px;color:#333}.dl-app-name{font-size:20px;font-weight:700}.view-btn{display:block;text-align:center;text-decoration:none}.page-loading{display:none!important}
