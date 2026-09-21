@@ -2,7 +2,7 @@
  'use strict';
  const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
  const realm=document.body.dataset.realm,isSuper=realm==='super',base=isSuper?'/api':'/p/'+realm+'/api';
- const state={csrf:'',username:'',projects:[],totals:{},active:0,view:'overview',project:null,stats:null,page:1,days:7,search:'',filter:'all',credentials:null,deleteSlug:null,deleting:false,pendingTemplate:null,previewMode:null,templates:[],templateSearch:'',selectedTemplate:null};
+ const state={csrf:'',username:'',projects:[],totals:{},active:0,view:'overview',project:null,stats:null,page:1,days:7,search:'',filter:'all',credentials:null,deleteSlug:null,deleting:false,creating:false,pendingTemplate:null,previewMode:null,templates:[],templateSearch:'',selectedTemplate:null};
  const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const n=value=>Number(value||0).toLocaleString('zh-CN');
  const date=value=>new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date(Number(value)));
@@ -20,6 +20,16 @@
  function showModal(selector){const el=typeof selector==='string'?$(selector):selector;if(!el.classList.contains('show'))modalFocus.set(el,document.activeElement);$$('.modal.show').filter(d=>d!==el).forEach(hideModal);tabler.Modal.getOrCreateInstance(el).show();}
  function hideModal(selector){const el=typeof selector==='string'?$(selector):selector;if(!el?.classList.contains('show'))return;document.activeElement?.blur();tabler.Modal.getOrCreateInstance(el).hide();const trigger=modalFocus.get(el);if(trigger?.isConnected&&!trigger.closest('[hidden],.modal:not(.show)'))trigger.focus();}
  function toast(message,error=false){const el=$('#toast');$('#toast-text').textContent=message;el.classList.toggle('bg-danger-lt',error);tabler.Toast.getOrCreateInstance(el,{delay:4500}).show();}
+ function syncCreateTemplates(reset=false){
+  const select=$('#create-form [name=template]'),previous=reset?'':select.value;
+  const allowed=$$('#create-form [name=allowedTemplates]:checked').map(input=>input.value);
+  select.innerHTML=allowed.length?allowed.map(id=>`<option value="${escape(id)}">${escape(templateName(id))}</option>`).join(''):'<option value="">请先勾选开放模板</option>';
+  select.value=allowed.includes(previous)?previous:(allowed[0]||'');
+  select.disabled=allowed.length===0;
+  $('#create-form [type=submit]').disabled=state.creating||allowed.length===0;
+  $('#create-template-hint').textContent=allowed.length===0?'请至少勾选一款开放模板后再创建项目。':allowed.length===1?'仅开放这一款，已自动设为初始模板。':'仅显示上方已开放的模板，可选择项目初次使用的模板。';
+  return allowed.length>0;
+ }
  function setupSidebar(){
   const key='landing-hub:sidebar',desktop=window.matchMedia('(min-width: 992px)'),compact=window.matchMedia('(max-width: 1279.98px)');
   const root=document.documentElement,toggle=$('#sidebar-toggle'),mobileToggle=$('#sidebar-mobile-toggle'),menu=$('#sidebar-menu');
@@ -141,7 +151,7 @@
   const size=e.target.closest('[data-preview-size]');if(size){setPreviewSize(size.dataset.previewSize);return;}
   const nav=e.target.closest('[data-view]');if(nav&&isSuper){sidebar.closeMobileMenu();busy(nav,()=>({overview,templates:templateLibrary,analytics,audit:auditView}[nav.dataset.view])());return;}
   const el=e.target.closest('[data-action]');if(!el)return;const a=el.dataset.action;
-  if(a==='create'){$('#create-form').reset();$('#create-error').textContent='';showModal('#create-dialog');}
+  if(a==='create'){$('#create-form').reset();syncCreateTemplates(true);$('#create-error').textContent='';showModal('#create-dialog');}
   if(a==='reload')busy(el,refresh);
   if(a==='manage'){state.page=1;busy(el,()=>detail(el.dataset.slug));}
   if(a==='copy-url')copy(location.origin+'/p/'+el.dataset.slug);
@@ -156,7 +166,8 @@
  });
  $('#login-form').addEventListener('submit',async e=>{e.preventDefault();$('#login-error').textContent='';const btn=$('#login-submit');btn.disabled=true;try{const data=await post('/login',{username:$('#username').value.trim(),password:$('#password').value});state.csrf=data.csrf;state.username=data.username;$('#password').value='';showShell();if(isSuper)await overview();else await detail(realm);}catch(e){$('#login-error').textContent=e.message;}finally{btn.disabled=false;}});
  $('#logout').addEventListener('click',()=>busy($('#logout'),async()=>{await post('/logout');showLogin();}));
- $('#create-form').addEventListener('submit',async e=>{e.preventDefault();const form=e.currentTarget,button=form.querySelector('[type=submit]');button.disabled=true;$('#create-error').textContent='';try{const result=await post('/projects',{...Object.fromEntries(new FormData(form)),allowedTemplates:new FormData(form).getAll('allowedTemplates')});hideModal('#create-dialog');showCredentials(result.credentials,result.project.slug);await overview();}catch(e){$('#create-error').textContent=e.message;}finally{button.disabled=false;}});
+ $('#create-form').addEventListener('change',e=>{if(e.target.name==='allowedTemplates'){syncCreateTemplates();$('#create-error').textContent='';}});
+ $('#create-form').addEventListener('submit',async e=>{e.preventDefault();if(state.creating||!syncCreateTemplates())return;const form=e.currentTarget;state.creating=true;syncCreateTemplates();$('#create-error').textContent='';try{const data=new FormData(form);const result=await post('/projects',{...Object.fromEntries(data),allowedTemplates:data.getAll('allowedTemplates')});hideModal('#create-dialog');showCredentials(result.credentials,result.project.slug);await overview();}catch(e){$('#create-error').textContent=e.message;}finally{state.creating=false;syncCreateTemplates();}});
  $('#copy-credentials').addEventListener('click',copyDelivery);
  $('#delete-confirm-slug').addEventListener('input',()=>{$('#delete-submit').disabled=state.deleting||!state.deleteSlug||$('#delete-confirm-slug').value!==state.deleteSlug;});
  $('#delete-dialog').addEventListener('hide.bs.modal',e=>{
@@ -189,5 +200,6 @@
  $('#preview-dialog').addEventListener('hide.bs.modal',()=>{$('#preview-frame').removeAttribute('src');state.previewMode=null;state.pendingTemplate=null;});
  $('#apply-template').addEventListener('click',()=>busy($('#apply-template'),async()=>{if(state.previewMode!=='project'||!state.project)return;await post(settingsPath(),{template:state.pendingTemplate});hideModal('#preview-dialog');toast('模板已应用');await detail(state.project.slug,true);}));
  const sidebar=setupSidebar();
+ syncCreateTemplates(true);
  initialize();
 })();
