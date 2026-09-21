@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es" dir="ltr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d0d0d"><title>Pasion TV</title>
+<link data-hub-logo rel="icon" type="image/svg+xml" href="logo.svg">
+<link data-hub-logo rel="apple-touch-icon" href="logo.svg">
+<link rel="stylesheet" href="quest.css?v=1">
+<script src="i18n.js?v=1" defer></script><script src="quest.js?v=1" defer></script>
+</head>
+<body>
+<svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="9" r="3"/><path d="M5 18c1-6 13-6 14 0"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><path d="m8 4 12 8-12 8Z"/></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20 3 11C-2 3 8-1 12 6c4-7 14-3 9 5Z"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2 3 7 8 1-6 5 2 8-7-4-7 4 2-8-6-5 8-1Z"/></symbol>
+<symbol id="i-close" viewBox="0 0 24 24"><path d="m5 5 14 14M5 19 19 5"/></symbol>
+<symbol id="i-fire" viewBox="0 0 24 24"><path d="M12 2c6 7 2 8 6 7 8 10-3 17-10 12C0 16 8 11 8 8c0 4 4 3 4-6Z"/></symbol>
+</defs></svg>
+<header class="site-header">
+<div class="header-left"><button class="icon-button" id="menu-toggle" aria-controls="site-menu" aria-expanded="false" data-i18n-aria="menu"><svg><use href="#i-menu"/></svg></button>
+<img data-hub-logo class="brand-icon optional-icon" src="logo.svg" alt="Pasion TV" width="28" height="28">
+<div class="logo" data-hub-wordmark>Pasion<span>TV</span></div></div>
+<div class="header-right"><button class="icon-button" id="search-toggle" aria-controls="search-panel" aria-expanded="false" data-i18n-aria="search"><svg><use href="#i-search"/></svg></button><button class="icon-button" data-open-app data-i18n-aria="app"><svg><use href="#i-user"/></svg></button></div>
+</header>
+<nav id="site-menu" class="site-menu" hidden>
+<div class="menu-brand"><img data-hub-logo src="logo.svg" alt="Pasion TV" width="32" height="32"><strong data-hub-name>Pasion TV</strong></div>
+<label for="language" data-i18n="language">Idioma</label><select id="language"><option value="es">Español</option><option value="en">English</option><option value="zh">简体中文</option><option value="pt">Português</option></select>
+<button type="button" data-open-app data-i18n="app">Descubre la app</button></nav>
+<div class="notice-bar"><div class="notice-content" data-i18n="notice">Guarda esta página en favoritos y descubre más historias en la app.</div></div>
+<div class="feature-strip"><span class="feature-tag"><svg><use href="#i-play"/></svg><span data-i18n="feature1">Historias para cada momento</span></span><span class="feature-tag"><svg><use href="#i-heart"/></svg><span data-i18n="feature2">Tus favoritos</span></span><span class="feature-tag"><svg><use href="#i-star"/></svg><span data-i18n="feature3">Calidad HD</span></span></div>
+<main class="container">
+<form id="search-panel" class="search-panel" role="search" hidden><label class="sr-only" for="search" data-i18n="search">Buscar</label><input id="search" type="search" maxlength="120" data-i18n-placeholder="searchPlaceholder" autocomplete="off"><button type="submit" data-i18n="search">Buscar</button></form>
+<h1 class="section-title"><svg><use href="#i-fire"/></svg><span data-i18n="featured">Recomendaciones destacadas</span></h1>
+<div id="video-grid" class="video-grid"></div>
+<p id="empty" class="empty" data-i18n="empty" hidden>No hay resultados. Prueba otro título.</p>
+<button id="load-more" class="loading-more" type="button" data-i18n="more">Haz clic para cargar más</button>
+<p class="demo-note" data-i18n="demo">Catálogo de muestra · Las imágenes y los títulos son ejemplos.</p>
+<noscript><p>JavaScript is required to display this sample catalog.</p></noscript>
+</main>
+<footer class="sticky-footer"><img data-hub-logo class="brand-icon optional-icon" src="logo.svg" alt="Pasion TV" width="34" height="34"><div class="footer-text"><div class="footer-title" data-i18n="footerTitle">Descarga la app</div><div class="footer-sub" data-i18n="footerSub">Más historias, en cualquier momento</div></div><a href="#" class="footer-btn download-link" data-download="footer" data-i18n="download">Descargar ahora</a></footer>
+<dialog id="app-dialog" class="app-dialog" aria-labelledby="modal-heading">
+<div class="modal-header"><h2 id="modal-heading" data-i18n="modalHeading">Descubre la app</h2><button class="icon-button close-btn" id="close-dialog" data-i18n-aria="close"><svg><use href="#i-close"/></svg></button></div>
+<div class="modal-body"><img data-hub-logo class="modal-logo" src="logo.svg" alt="Pasion TV" width="52" height="52"><strong class="modal-brand" data-hub-name>Pasion TV</strong><div class="vip-badge" data-i18n="recommended">Recomendado</div>
+<p id="selected-title" class="selected-title" hidden></p><p class="modal-title" data-i18n="modalTitle">Continúa viendo en la app</p><p class="sub-text" data-i18n="modalText">Este sitio muestra un catálogo de ejemplo. Abre la app para consultar el contenido disponible.</p>
+<a href="#" class="action-btn download-btn download-link" data-download="dialog" data-i18n="install">Descargar la app</a>
+<p class="device-tip" data-i18n="device">APK para Android. En otros dispositivos, abre este enlace en tu teléfono Android.</p>
+<button class="share-btn" id="copy-link" type="button" data-i18n="copy">Copiar enlace de esta página</button><p id="copy-status" class="copy-status" role="status" aria-live="polite"></p></div>
+</dialog>
+</body></html>

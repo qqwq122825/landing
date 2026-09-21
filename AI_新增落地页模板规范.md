@@ -90,11 +90,11 @@ app/tenant.html + public/assets/tenant.*   子后台入口与模板权限界面
 
 ### 新增注册时逐处核对
 
-当前项目仍有两模板写死的分支，单纯复制 HTML 文件不够：
+当前项目仍有模板注册列表与 UI 名称映射需要同步，单纯复制 HTML 文件不够：
 
-- `app/bootstrap.php`：`HUB_TEMPLATES`、`HUB_TEMPLATE_NAMES` 默认应用名、配置验证和默认开放逻辑。
+- `app/bootstrap.php`：`HUB_TEMPLATES`、`HUB_DEFAULT_TEMPLATES` 历史默认范围、`HUB_TEMPLATE_NAMES` 默认应用名、配置验证和默认开放逻辑。
 - `app/routes.php`：`template_catalog()` 元数据、`render_landing()` 白名单、全局预览样例。
-- `public/index.php`：项目模板预览路由目前明确列出 `feiyue|dptv`。
+- `public/index.php`：项目模板预览路由通过 `HUB_TEMPLATES` 校验模板 ID。
 - `app/console.html`：开户模板选项、开放复选框。
 - `public/assets/console.js`：模板名称、标签、项目详情卡、开放列表、款数。
 - `public/assets/console.css`：模板卡片展示所需样式。
@@ -208,7 +208,7 @@ app/tenant.html + public/assets/tenant.*   子后台入口与模板权限界面
 
 ### 当前旧模板基线：并非“全语言完成”
 
-以下为 2026-09-21 的源码核对结果，后续完成补齐后更新此表：
+以下为 2026-09-21 的旧模板源码核对结果，后续完成补齐后更新此表。新增 Quest 的独立四语界面验证见 `docs/templates/quest.md`：
 
 | 模板 | 当前基线 | 已知待补齐 |
 | --- | --- | --- |

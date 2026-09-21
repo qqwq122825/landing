@@ -36,14 +36,15 @@ $required = [
     'public/assets/brand-settings.js', 'public/assets/collector.js',
     'public/assets/vendor/tabler-1.5.1/tabler.min.css',
     'public/assets/vendor/tabler-1.5.1/tabler.min.js',
-    'resources/pages/feiyue.html', 'resources/pages/dptv.html',
+    'resources/pages/feiyue.html', 'resources/pages/dptv.html', 'resources/pages/quest.html',
+    'public/themes/quest/quest.css', 'public/themes/quest/quest.js', 'public/themes/quest/i18n.js', 'public/themes/quest/logo.svg',
 ];
 $missing = array_filter($required, static function (string $file) use ($root): bool {
     return !is_file($root.'/'.$file) || !is_readable($root.'/'.$file);
 });
 $check('核心程序与本地 UI 资源', !$missing);
 foreach ($missing as $file) echo '       缺失或不可读：'.$file.PHP_EOL;
-foreach (['feiyue', 'dptv'] as $template) {
+foreach (['feiyue', 'dptv', 'quest'] as $template) {
     $check('模板资源目录：'.$template, is_dir($root.'/public/themes/'.$template)
         && is_readable($root.'/public/themes/'.$template));
 }

@@ -47,3 +47,7 @@ body{font-family:system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaH
 .error-page{display:grid;place-items:center;min-height:100vh;background:#f6f8fb;margin:0}.empty-card{padding:40px;max-width:520px;text-align:center}.logo-mark{font-size:32px;color:#206bc4}
 @media(max-width:1100px){.detail-grid{grid-template-columns:1fr}.stats-grid{gap:12px}.hub-ranking{grid-template-columns:130px 1fr 50px}}
 @media(max-width:767px){#main{padding:0 16px}.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.template-grid,.template-library-grid{grid-template-columns:1fr}.filters{width:100%;margin-left:0;flex-wrap:wrap}.filters .input-icon{flex:1;min-width:150px}.filters .form-select{width:120px}.card-header{padding:16px}.card-body{padding:16px}.template-library-grid{padding:16px}.hub-ranking{grid-template-columns:100px 1fr 40px;gap:10px}.modal-dialog{margin:12px}.page-header .btn-list{width:100%}}
+
+/* Quest's preview tile reflects the landing theme; controls remain native Tabler. */
+.card-header.quest{background:linear-gradient(135deg,#171717,#34302a)!important;color:#ffb435}
+.card-header.quest strong{color:#ffb435}

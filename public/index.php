@@ -14,7 +14,8 @@ try{
  elseif(($path==='/'||$path==='/admin')&&$method==='GET'){render_console('super');}
  elseif(preg_match('#^/templates/([a-z0-9_-]+)/preview$#D',$path,$m)&&$method==='GET'){render_catalog_preview($m[1]);}
  elseif(preg_match('#^/p/([a-z0-9]{7,12})/admin/?$#D',$path,$m)&&$method==='GET'){render_console($m[1]);}
- elseif(preg_match('#^/p/([a-z0-9]{7,12})/preview/(feiyue|dptv)$#D',$path,$m)&&$method==='GET'){
+ elseif(preg_match('#^/p/([a-z0-9]{7,12})/preview/([a-z0-9_-]+)$#D',$path,$m)&&$method==='GET'){
+  if(!in_array($m[2],HUB_TEMPLATES,true))throw new HubError('模板不存在',404);
   $p=project($m[1]);$isSuper=false;try{auth('super');$isSuper=true;}catch(HubError $e){if(session_status()===PHP_SESSION_ACTIVE)session_write_close();}
   if(!$isSuper){$account=auth($m[1]);if(!in_array($m[2],project_templates($account),true))throw new HubError('该模板尚未对当前账号开放',403);}render_landing($p,true,$m[2]);
  }
