@@ -1,0 +1,4 @@
+
+/* Project branding and narrow-screen containment. */
+[data-hub-name],[data-hub-wordmark]{overflow-wrap:anywhere}img[data-hub-logo]{object-fit:contain}html{scroll-behavior:smooth}body{overflow-x:clip}[hidden]{display:none!important}
+.screenshotSwiper .swiper-wrapper{overflow-x:auto;scroll-snap-type:x mandatory;transform:none!important}.screenshotSwiper .swiper-slide{scroll-snap-align:center;flex-shrink:0;width:min(76vw,280px)!important}.screenshotSwiper .swiper-pagination{display:none}

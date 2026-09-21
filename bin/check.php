@@ -41,12 +41,21 @@ $required = [
     'public/themes/aivideo/teaser.jpg', 'public/themes/aivideo/teaser.mp4', 'public/themes/aivideo/stories.webp',
     'public/themes/quest/quest.css', 'public/themes/quest/quest.js', 'public/themes/quest/i18n.js', 'public/themes/quest/logo.svg',
 ];
+// Imported templates retain local CSS/JS; display media use documented hotlinks.
+$required[] = 'public/themes/reference/common.js';
+$required[] = 'public/themes/reference/common.css';
+foreach (['ggtv', 'appstore', 'ultraplay', 'yacinetv', 'dptvplus', 'fizzio', 'kyss', 'sparkle', 'newf', 'soccerqueens', 'cinema', 'noxxtv', 'smarttrade', 'stockvault'] as $template) {
+    $required[] = 'resources/pages/'.$template.'.html';
+    foreach (['theme.css', 'reference-data.js', 'logo.svg'] as $asset) {
+        $required[] = 'public/themes/'.$template.'/'.$asset;
+    }
+}
 $missing = array_filter($required, static function (string $file) use ($root): bool {
     return !is_file($root.'/'.$file) || !is_readable($root.'/'.$file);
 });
 $check('核心程序与本地 UI 资源', !$missing);
 foreach ($missing as $file) echo '       缺失或不可读：'.$file.PHP_EOL;
-foreach (['feiyue', 'dptv', 'quest', 'aivideo'] as $template) {
+foreach (['feiyue', 'dptv', 'quest', 'aivideo', 'ggtv','appstore','ultraplay','yacinetv','dptvplus','fizzio','kyss','sparkle','newf','soccerqueens','cinema','noxxtv','smarttrade','stockvault'] as $template) {
     $check('模板资源目录：'.$template, is_dir($root.'/public/themes/'.$template)
         && is_readable($root.'/public/themes/'.$template));
 }

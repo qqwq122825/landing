@@ -130,7 +130,7 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
  await t.test('mutation rejects missing CSRF and cross-origin requests',async()=>{assert.equal((await post('/api/projects',{name:'bad'},{cookie:master.cookie})).status,403);assert.equal((await post('/api/projects',{name:'bad'},{...master,origin:'https://other.example'})).status,403);});
  await t.test('master sees the complete template catalog before creating any project',async()=>{
   const r=await request('/api/templates',master);assert.equal(r.status,200);assert.match(r.headers.get('cache-control'),/no-store/);assert.equal(r.data.projectCount,0);
-  assert.deepEqual(r.data.templates.map(t=>t.id),['feiyue','dptv','quest','aivideo']);
+  assert.deepEqual(r.data.templates.map(t=>t.id),['feiyue','dptv','quest','aivideo','ggtv','appstore','ultraplay','yacinetv','dptvplus','fizzio','kyss','sparkle','newf','soccerqueens','cinema','noxxtv','smarttrade','stockvault']);
   for(const item of r.data.templates){assert.equal(item.usedCount,0);assert.equal(item.allowedCount,0);assert.deepEqual(item.projects,[]);assert.equal(item.previewUrl,'/templates/'+item.id+'/preview');}
   const page=await request('/');assert.match(page.text,/data-view="templates"/);assert.match(page.text,/data-preview-size="desktop"/);
  });

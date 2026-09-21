@@ -1,0 +1,6 @@
+.hub-ref-language{position:fixed;right:12px;bottom:82px;z-index:900;max-width:170px;padding:7px 10px;border:1px solid #7775;border-radius:8px;background:#fff;color:#24262a;font:12px system-ui;box-shadow:0 2px 9px #0002}
+#hub-ref-dialog{width:min(420px,calc(100vw - 32px));padding:28px;border:1px solid #8884;border-radius:18px;background:#181b23;color:#fff;text-align:center;box-shadow:0 20px 80px #0008;font:16px/1.5 system-ui;max-height:85svh;overflow:auto}
+#hub-ref-dialog::backdrop{background:#000b}#hub-ref-dialog:not([open]){display:none}#hub-ref-dialog>button{position:absolute;inset:8px 8px auto auto;border:0;background:none;color:inherit;font:26px system-ui;cursor:pointer}#hub-ref-dialog h2{font:700 24px/1.3 system-ui}#hub-ref-dialog p{color:#c3c8d5}#hub-ref-dialog>a{display:block;padding:12px;border-radius:10px;color:#fff;background:#5567ec;text-decoration:none;font-weight:700}#hub-ref-dialog img{max-width:100%;object-fit:contain}
+a.download-link{cursor:pointer}a.download-link[role=button]{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}.hub-demo-note{font:12px/1.6 system-ui;text-align:center;padding:8px 16px;opacity:.75}
+
+body[data-reference-template="soccerqueens"] .hub-ref-language{top:12px;bottom:auto}

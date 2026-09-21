@@ -1,0 +1,198 @@
+[
+  {
+    "id": "ggtv",
+    "name": "GGTV",
+    "brand": "GGTV",
+    "sourceNumber": "68",
+    "lang": "en",
+    "description": "参考后台 68 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 68",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "GGTV"
+  },
+  {
+    "id": "appstore",
+    "name": "Google Play / 应用详情",
+    "brand": "Cast",
+    "sourceNumber": "69",
+    "lang": "en",
+    "description": "参考后台 69 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 69",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "Cast"
+  },
+  {
+    "id": "ultraplay",
+    "name": "Ultra Play",
+    "brand": "Ultra Play",
+    "sourceNumber": "74",
+    "lang": "hi",
+    "description": "参考后台 74 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 74",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "Ultra Play"
+  },
+  {
+    "id": "yacinetv",
+    "name": "Yacine TV",
+    "brand": "Yacine TV",
+    "sourceNumber": "77",
+    "lang": "fr",
+    "description": "参考后台 77 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 77",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "Yacine TV"
+  },
+  {
+    "id": "dptvplus",
+    "name": "DPTV / 电视介绍",
+    "brand": "DPTV",
+    "sourceNumber": "83",
+    "lang": "en",
+    "description": "参考后台 83 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 83",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "DPTV"
+  },
+  {
+    "id": "fizzio",
+    "name": "Fizzio Live",
+    "brand": "Fizzio",
+    "sourceNumber": "85",
+    "lang": "en",
+    "description": "参考后台 85 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 85",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "Fizzio"
+  },
+  {
+    "id": "kyss",
+    "name": "KYSS",
+    "brand": "KYSS",
+    "sourceNumber": "88",
+    "lang": "en",
+    "description": "参考后台 88 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 88",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "KYSS"
+  },
+  {
+    "id": "sparkle",
+    "name": "Sparkle",
+    "brand": "Sparkle",
+    "sourceNumber": "90",
+    "lang": "en",
+    "description": "参考后台 90 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 90",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "Sparkle"
+  },
+  {
+    "id": "newf",
+    "name": "NEW-F",
+    "brand": "NEW-F",
+    "sourceNumber": "92",
+    "lang": "en",
+    "description": "参考后台 92 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 92",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "NEW-F"
+  },
+  {
+    "id": "soccerqueens",
+    "name": "Soccer Queens",
+    "brand": "Soccer Queens",
+    "sourceNumber": "93",
+    "lang": "en",
+    "description": "参考后台 93 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 93",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "Soccer Queens"
+  },
+  {
+    "id": "cinema",
+    "name": "Netflix Gratis / 影视目录",
+    "brand": "Netflix Gratis",
+    "sourceNumber": "96",
+    "lang": "es",
+    "description": "参考后台 96 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 96",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "Netflix Gratis"
+  },
+  {
+    "id": "noxxtv",
+    "name": "NOXX TV",
+    "brand": "NOXX",
+    "sourceNumber": "100",
+    "lang": "en",
+    "description": "参考后台 100 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 100",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "NOXX"
+  },
+  {
+    "id": "smarttrade",
+    "name": "SmartTrade",
+    "brand": "SmartTrade",
+    "sourceNumber": "101",
+    "lang": "en",
+    "description": "参考后台 101 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 101",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "SmartTrade"
+  },
+  {
+    "id": "stockvault",
+    "name": "StockVault",
+    "brand": "StockVault",
+    "sourceNumber": "102",
+    "lang": "en",
+    "description": "参考后台 102 号模板的平台适配版；语言与交互差异详见接入记录。",
+    "tags": [
+      "参考 102",
+      "独立配置",
+      "图片热链"
+    ],
+    "appName": "StockVault"
+  }
+]

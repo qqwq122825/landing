@@ -1,0 +1,449 @@
+
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#121212;
+  --surface:#1e1e1e;
+  --card:#2a2a2a;
+  --border:#333;
+  --text:#e0e0e0;
+  --text-secondary:#999;
+  --accent:#3ddc84;
+  --accent-dark:#2bb868;
+  --star:#fdd835;
+  --green-bar:#3ddc84;
+}
+html{font-size:16px}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  max-width:480px;
+  margin:0 auto;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* Top Nav */
+.topbar{
+  display:flex;
+  align-items:center;
+  padding:12px 16px;
+  background:var(--surface);
+  position:sticky;
+  top:0;
+  z-index:100;
+  border-bottom:1px solid var(--border);
+}
+.topbar svg{flex-shrink:0}
+.topbar-title{
+  flex:1;
+  text-align:center;
+  font-size:16px;
+  font-weight:500;
+  color:var(--text);
+  letter-spacing:.3px;
+}
+.topbar-logo{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex:1;
+}
+.topbar-logo svg{width:24px;height:24px}
+.topbar-logo span{font-size:16px;color:var(--text);font-weight:500}
+.topbar-actions{display:flex;gap:16px;align-items:center}
+.topbar-actions svg{cursor:pointer;opacity:.8}
+
+/* App Header */
+.app-header{
+  display:flex;
+  align-items:flex-start;
+  padding:20px 16px;
+  gap:16px;
+}
+.app-icon{
+  width:80px;
+  height:80px;
+  border-radius:20px;
+  object-fit:cover;
+  flex-shrink:0;
+  box-shadow:0 2px 12px rgba(0,0,0,.4);
+}
+.app-info{flex:1;padding-top:4px}
+.app-name{
+  font-size:22px;
+  font-weight:600;
+  color:#fff;
+  line-height:1.3;
+}
+.app-developer{
+  font-size:14px;
+  color:var(--accent);
+  margin-top:4px;
+  font-weight:500;
+}
+.app-tag{
+  font-size:12px;
+  color:var(--text-secondary);
+  margin-top:4px;
+}
+
+/* Stats Row */
+.stats-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-around;
+  padding:12px 16px;
+  margin:0 16px;
+  background:var(--surface);
+  border-radius:12px;
+  border:1px solid var(--border);
+}
+.stat-item{
+  text-align:center;
+  flex:1;
+}
+.stat-value{
+  font-size:14px;
+  font-weight:600;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+}
+.stat-value .star{color:var(--star);font-size:13px}
+.stat-label{
+  font-size:11px;
+  color:var(--text-secondary);
+  margin-top:2px;
+}
+.stat-divider{
+  width:1px;
+  height:28px;
+  background:var(--border);
+}
+
+/* Install Button */
+.install-section{padding:16px}
+.install-btn{
+  display:block;
+  width:100%;
+  padding:14px;
+  background:var(--accent);
+  color:#000;
+  border:none;
+  border-radius:8px;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  text-align:center;
+  text-decoration:none;
+  transition:background .2s;
+  letter-spacing:.3px;
+}
+.install-btn:active{background:var(--accent-dark)}
+.install-hint{
+  text-align:center;
+  font-size:11px;
+  color:var(--text-secondary);
+  margin-top:6px;
+}
+
+/* Section Titles */
+.section{padding:20px 16px 8px}
+.section-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:14px;
+}
+.section-title{
+  font-size:17px;
+  font-weight:600;
+  color:#fff;
+}
+.section-arrow{
+  color:var(--text-secondary);
+  font-size:20px;
+  text-decoration:none;
+}
+
+/* Screenshots Carousel */
+.screenshots-wrapper{position:relative;margin:0 16px 8px}
+.screenshots{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  scroll-behavior:smooth;
+}
+.screenshots::-webkit-scrollbar{display:none}
+.screenshot-item{
+  flex-shrink:0;
+  scroll-snap-align:center;
+}
+.screenshot-item img{
+  width:200px;
+  height:356px;
+  object-fit:cover;
+  border-radius:12px;
+  border:1px solid var(--border);
+  transition:transform .3s,opacity .3s;
+}
+.screenshot-item.active img{
+  transform:scale(1.03);
+  border-color:var(--accent);
+}
+.carousel-dots{
+  display:flex;
+  justify-content:center;
+  gap:6px;
+  margin-top:12px;
+}
+.carousel-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--border);
+  transition:all .3s;
+}
+.carousel-dot.active{
+  background:var(--accent);
+  width:18px;
+  border-radius:3px;
+}
+
+/* About */
+.about-text{
+  font-size:14px;
+  line-height:1.7;
+  color:var(--text-secondary);
+}
+
+/* Tags */
+.tag-row{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+.tag{
+  padding:6px 14px;
+  border-radius:20px;
+  border:1px solid var(--border);
+  font-size:12px;
+  color:var(--text-secondary);
+  background:var(--surface);
+}
+
+/* Data Safety */
+.safety-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px;
+  margin:0 16px;
+}
+.safety-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:10px 0;
+}
+.safety-item:not(:last-child){border-bottom:1px solid var(--border)}
+.safety-icon{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:var(--card);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+.safety-icon svg{width:18px;height:18px;color:var(--text-secondary)}
+.safety-text{font-size:13px;color:var(--text-secondary);line-height:1.5}
+.safety-text strong{color:var(--text);font-weight:500}
+
+/* Ratings */
+.rating-block{
+  display:flex;
+  align-items:center;
+  gap:24px;
+  margin-bottom:16px;
+}
+.rating-big{text-align:center}
+.rating-number{
+  font-size:48px;
+  font-weight:300;
+  color:#fff;
+  line-height:1;
+}
+.rating-stars{
+  display:flex;
+  gap:2px;
+  justify-content:center;
+  margin-top:6px;
+}
+.rating-stars span{color:var(--star);font-size:14px}
+.rating-count{
+  font-size:12px;
+  color:var(--text-secondary);
+  margin-top:4px;
+}
+.rating-bars{flex:1}
+.bar-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:4px;
+}
+.bar-label{
+  font-size:12px;
+  color:var(--text-secondary);
+  width:10px;
+  text-align:right;
+}
+.bar-track{
+  flex:1;
+  height:8px;
+  background:var(--card);
+  border-radius:4px;
+  overflow:hidden;
+}
+.bar-fill{
+  height:100%;
+  background:var(--green-bar);
+  border-radius:4px;
+}
+
+/* Reviews */
+.review-card{
+  background:var(--surface);
+  border-radius:12px;
+  padding:14px;
+  margin-bottom:10px;
+  border:1px solid var(--border);
+}
+.review-top{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:8px;
+}
+.review-avatar{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:14px;
+  font-weight:600;
+  color:#fff;
+  flex-shrink:0;
+}
+.review-name{font-size:13px;color:var(--text);font-weight:500}
+.review-meta{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:6px;
+}
+.review-stars span{color:var(--star);font-size:12px}
+.review-date{font-size:12px;color:var(--text-secondary)}
+.review-text{
+  font-size:13px;
+  color:var(--text-secondary);
+  line-height:1.6;
+}
+
+/* Similar Apps */
+.similar-row{
+  display:flex;
+  gap:16px;
+  overflow-x:auto;
+  padding:0 16px 8px;
+  scrollbar-width:none;
+}
+.similar-row::-webkit-scrollbar{display:none}
+.similar-item{
+  flex-shrink:0;
+  text-align:center;
+  width:72px;
+}
+.similar-icon{
+  width:56px;
+  height:56px;
+  border-radius:14px;
+  margin:0 auto 6px;
+  object-fit:cover;
+  border:1px solid var(--border);
+}
+.similar-name{
+  font-size:11px;
+  color:var(--text-secondary);
+  line-height:1.3;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.similar-rating{
+  font-size:10px;
+  color:var(--text-secondary);
+  margin-top:2px;
+}
+
+/* Footer */
+.footer{
+  padding:24px 16px 40px;
+  border-top:1px solid var(--border);
+  margin-top:16px;
+}
+.footer-links{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 20px;
+  margin-bottom:12px;
+}
+.footer-links a{
+  font-size:12px;
+  color:var(--text-secondary);
+  text-decoration:none;
+}
+.footer-copy{
+  font-size:11px;
+  color:#666;
+  margin-top:8px;
+}
+.google-play-footer{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:12px;
+}
+.google-play-footer img{height:18px}
+.google-play-footer span{
+  font-size:14px;
+  color:var(--text-secondary);
+  font-weight:500;
+}
+
+/* Divider */
+.divider{
+  height:1px;
+  background:var(--border);
+  margin:0 16px;
+}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.app-header,.stats-row,.install-section,.section,.screenshots,.safety-card,.review-card,.similar-row{
+  animation:fadeIn .4s ease both;
+}
+
+/* Project branding and narrow-screen containment. */
+[data-hub-name],[data-hub-wordmark]{overflow-wrap:anywhere}img[data-hub-logo]{object-fit:contain}html{scroll-behavior:smooth}body{overflow-x:clip}[hidden]{display:none!important}

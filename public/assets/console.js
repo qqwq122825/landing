@@ -10,8 +10,8 @@
  const device={desktop:'电脑',mobile:'手机',tablet:'平板',other:'其他'};
  const region=new Intl.DisplayNames(['zh-CN'],{type:'region'});
  const country=c=>{try{return c?region.of(c):'未知';}catch{return '未知';}};
- const templateLabels={feiyue:'Feiyue / ReelShort',dptv:'DPTV / MinuteDrama',quest:'Quest / Pasion TV',aivideo:'AI Video / 阿语短视频'};
- const templateBrands={feiyue:'ReelShort',dptv:'DPTV',quest:'Pasion TV',aivideo:'AI Video'};
+ const templateLabels={feiyue:'Feiyue / ReelShort',dptv:'DPTV / MinuteDrama',quest:'Quest / Pasion TV',aivideo:'AI Video / 阿语短视频',ggtv:'GGTV',appstore:'Google Play / 应用详情',ultraplay:'Ultra Play',yacinetv:'Yacine TV',dptvplus:'DPTV / 电视介绍',fizzio:'Fizzio Live',kyss:'KYSS',sparkle:'Sparkle',newf:'NEW-F',soccerqueens:'Soccer Queens',cinema:'Netflix Gratis / 影视目录',noxxtv:'NOXX TV',smarttrade:'SmartTrade',stockvault:'StockVault'};
+ const templateBrands={feiyue:'ReelShort',dptv:'DPTV',quest:'Pasion TV',aivideo:'AI Video',ggtv:'GGTV',appstore:'Cast',ultraplay:'Ultra Play',yacinetv:'Yacine TV',dptvplus:'DPTV',fizzio:'Fizzio',kyss:'KYSS',sparkle:'Sparkle',newf:'NEW-F',soccerqueens:'Soccer Queens',cinema:'Netflix Gratis',noxxtv:'NOXX',smarttrade:'SmartTrade',stockvault:'StockVault'};
  const templateIds=Object.keys(templateLabels);
  const templateName=id=>templateLabels[id]||id;
  const status=p=>`<span class="badge ${p.status==='active'?'bg-success-lt':'bg-warning-lt'}">${p.status==='active'?'运行中':'已暂停'}</span>`;

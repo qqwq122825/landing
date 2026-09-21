@@ -7,6 +7,20 @@ function template_catalog():array {
   ['id'=>'dptv','name'=>'DPTV / MinuteDrama','brand'=>'DPTV','description'=>'影音展示风格，包含内容海报与应用下载区域。','tags'=>['影音展示','海报布局','自适应'],'appName'=>HUB_TEMPLATE_NAMES['dptv']],
   ['id'=>'quest','name'=>'Quest / Pasion TV','brand'=>'Pasion TV','description'=>'黑橙色视频目录，竖版卡片、搜索与下载弹窗；内置中英西葡四语界面。','tags'=>['黑橙风格','视频卡片','四语界面'],'appName'=>HUB_TEMPLATE_NAMES['quest']],
   ['id'=>'aivideo','name'=>'AI Video / 阿语短视频','brand'=>'AI Video','description'=>'黑黄竖屏视频风格，原生阿语 RTL，扩展中英西葡界面，含下载浮层。','tags'=>['竖屏视频','阿语 RTL','五语界面'],'appName'=>HUB_TEMPLATE_NAMES['aivideo']],
+  ['id'=>'ggtv','name'=>'GGTV','brand'=>'GGTV','description'=>'参考后台 68 号模板的平台适配版；语言与交互差异详见接入记录。','tags'=>['参考 68','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['ggtv']],
+  ['id'=>'appstore','name'=>'Google Play / 应用详情','brand'=>'Cast','description'=>'参考后台 69 号模板的平台适配版；语言与交互差异详见接入记录。','tags'=>['参考 69','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['appstore']],
+  ['id'=>'ultraplay','name'=>'Ultra Play','brand'=>'Ultra Play','description'=>'参考后台 74 号模板的平台适配版；语言与交互差异详见接入记录。','tags'=>['参考 74','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['ultraplay']],
+  ['id'=>'yacinetv','name'=>'Yacine TV','brand'=>'Yacine TV','description'=>'参考后台 77 号模板的平台适配版；语言与交互差异详见接入记录。','tags'=>['参考 77','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['yacinetv']],
+  ['id'=>'dptvplus','name'=>'DPTV / 电视介绍','brand'=>'DPTV','description'=>'参考后台 83 号模板的平台适配版；语言与交互差异详见接入记录。','tags'=>['参考 83','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['dptvplus']],
+  ['id'=>'fizzio','name'=>'Fizzio Live','brand'=>'Fizzio','description'=>'参考后台 85 号模板的平台适配版；语言与交互差异详见接入记录。','tags'=>['参考 85','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['fizzio']],
+  ['id'=>'kyss','name'=>'KYSS','brand'=>'KYSS','description'=>'参考后台 88 号模板的平台适配版；语言与交互差异详见接入记录。','tags'=>['参考 88','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['kyss']],
+  ['id'=>'sparkle','name'=>'Sparkle','brand'=>'Sparkle','description'=>'参考后台 90 号模板的平台适配版；语言与交互差异详见接入记录。','tags'=>['参考 90','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['sparkle']],
+  ['id'=>'newf','name'=>'NEW-F','brand'=>'NEW-F','description'=>'参考后台 92 号模板的平台适配版；语言与交互差异详见接入记录。','tags'=>['参考 92','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['newf']],
+  ['id'=>'soccerqueens','name'=>'Soccer Queens','brand'=>'Soccer Queens','description'=>'参考后台 93 号模板的平台适配版；语言与交互差异详见接入记录。','tags'=>['参考 93','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['soccerqueens']],
+  ['id'=>'cinema','name'=>'Netflix Gratis / 影视目录','brand'=>'Netflix Gratis','description'=>'参考后台 96 号模板的平台适配版；语言与交互差异详见接入记录。','tags'=>['参考 96','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['cinema']],
+  ['id'=>'noxxtv','name'=>'NOXX TV','brand'=>'NOXX','description'=>'参考后台 100 号模板的平台适配版；语言与交互差异详见接入记录。','tags'=>['参考 100','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['noxxtv']],
+  ['id'=>'smarttrade','name'=>'SmartTrade','brand'=>'SmartTrade','description'=>'参考后台 101 号模板的平台适配版；语言与交互差异详见接入记录。','tags'=>['参考 101','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['smarttrade']],
+  ['id'=>'stockvault','name'=>'StockVault','brand'=>'StockVault','description'=>'参考后台 102 号模板的平台适配版；语言与交互差异详见接入记录。','tags'=>['参考 102','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['stockvault']],
  ];
 }
 function template_inventory():array {

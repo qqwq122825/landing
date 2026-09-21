@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+
+<html dir="ltr" lang="en"><head>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link data-hub-logo="" href="logo.svg" rel="shortcut icon"/>
+<meta content="#1c1917" name="theme-color"/>
+<title>NOXX</title>
+<link href="source-1.css" rel="stylesheet"/>
+<link href="source-0.css" rel="stylesheet"/>
+<link href="source-2.css" rel="stylesheet"/>
+<link href="theme.css" rel="stylesheet"/><link href="/themes/reference/common.css" rel="stylesheet"/><script defer="" src="reference-data.js"></script><script defer="" src="/themes/reference/common.js"></script></head>
+<body data-reference-template="noxxtv">
+<svg aria-hidden="true" style="display:none" xmlns="http://www.w3.org/2000/svg">
+<symbol id="icon-home" viewbox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5Z"></path></symbol>
+<symbol id="icon-clock" viewbox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm1 5v5l4 2-.9 1.8L11 13V7h2Z"></path></symbol>
+<symbol id="icon-grid" viewbox="0 0 24 24"><path d="M3 3h7v7H3V3Zm11 0h7v7h-7V3ZM3 14h7v7H3v-7Zm11 0h7v7h-7v-7Z"></path></symbol>
+<symbol id="icon-film" viewbox="0 0 24 24"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm2 2v3h2V6H6Zm0 5v3h2v-3H6Zm0 5v3h2v-3H6Zm10-10v3h2V6h-2Zm0 5v3h2v-3h-2Zm0 5v3h2v-3h-2Z"></path></symbol>
+<symbol id="icon-close" viewbox="0 0 24 24"><path d="M6.4 6 12 11.6 17.6 6 18.4 6.8 12.8 12.4 18.4 18 17.6 18.8 12 13.2 6.4 18.8 5.6 18 11.2 12.4 5.6 6.8Z"></path></symbol>
+<symbol id="icon-search" viewbox="0 0 24 24"><path d="M10 3a7 7 0 1 1 0 14 7 7 0 0 1 0-14Zm0 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm8.3 12.7 3.7 3.7-1.4 1.4-3.7-3.7 1.4-1.4Z"></path></symbol>
+<symbol id="icon-star" viewbox="0 0 24 24"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8 5.8 21.1 7 14.2 2 9.3l6.9-1L12 2Z"></path></symbol>
+<symbol id="icon-play-circle" viewbox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm-1 6.5 7 4.5-7 4.5v-9Z"></path></symbol>
+<symbol id="icon-play" viewbox="0 0 24 24"><path d="M8 5v14l11-7L8 5Z"></path></symbol>
+<symbol id="icon-chevron-left" viewbox="0 0 24 24"><path d="M15.4 5.4 9.8 11l5.6 5.6-1.4 1.4-7-7 7-7 1.4 1.4Z"></path></symbol>
+<symbol id="icon-chevron-right" viewbox="0 0 24 24"><path d="M8.6 5.4 14.2 11l-5.6 5.6 1.4 1.4 7-7-7-7-1.4 1.4Z"></path></symbol>
+<symbol id="icon-download" viewbox="0 0 24 24"><path d="M12 3a1 1 0 0 1 1 1v8.6l2.3-2.3 1.4 1.4-4.7 4.7-4.7-4.7 1.4-1.4 2.3 2.3V4a1 1 0 0 1 1-1Zm-7 14h14v2H5v-2Z"></path></symbol>
+</svg>
+<header class="site-header">
+<div class="container site-header__inner">
+<button aria-controls="main-nav" aria-expanded="false" aria-label="Open menu" class="nav-toggle" id="nav-toggle">
+<span class="nav-toggle__box">
+<span class="nav-toggle__bar"></span>
+<span class="nav-toggle__bar"></span>
+<span class="nav-toggle__bar"></span>
+</span>
+</button>
+<a aria-label="NOXX 首页" class="brand-link brand download-link" data-hub-name="" href="#download" role="link">NOXX</a>
+<nav aria-label="Primary" class="main-nav" id="main-nav">
+<ul class="main-nav__list">
+<li><a class="main-nav__link" href="#download"><svg><use href="#icon-home"></use></svg><span><span data-ref-text="t43">Home</span></span></a></li>
+<li><a class="main-nav__link" href="#download"><svg><use href="#icon-clock"></use></svg><span><span data-ref-text="t45">Timeline</span></span></a></li>
+<li><a class="main-nav__link" href="#download"><svg><use href="#icon-grid"></use></svg><span><span data-ref-text="t47">Browse</span></span></a></li>
+<li><a class="main-nav__link" href="#download" rel="noopener"><svg><use href="#icon-film"></use></svg><span><span data-ref-text="t49">Movies</span></span></a></li>
+</ul>
+</nav>
+<div class="nav-overlay" id="nav-overlay"></div>
+<div class="search" id="search">
+<button aria-label="Close search" class="search__close" id="search-close" type="button">
+<svg><use href="#icon-close"></use></svg>
+</button>
+<form action="#" class="search__form" id="search-form" role="search">
+<input aria-label="Search TV shows" autocomplete="off" class="search__input" id="search-input" name="q" placeholder="Search TV shows..." type="text" value=""/>
+<button aria-label="Search" class="search__submit" type="submit">
+<svg><use href="#icon-search"></use></svg>
+</button>
+<div class="search-results" id="search-results"></div>
+</form>
+</div>
+<button aria-label="Open search" class="icon-btn mobile-search-toggle" id="mobile-search-toggle">
+<svg><use href="#icon-search"></use></svg>
+</button>
+</div>
+</header>
+<main>
+<section aria-label="Featured TV shows" aria-roledescription="carousel" class="hero">
+<article aria-label="The Chi" aria-roledescription="slide" class="hero-slide is-active" role="group">
+<div class="hero-slide__bg" style='background-image:url("https://alphapundits.com/landing-static/100/100/index_files/niD8X5pEXpmRUDhSPdDOgI3Gw5Q.jpg");'></div>
+<div class="container hero-slide__inner">
+<div class="hero-slide__content">
+<div class="hero-slide__eyebrow">
+<span class="hero-slide__tag"><span data-ref-text="t78">New Episode</span></span>
+<span>S8E7</span>
+<span><span data-ref-text="t82">· Jul 5</span></span> </div>
+<h1 class="hero-slide__title">The Chi</h1>
+<p class="hero-slide__subtitle"><span data-ref-text="t87">The Best Woman</span></p>
+<div class="hero-slide__meta">
+<span class="rating rating--lg"><svg><use href="#icon-star"></use></svg>7.9</span>
+<a class="hero-chip download-link" href="#download" role="link"><span data-ref-text="t92">Drama</span></a>
+</div>
+<p class="hero-slide__overview clamp-3"><span data-ref-text="t95">Tiff attempts to quiet Kiesha's worried mind about Nuck's disappearance as devastating news forces Emmett to consider a difficult choice.</span></p>
+<div class="hero-slide__actions">
+<a class="btn btn--primary btn--lg download-link" href="#download" role="button">
+<svg><use href="#icon-play-circle"></use></svg><span><span data-ref-text="t99">Watch Episode</span></span>
+</a>
+</div>
+</div>
+</div>
+</article>
+<article aria-hidden="true" aria-label="犯罪心理" aria-roledescription="slide" class="hero-slide" role="group">
+<div class="hero-slide__bg" style='background-image:url("https://alphapundits.com/landing-static/100/100/index_files/gigxjNnACiXAfrwoMox5WJFgc0I.jpg");'></div>
+<div class="container hero-slide__inner">
+<div class="hero-slide__content">
+<div class="hero-slide__eyebrow">
+<span class="hero-slide__tag"><span data-ref-text="t111">New Episode</span></span>
+<span>S19E7</span>
+<span><span data-ref-text="t115">· Jul 2</span></span> </div>
+<h1 class="hero-slide__title"><span data-ref-text="t118">Criminal Minds</span></h1>
+<p class="hero-slide__subtitle">The Furies</p>
+<div class="hero-slide__meta">
+<span class="rating rating--lg"><svg><use href="#icon-star"></use></svg>8.3</span>
+<a class="hero-chip download-link" href="#download" role="link"><span data-ref-text="t125">Crime</span></a>
+<a class="hero-chip download-link" href="#download" role="link"><span data-ref-text="t127">Drama</span></a>
+<a class="hero-chip download-link" href="#download" role="link"><span data-ref-text="t129">Mystery</span></a>
+</div>
+<p class="hero-slide__overview clamp-3"><span data-ref-text="t132">While the BAU investigates a cop killer, Voit receives an enigmatic new visitor.</span></p>
+<div class="hero-slide__actions">
+<a class="btn btn--primary btn--lg download-link" href="#download" role="button">
+<svg><use href="#icon-play-circle"></use></svg><span><span data-ref-text="t136">Watch Episode</span></span>
+</a>
+</div>
+</div>
+</div>
+</article>
+<article aria-hidden="true" aria-label="筒仓" aria-roledescription="slide" class="hero-slide" role="group">
+<div class="hero-slide__bg" style='background-image:url("https://alphapundits.com/landing-static/100/100/index_files/fDMTqUcEh6qJwWZP1SHTfoaqsCy.jpg");'></div>
+<div class="container hero-slide__inner">
+<div class="hero-slide__content">
+<div class="hero-slide__eyebrow">
+<span class="hero-slide__tag"><span data-ref-text="t148">New Episode</span></span>
+<span>S3E1</span>
+<span><span data-ref-text="t152">· Jul 2</span></span> </div>
+<h1 class="hero-slide__title"><span data-ref-text="t155">Silo</span></h1>
+<p class="hero-slide__subtitle"><span data-ref-text="t157">Who Are You?</span></p>
+<div class="hero-slide__meta">
+<span class="rating rating--lg"><svg><use href="#icon-star"></use></svg>8.2</span>
+<a class="hero-chip download-link" href="#download" role="link"><span data-ref-text="t162">Sci-Fi &amp; Fantasy</span></a>
+<a class="hero-chip download-link" href="#download" role="link"><span data-ref-text="t164">Drama</span></a>
+</div>
+<p class="hero-slide__overview clamp-3"><span data-ref-text="t167">New mayor Juliette can't remember anything from her time outside—or her past.</span></p>
+<div class="hero-slide__actions">
+<a class="btn btn--primary btn--lg download-link" href="#download" role="button">
+<svg><use href="#icon-play-circle"></use></svg><span><span data-ref-text="t171">Watch Episode</span></span>
+</a>
+</div>
+</div>
+</div>
+</article>
+<article aria-hidden="true" aria-label="瑞克和莫蒂" aria-roledescription="slide" class="hero-slide" role="group">
+<div class="hero-slide__bg" style='background-image:url("https://alphapundits.com/landing-static/100/100/index_files/WGRQ8FpjkDTzivQJ43t94bOuY0.jpg");'></div>
+<div class="container hero-slide__inner">
+<div class="hero-slide__content">
+<div class="hero-slide__eyebrow">
+<span class="hero-slide__tag"><span data-ref-text="t183">New Episode</span></span>
+<span>S9E6</span>
+<span><span data-ref-text="t187">· Jun 28</span></span> </div>
+<h1 class="hero-slide__title"><span data-ref-text="t190">Rick and Morty</span></h1>
+<p class="hero-slide__subtitle"><span data-ref-text="t192">Erickerhead</span></p>
+<div class="hero-slide__meta">
+<span class="rating rating--lg"><svg><use href="#icon-star"></use></svg>8.7</span>
+<a class="hero-chip download-link" href="#download" role="link"><span data-ref-text="t197">Animation</span></a>
+<a class="hero-chip download-link" href="#download" role="link"><span data-ref-text="t199">Comedy</span></a>
+<a class="hero-chip download-link" href="#download" role="link"><span data-ref-text="t201">Sci-Fi &amp; Fantasy</span></a>
+</div>
+<p class="hero-slide__overview clamp-3"><span data-ref-text="t204">Rick's stomach is mad, broh. But it's all-you-can-eat-and-drink here, broh!</span></p>
+<div class="hero-slide__actions">
+<a class="btn btn--primary btn--lg download-link" href="#download" role="button">
+<svg><use href="#icon-play-circle"></use></svg><span><span data-ref-text="t208">Watch Episode</span></span>
+</a>
+</div>
+</div>
+</div>
+</article>
+<article aria-hidden="true" aria-label="从" aria-roledescription="slide" class="hero-slide" role="group">
+<div class="hero-slide__bg" style='background-image:url("https://alphapundits.com/landing-static/100/100/index_files/cjXLrg4R7FRPFafvuQ3SSznQOd9.jpg");'></div>
+<div class="container hero-slide__inner">
+<div class="hero-slide__content">
+<div class="hero-slide__eyebrow">
+<span class="hero-slide__tag"><span data-ref-text="t220">New Episode</span></span>
+<span>S4E10</span>
+<span><span data-ref-text="t224">· Jun 28</span></span> </div>
+<h1 class="hero-slide__title"><span data-ref-text="t227">FROM</span></h1>
+<p class="hero-slide__subtitle"><span data-ref-text="t229">If a Tree Falls in the Forest…</span></p>
+<div class="hero-slide__meta">
+<span class="rating rating--lg"><svg><use href="#icon-star"></use></svg>8.2</span>
+<a class="hero-chip download-link" href="#download" role="link"><span data-ref-text="t234">Mystery</span></a>
+<a class="hero-chip download-link" href="#download" role="link"><span data-ref-text="t236">Drama</span></a>
+<a class="hero-chip download-link" href="#download" role="link"><span data-ref-text="t238">Sci-Fi &amp; Fantasy</span></a>
+</div>
+<p class="hero-slide__overview clamp-3">Boyd’s quest to lead the residents Home reaches a terrifying crossroads, and nothing will ever be the same again.</p>
+<div class="hero-slide__actions">
+<a class="btn btn--primary btn--lg download-link" href="#download" role="button">
+<svg><use href="#icon-play-circle"></use></svg><span><span data-ref-text="t245">Watch Episode</span></span>
+</a>
+</div>
+</div>
+</div>
+</article>
+<article aria-hidden="true" aria-label="龙之屋" aria-roledescription="slide" class="hero-slide" role="group">
+<div class="hero-slide__bg" style='background-image:url("https://alphapundits.com/landing-static/100/100/index_files/7QMsOTMUswlwxJP0rTTZfmz2tX2.jpg");'></div>
+<div class="container hero-slide__inner">
+<div class="hero-slide__content">
+<div class="hero-slide__eyebrow">
+<span class="hero-slide__tag"><span data-ref-text="t257">New Episode</span></span>
+<span>S3E2</span>
+<span><span data-ref-text="t261">· Jun 28</span></span> </div>
+<h1 class="hero-slide__title"><span data-ref-text="t264">House of the Dragon</span></h1>
+<p class="hero-slide__subtitle">Queen's Landing</p>
+<div class="hero-slide__meta">
+<span class="rating rating--lg"><svg><use href="#icon-star"></use></svg>8.3</span>
+<a class="hero-chip download-link" href="#download" role="link"><span data-ref-text="t271">Sci-Fi &amp; Fantasy</span></a>
+<a class="hero-chip download-link" href="#download" role="link"><span data-ref-text="t273">Drama</span></a>
+<a class="hero-chip download-link" href="#download" role="link"><span data-ref-text="t275">Action &amp; Adventure</span></a>
+</div>
+<p class="hero-slide__overview clamp-3"><span data-ref-text="t278">As Alicent risks everything to fulfill her end of the bargain, Rhaenyra must decide whether the Iron Throne is worth the cost.</span></p>
+<div class="hero-slide__actions">
+<a class="btn btn--primary btn--lg download-link" href="#download" role="button">
+<svg><use href="#icon-play-circle"></use></svg><span><span data-ref-text="t282">Watch Episode</span></span>
+</a>
+</div>
+</div>
+</div>
+</article>
+<button aria-label="Previous featured show" class="hero-arrow hero-arrow--prev" type="button">
+<svg><use href="#icon-chevron-left"></use></svg>
+</button>
+<button aria-label="Next featured show" class="hero-arrow hero-arrow--next" type="button">
+<svg><use href="#icon-chevron-right"></use></svg>
+</button>
+<div aria-label="Choose featured show" class="hero-dots" role="tablist">
+<button aria-label="The Chi" aria-selected="true" class="hero-dot is-active" role="tab" type="button"></button>
+<button aria-label="犯罪心理" class="hero-dot" role="tab" type="button"></button>
+<button aria-label="筒仓" class="hero-dot" role="tab" type="button"></button>
+<button aria-label="瑞克和莫蒂" class="hero-dot" role="tab" type="button"></button>
+<button aria-label="从" class="hero-dot" role="tab" type="button"></button>
+<button aria-label="龙之屋" class="hero-dot" role="tab" type="button"></button>
+</div>
+</section>
+<section class="section container">
+<div class="section__head"><h2 class="section__title"><span data-ref-text="t305">Aired This Week</span></h2></div>
+<div class="carousel">
+<button aria-label="Scroll left" class="carousel__btn carousel__btn--prev" hidden="" type="button">
+<svg><use href="#icon-chevron-left"></use></svg>
+</button>
+<div class="carousel__track">
+<a class="poster-card download-link" href="#download" role="link">
+<span class="poster-card__badge">S8 E7</span>
+<img alt="The Chi" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/niD8X5pEXpmRUDhSPdDOgI3Gw5Q.jpg"/>
+<span class="poster-card__title">The Chi</span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name">The Chi</span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>7.9</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<span class="poster-card__badge">S3 E1</span>
+<img alt="筒仓" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/fDMTqUcEh6qJwWZP1SHTfoaqsCy.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t332">Silo</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t337">Silo</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.2</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<span class="poster-card__badge">S19 E7</span>
+<img alt="犯罪心理" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/gigxjNnACiXAfrwoMox5WJFgc0I.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t348">Criminal Minds</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t353">Criminal Minds</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.3</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<span class="poster-card__badge">S9 E6</span>
+<img alt="瑞克和莫蒂" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/WGRQ8FpjkDTzivQJ43t94bOuY0.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t364">Rick and Morty</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t369">Rick and Morty</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.7</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<span class="poster-card__badge">S3 E2</span>
+<img alt="龙之屋" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/7QMsOTMUswlwxJP0rTTZfmz2tX2.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t380">House of the Dragon</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t385">House of the Dragon</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.3</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<span class="poster-card__badge">S4 E10</span>
+<img alt="从" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/cjXLrg4R7FRPFafvuQ3SSznQOd9.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t396">FROM</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t401">FROM</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.2</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<span class="poster-card__badge">S8 E6</span>
+<img alt="The Chi" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/niD8X5pEXpmRUDhSPdDOgI3Gw5Q.jpg"/>
+<span class="poster-card__title">The Chi</span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name">The Chi</span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>7.9</span>
+</span>
+</span>
+</a>
+</div>
+<button aria-label="Scroll right" class="carousel__btn carousel__btn--next" type="button">
+<svg><use href="#icon-chevron-right"></use></svg>
+</button>
+</div>
+</section>
+<section class="section container">
+<div class="section__head"><h2 class="section__title"><span data-ref-text="t431">Top Rated</span></h2></div>
+<div class="carousel">
+<button aria-label="Scroll left" class="carousel__btn carousel__btn--prev" hidden="" type="button">
+<svg><use href="#icon-chevron-left"></use></svg>
+</button>
+<div class="carousel__track">
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="亚裔美国人" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/zO6mpmHpId2PVBQtXkQE774cG0R.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t440">Asian Americans</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t445">Asian Americans</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>10</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="摔跤手" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/nnyNFKKAR9kqECTx6NPPM66WahP.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t454">The Wrestlers</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t459">The Wrestlers</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>9.7</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="BBQuest" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/8qgcbwDUs0eWijMJYiJuOMgi38B.jpg"/>
+<span class="poster-card__title">BBQuest</span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name">BBQuest</span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>9</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="魂城" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/rOic7stgqZMtPqP2gSEhKkAP81n.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t482">Soul City</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t487">Soul City</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>9</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="绝命毒师" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/ztkUQFLlC19CCMYHW9o1zWhJRNq.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t496">Breaking Bad</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t501">Breaking Bad</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.9</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="零以下生活：下一代" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/nLvS9dfnDFgXJTfwYu6P0cDBOS6.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t510">Life Below Zero: Next Generation</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t515">Life Below Zero: Next Generation</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.8</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="战时农场" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/uPmpGBgAknu5mX6APCJw6PpD6jj.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t524">Wartime Farm</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t529">Wartime Farm</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.8</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="马尔科姆在中间：生活仍然不公平" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/bqYCU8Xv8CCfJm4HfznGzfgRJOp.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t538">Malcolm in the Middle: Life's Still Unfair</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t543">Malcolm in the Middle: Life's Still Unfair</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.8</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="Arcane" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/abf8tHznhSvl9BAElD2cQeRr7do.jpg"/>
+<span class="poster-card__title">Arcane</span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name">Arcane</span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.8</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="Better Call Saul" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/fC2HDm5t0kHl7mTm7jxMR31b7by.jpg"/>
+<span class="poster-card__title">Better Call Saul</span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name">Better Call Saul</span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.7</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="Anne with an E" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/6P6tXhjT5tK3qOXzxF9OMLlG7iz.jpg"/>
+<span class="poster-card__title">Anne with an E</span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name">Anne with an E</span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.7</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="瑞克和莫蒂" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/WGRQ8FpjkDTzivQJ43t94bOuY0.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t594">Rick and Morty</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t599">Rick and Morty</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.7</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="The Pitt" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/kvFSpESyBZMjaeOJDx7RS3P1jey.jpg"/>
+<span class="poster-card__title">The Pitt</span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name">The Pitt</span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.7</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="切尔诺贝利核事故" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t622">Chernobyl</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t627">Chernobyl</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.7</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="战无不胜" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/4tblBrslcKSifMVZ3TmtT2ukMor.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t636">Invincible</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t641">Invincible</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.6</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="蝙蝠侠：动画系列" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/lBomQFW1vlm1yUYMNSbFZ45R4Ox.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t650">Batman: The Animated Series</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t655">Batman: The Animated Series</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.6</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="办公室" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/dg9e5fPRRId8PoBE0F6jl5y85Eu.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t664">The Office</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t669">The Office</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.6</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="火线" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/4lbclFySvugI51fwsyxBTOm4DqK.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t678">The Wire</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t683">The Wire</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.6</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="The Sopranos" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/rTc7ZXdroqjkKivFPvCPX0Ru7uw.jpg"/>
+<span class="poster-card__title">The Sopranos</span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name">The Sopranos</span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.6</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="兄弟连" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/8JMXquNmdMUy2n2RgW8gfOM0O3l.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t706">Band of Brothers</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t711">Band of Brothers</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.6</span>
+</span>
+</span>
+</a>
+</div>
+<button aria-label="Scroll right" class="carousel__btn carousel__btn--next" type="button">
+<svg><use href="#icon-chevron-right"></use></svg>
+</button>
+</div>
+</section>
+<section class="section container">
+<div class="section__head"><h2 class="section__title"><span data-ref-text="t725">Recently Added</span></h2></div>
+<div class="poster-grid" id="results">
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="马尔科姆在中间" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/uftxEWbn3OSykTy4DX4BrdVeiuv.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t730">Malcolm in the Middle</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t735">Malcolm in the Middle</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.5</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="他和她的" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/vRXw6fUD9B4RhMoTvhcJcnHYIMP.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t744">HIS &amp; HERS</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t749">HIS &amp; HERS</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>7.3</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="马尔科姆在中间：生活仍然不公平" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/bqYCU8Xv8CCfJm4HfznGzfgRJOp.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t758">Malcolm in the Middle: Life's Still Unfair</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t763">Malcolm in the Middle: Life's Still Unfair</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.8</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="Scarpetta" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/zvkcHCJUPqv7R9ukaiDNkm75jy.jpg"/>
+<span class="poster-card__title">Scarpetta</span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name">Scarpetta</span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>7.3</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="manhunt" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/nLjUC3ze3WxCFhg4GDbcwLRSgvJ.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t786">Manhunt</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t791">Manhunt</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>7.1</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="暗物质" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/oWYOFBvIMkW64n51uD4mdje6k2u.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t800">Dark Matter</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t805">Dark Matter</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>6.7</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="权力之争" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t814">Game of Thrones</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t819">Game of Thrones</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.5</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="同舟同济" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/2koX1xLkpTQM4IZebYvKysFW1Nh.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t828">Friends</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t833">Friends</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.4</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="辛普森一家" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/uWpG7GqfKGQqX4YMAo3nv5OrglV.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t842">The Simpsons</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t847">The Simpsons</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="绝命毒师" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/ztkUQFLlC19CCMYHW9o1zWhJRNq.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t856">Breaking Bad</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t861">Breaking Bad</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.9</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="Dexter" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/q8dWfc4JwQuv3HayIZeO84jAXED.jpg"/>
+<span class="poster-card__title">Dexter</span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name">Dexter</span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.2</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="大天空" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/4CUK42x0TvcWvuRXfjAFQlCeRdf.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t884">Big Sky</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t889">Big Sky</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>7.2</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="英语游戏" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/vvOccQ5Mcn665KXS2KSnldhpvva.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t898">The English Game</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t903">The English Game</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>7.4</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="The Last of Us" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/dmo6TYuuJgaYinXBPjrgG9mB5od.jpg"/>
+<span class="poster-card__title">The Last of Us</span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name">The Last of Us</span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.4</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="最危险的动物" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/u13gKUHiDKEumiCOrux0JqJP5s6.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t926">The Most Dangerous Animal of All</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t931">The Most Dangerous Animal of All</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>6.5</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="Borderforce USA ： The Bridges" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/drKZOti2PFAL9R43kJt5WEUp7ZE.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t940">Borderforce USA: The Bridges</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t945">Borderforce USA: The Bridges</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>7.5</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="失落的秘密" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/4kokOE8lim11XKt368X97Z8zwiI.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t954">Lost Secrets</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t959">Lost Secrets</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>6.2</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="夏日" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/9PCmLDADfqrCnnxOo8yeM5AjnWY.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t968">Summertime</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t973">Summertime</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>6.8</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="亚特兰大失踪和被谋杀：失落的孩子" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/sj7ypoywE2RooXnTjcggd0ooYPC.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t982">Atlanta's Missing and Murdered: The Lost Children</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t987">Atlanta's Missing and Murdered: The Lost Children</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>7.1</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="几乎是天堂" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/wtmV4qF9ADKn8BQ1nHq3eTFjuaS.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t996">Almost Paradise</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t1001">Almost Paradise</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>7.1</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="保姆俱乐部" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/afyG6cPl0jeV3SwNwyZxRG0Q9wd.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t1010">The Baby-Sitters Club</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t1015">The Baby-Sitters Club</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>7.9</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="100个人类：生活中的问题。答案。" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/ykN9uhnGdtjvx9Lk8bYvdprNQsC.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t1024">100 Humans: Life's Questions. Answered.</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t1029">100 Humans: Life's Questions. Answered.</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>6.1</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="成人材料" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/niPoxn9jPgB322BvujD7ZdlfOJd.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t1038">Adult Material</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t1043">Adult Material</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>6.5</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="Project Impossible" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/3Mipamh7sqoGLQYenZeBZhYmdWo.jpg"/>
+<span class="poster-card__title">Project Impossible</span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name">Project Impossible</span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>7</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="虎王" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/dXQCEjVth8P8L47XIsoRt0oL8Gw.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t1066">Tiger King</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t1071">Tiger King</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>6.9</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="外滩" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/ovDgO2LPfwdVRfvScAqo9aMiIW.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t1080">Outer Banks</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t1085">Outer Banks</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.3</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="Soulmates" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/g2mvINQCGACb9sswdKXh1KwpwzB.jpg"/>
+<span class="poster-card__title">Soulmates</span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name">Soulmates</span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>6.1</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="我从来没有" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/hd5fnBixab6IzfUwjC5wfdbX3eM.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t1108">Never Have I Ever</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t1113">Never Have I Ever</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.1</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="The Big Show Show" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/dsuQtGTIol9sUZFw1yJjqONKs5G.jpg"/>
+<span class="poster-card__title">The Big Show Show</span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name">The Big Show Show</span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>7.5</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="Ladies Up" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/amH94ax5bR073WoKVOnnfu0NmTh.jpg"/>
+<span class="poster-card__title">Ladies Up</span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name">Ladies Up</span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>6.2</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="犯罪节拍" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/rx98FBXnr2wfcZt3ocfi9Nm4pXx.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t1150">Crime Beat</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t1155">Crime Beat</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>6.2</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="诅咒电影" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/qrdhQ2jVx8Ewu33ahp7HbhT1hHn.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t1164">Cursed Films</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t1169">Cursed Films</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>7.2</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="地球的神圣奇观" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/hpUYrj43BrDGLNJexHpMV0W3uwT.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t1178">Earth's Sacred Wonders</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t1183">Earth's Sacred Wonders</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>0</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="Beef House" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/2ZexzQW1To7PEDJySHl3Nmvx84g.jpg"/>
+<span class="poster-card__title">Beef House</span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name">Beef House</span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>6.1</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="Swingtown" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/os3UoeuvCmmOuTrlTV97jdtZsn0.jpg"/>
+<span class="poster-card__title">Swingtown</span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name">Swingtown</span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>5.5</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="Spirit Riding 免费: Riding Academy" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/1P73hdMxOmxeWySMA8RDvmS1dQ4.jpg"/>
+<span class="poster-card__title">Spirit Riding Free: Riding Academy</span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name">Spirit Riding Free: Riding Academy</span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>8.3</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="Prodigy" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/uJKT02xK4xgSJ0iGf0LQXvGzACW.jpg"/>
+<span class="poster-card__title">Prodigy</span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name">Prodigy</span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>3</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="Brews Brothers" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/bZONqPgSEfphbuUihJ7wjfgmslV.jpg"/>
+<span class="poster-card__title">Brews Brothers</span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name">Brews Brothers</span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>5.6</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="测验" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/yCHBUpRwtRpGuIRy0bMGSc5Xd1I.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t1262">Quiz</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t1267">Quiz</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>6.9</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="她保守的秘密" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/3IqfC1nJJTfOBhKv23qreRwMifG.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t1276">The Secrets She Keeps</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t1281">The Secrets She Keeps</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>5.4</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="在我的皮肤上" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/zOLx19TxskkCPObaNv890Zuy2yl.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t1290">In My Skin</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t1295">In My Skin</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>7.5</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="瓦莱里娅" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/9WN7hVLAx7LEhLn5ZPylUEghM4m.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t1304">Valeria</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t1309">Valeria</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>7.4</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="INFORMER 3838" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/4RlSo9CF40FY7SBJF4YhvTRK57R.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t1318">Informer 3838</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t1323">Informer 3838</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>6</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="代码404" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/4mxnGq5ysyqSDF1UyBj9wAI3TwF.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t1332">Code 404</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t1337">Code 404</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>6.7</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="One Lane Bridge" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/AcTx0BxYuzk3cvf4YL0OSG27DHk.jpg"/>
+<span class="poster-card__title">One Lane Bridge</span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name">One Lane Bridge</span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>6.7</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="Lenox Hill" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/1MvaZ5WbRAqjhkiMGH3trRXcYgG.jpg"/>
+<span class="poster-card__title">Lenox Hill</span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name">Lenox Hill</span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>6.8</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="实现您的梦想" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/yIlbPxb7KC4k112v8vattKwLsN7.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t1374">Love Life</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t1379">Love Life</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>7</span>
+</span>
+</span>
+</a>
+<a class="poster-card download-link" href="#download" role="link">
+<img alt="赢得荒野：阿拉斯加" class="poster-card__img" loading="lazy" src="https://alphapundits.com/landing-static/100/100/index_files/wGutSmG7kfgkmUjPQghOQrEXzCF.jpg"/>
+<span class="poster-card__title"><span data-ref-text="t1388">Win the Wilderness: Alaska</span></span>
+<span class="poster-card__overlay">
+<span class="poster-card__play"><svg><use href="#icon-play-circle"></use></svg></span>
+<span class="poster-card__meta">
+<span class="poster-card__name"><span data-ref-text="t1393">Win the Wilderness: Alaska</span></span>
+<span class="rating"><svg><use href="#icon-star"></use></svg>5.3</span>
+</span>
+</span>
+</a>
+</div>
+</section>
+</main>
+<footer class="site-footer">
+<div class="container site-footer__inner">
+<div class="site-footer__grid">
+<div class="site-footer__about">
+<div class="brand brand--sm"><span class="brand__no"><span data-ref-text="t1407">NO</span></span><span class="brand__xx">XX</span>
+</div>
+<p>Watch your favorite TV shows here without any limits. Pick the show you like and enjoy — it's Free and always will be.</p>
+<p class="site-footer__copy"><span data-ref-brand-text="" data-ref-text="t1413">© 2026 NOXX. All rights reserved.</span></p>
+</div>
+<div>
+<h2 class="site-footer__heading"><span data-ref-text="t1417">Quick Links</span></h2>
+<div class="footer-links">
+<a href="#download"><svg><use href="#icon-home"></use></svg><span data-ref-text="t1420">Home</span></a>
+<a href="#download"><svg><use href="#icon-grid"></use></svg><span data-ref-text="t1422">Browse TV Shows</span></a>
+<a href="#download"><svg><use href="#icon-clock"></use></svg><span data-ref-text="t1424">Timeline</span></a>
+<a href="#download" rel="noopener"><svg><use href="#icon-play"></use></svg>CoCoFlix</a>
+</div>
+</div>
+<div>
+<h2 class="site-footer__heading"><span data-ref-text="t1431">Legal &amp; Policies</span></h2>
+<div class="footer-links">
+<a href="#download"><span data-ref-text="t1434">DMCA Policy</span></a>
+<a href="#download"><span data-ref-text="t1436">Terms of Service</span></a>
+<a href="#download"><span data-ref-text="t1438">Cookie Policy</span></a>
+</div>
+</div>
+</div>
+<p class="footer-disclaimer">
+<strong><span data-ref-text="t1444">Disclaimer:</span></strong> No copyrighted content is hosted on this server.
+                All files are hosted on third-party websites.
+            </p>
+<div class="site-footer__bottom">
+<p><span data-ref-text="t1448">Made with ❤️ for TV show lovers worldwide</span></p>
+</div>
+</div>
+</footer>
+<a aria-label="游戏登录器" class="app-download-fab download-link" href="#download" role="link">
+<svg><use href="#icon-download"></use></svg>
+<span><span data-ref-text="t1456">Download App</span></span>
+</a>
+<dialog id="hub-ref-dialog"><button aria-label="Close" data-ref-action="close" type="button">×</button><img alt="" data-hub-logo="" height="64" src="logo.svg" width="64"/><h2 data-hub-name="">NOXX</h2><p data-ref-dialog-description="">Open the app download link to continue.</p><a class="download-link" data-ref-modal-download="" href="#download" role="link">Download</a></dialog></body></html>

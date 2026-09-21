@@ -1,0 +1,3 @@
+
+/* Project branding and narrow-screen containment. */
+[data-hub-name],[data-hub-wordmark]{overflow-wrap:anywhere}img[data-hub-logo]{object-fit:contain}html{scroll-behavior:smooth}body{overflow-x:clip}[hidden]{display:none!important}
