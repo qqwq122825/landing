@@ -13,7 +13,7 @@ assert.ok(start>=0&&end>start&&bindStart>=0&&bindEnd>bindStart);
 const legacyIds=['feiyue','dptv','quest','aivideo'];
 const ids=[...legacyIds,...JSON.parse(readFileSync(new URL('../docs/templates/reference-batch.json',import.meta.url),'utf8')).map(t=>t.id)];
 function fixture(post){
- const elements=new Map(),calls=[],checks=ids.map(value=>({value,checked:['feiyue','dptv'].includes(value)}));
+ const elements=new Map(),calls=[],checks=ids.map(value=>({value,checked:['feiyue'].includes(value)}));
  const element=selector=>{
   if(!elements.has(selector))elements.set(selector,{value:'',innerHTML:'',textContent:'',disabled:false,listeners:new Map(),
    addEventListener(name,fn){this.listeners.set(name,fn);},
@@ -38,13 +38,13 @@ function fixture(post){
  return {select,button,hint,state,calls,element,
   options:()=>[...select.innerHTML.matchAll(/<option value="([^"]*)"/g)].map(m=>m[1]),
   allow(values){checks.forEach(c=>c.checked=values.includes(c.value));form.emit('change',{target:{name:'allowedTemplates'}});},
-  reset(){checks.forEach(c=>c.checked=['feiyue','dptv'].includes(c.value));sync(true);},
+  reset(){checks.forEach(c=>c.checked=['feiyue'].includes(c.value));sync(true);},
   submit:()=>form.emit('submit'),
  };
 }
 
 test('initial template choices follow grants, preserve valid selections and auto-select replacements',()=>{
- const f=fixture();assert.deepEqual(f.options(),['feiyue','dptv']);assert.equal(f.select.value,'feiyue');
+ const f=fixture();assert.deepEqual(f.options(),['feiyue']);assert.equal(f.select.value,'feiyue');
  f.allow(['quest']);assert.deepEqual(f.options(),['quest']);assert.equal(f.select.value,'quest');assert.match(f.hint.textContent,/自动/);
  f.allow(['feiyue','quest']);assert.equal(f.select.value,'quest','adding another grant preserves the choice');
  f.allow(['feiyue']);assert.equal(f.select.value,'feiyue');
@@ -67,7 +67,7 @@ test('empty grants disable initial selection and block creation, rechecking rest
 test('reopening creation resets permissions and the initial choice instead of retaining a filtered dropdown',()=>{
  const f=fixture();
  for(const allowed of [['quest'],['dptv'],[]]){
-  f.allow(allowed);f.reset();assert.deepEqual(f.options(),['feiyue','dptv']);assert.equal(f.select.value,'feiyue');assert.equal(f.button.disabled,false);
+  f.allow(allowed);f.reset();assert.deepEqual(f.options(),['feiyue']);assert.equal(f.select.value,'feiyue');assert.equal(f.button.disabled,false);
  }
  assert.match(source,/if\(a==='create'\)\{\$\('#create-form'\)\.reset\(\);syncCreateTemplates\(true\)/);
 });
@@ -97,4 +97,37 @@ test('create form uses a required select and an accessible live hint with no ung
 test('all imported templates participate in initial-template grant selection',()=>{
  const f=fixture();
  for(const id of ids){f.allow([id]);assert.deepEqual(f.options(),[id]);assert.equal(f.select.value,id);f.allow(['feiyue',id]);assert.equal(f.select.value,id);f.allow(['feiyue']);assert.equal(f.select.value,'feiyue');}
+});
+
+test('new account form checks exactly one template by default',()=>{
+ const checked=[...html.matchAll(/<input[^>]*name="allowedTemplates"[^>]*>/g)].filter(m=>/\bchecked\b/.test(m[0]));
+ assert.equal(checked.length,1);assert.match(checked[0][0],/value="feiyue"/);
+});
+
+test('permission cards keep checkboxes separate from preview buttons and expose a single save toolbar',()=>{
+ const renderer=source.slice(source.indexOf(' function templatePermissions('),source.indexOf(' function syncTemplatePermissions('));
+ assert.match(renderer,/type="checkbox" name="allowedTemplates"/);
+ assert.match(renderer,/type="button"[^>]*data-action="preview"/);
+ assert.ok(renderer.indexOf('type="checkbox"')<renderer.indexOf('data-action="preview"'));
+ assert.match(renderer,/id="template-permissions-save"/);
+ assert.match(renderer,/aria-live="polite"/);
+ assert.doesNotMatch(renderer,/collapse|template-permissions-panel/);
+});
+
+test('card grant drafts distinguish saved state, empty grants and current-template replacement',()=>{
+ const checks=['feiyue','dptv','quest'].map(value=>({value,checked:value==='feiyue'}));
+ const labels=new Map(checks.map(c=>['[data-permission-label="'+c.value+'"]',{textContent:'',classList:{toggle(){}}}]));
+ const hint={textContent:''},save={},reset={};
+ labels.set('#template-permissions-status',hint);labels.set('#template-permissions-save',save);labels.set('#template-permissions-reset',reset);
+ const state={project:{template:'feiyue',allowedTemplates:['feiyue']}};
+ const code=source.slice(source.indexOf(' function syncTemplatePermissions('),source.indexOf(' function drawBars('));
+ const sync=vm.runInNewContext(code+';syncTemplatePermissions',{state,$:s=>labels.get(s),$$:()=>checks,templateIds:['feiyue','dptv','quest'],templateName:String});
+ sync();assert.equal(save.disabled,true);assert.equal(reset.disabled,true);
+ checks[2].checked=true;sync();assert.match(hint.textContent,/2 款 · 1 项待保存/);assert.equal(save.disabled,false);
+ assert.equal(labels.get('[data-permission-label="quest"]').textContent,'待开放 · 未保存');
+ assert.deepEqual(state.project.allowedTemplates,['feiyue']);
+ checks[0].checked=false;sync();assert.match(hint.textContent,/保存后将自动切换至剩余开放模板/);
+ assert.equal(labels.get('[data-permission-label="feiyue"]').textContent,'待取消开放 · 未保存');
+ checks[2].checked=false;sync();assert.equal(save.disabled,true);assert.match(hint.textContent,/至少保留/);
+ checks[0].checked=true;sync();assert.equal(save.disabled,true);assert.equal(reset.disabled,true);
 });

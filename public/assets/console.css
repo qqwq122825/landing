@@ -53,3 +53,5 @@ body{font-family:system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaH
 .card-header.quest strong{color:#ffb435}
 .card-header.aivideo{background:linear-gradient(135deg,#11110f,#342b0d)!important;color:#ffd419}
 .card-header.aivideo strong{color:#ffd419}
+
+.template-permissions-toolbar{top:12px;z-index:2}

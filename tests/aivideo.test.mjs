@@ -81,7 +81,7 @@ test('AI Video isolated HTTP integration: registration, grants, preview, brandin
  assert.equal((await reaivideo('/templates/aivideo/preview')).status,401);
  const global=await reaivideo('/templates/aivideo/preview',master);assert.equal(global.status,200);assert.equal(pixel(global.text).config.appName,'AI Video');assert.equal(pixel(global.text).config.token,'');assert.deepEqual(pixel(global.text).calls,[]);
  const a=await reaivideo('/api/projects',master,{name:'AI Video isolated account',allowedTemplates:['feiyue','aivideo'],template:'aivideo'});assert.equal(a.status,200);const slug=a.json.project.slug,path='/p/'+slug;assert.equal(a.json.project.app_name,'');assert.equal(a.json.project.pixel_id,'');assert.equal(a.json.project.download_url,'');
- const b=await reaivideo('/api/projects',master,{name:'Legacy grant account'});assert.deepEqual(b.json.project.allowedTemplates,['feiyue','dptv']);const before=b.json.project;
+ const b=await reaivideo('/api/projects',master,{name:'Legacy grant account'});assert.deepEqual(b.json.project.allowedTemplates,['feiyue']);const before=b.json.project;
  const login=await reaivideo(path+'/api/login',{},a.json.credentials);assert.equal(login.status,200);const customer={cookie:login.cookie,csrf:login.json.csrf};
  const bLogin=await reaivideo('/p/'+b.json.project.slug+'/api/login',{},b.json.credentials),other={cookie:bLogin.cookie,csrf:bLogin.json.csrf};
  assert.equal((await reaivideo('/p/'+b.json.project.slug+'/preview/aivideo',other)).status,403);

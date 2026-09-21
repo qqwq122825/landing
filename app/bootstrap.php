@@ -129,7 +129,7 @@ function admin_project(array $p,bool $super=true):array {
 }
 function create_project(array $b,string $actor):array {
  $name=clean_text($b['name']??'',80,'项目名称');$app=clean_text($b['appName']??'',80,'应用名',false);$url=url_value($b['downloadUrl']??'');$note=clean_text($b['note']??'',500,'备注',false);
- $allowed=validate_templates($b['allowedTemplates']??HUB_DEFAULT_TEMPLATES);$template=$b['template']??$allowed[0];
+ $allowed=validate_templates($b['allowedTemplates']??[$b['template']??'feiyue']);$template=$b['template']??$allowed[0];
  if(!in_array($template,$allowed,true))throw new HubError('初始模板需在开放模板中');
  do{$slug=substr(bin2hex(random_bytes(6)),0,9);}while(query('SELECT 1 FROM projects WHERE slug=? UNION ALL SELECT 1 FROM deleted_projects WHERE slug=?',[$slug,$slug])->fetchColumn());
  $username=random_customer_credential(false);$password=random_customer_credential(true);$time=now_ms();

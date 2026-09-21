@@ -130,7 +130,7 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
  await t.test('mutation rejects missing CSRF and cross-origin requests',async()=>{assert.equal((await post('/api/projects',{name:'bad'},{cookie:master.cookie})).status,403);assert.equal((await post('/api/projects',{name:'bad'},{...master,origin:'https://other.example'})).status,403);});
  await t.test('master sees the complete template catalog before creating any project',async()=>{
   const r=await request('/api/templates',master);assert.equal(r.status,200);assert.match(r.headers.get('cache-control'),/no-store/);assert.equal(r.data.projectCount,0);
-  assert.deepEqual(r.data.templates.map(t=>t.id),['feiyue','dptv','quest','aivideo','ggtv','appstore','ultraplay','yacinetv','dptvplus','fizzio','kyss','sparkle','newf','soccerqueens','cinema','noxxtv','smarttrade','stockvault','loveapp','qiyou','stripchat','pornparadise','pornhub','chatee','cosplay','lustylive','nightplay','bokep','xhamster','mylive','kuaibo','tikapk','jiaoyou','cyberheart','promotions','india','apuestamx']);
+  assert.deepEqual(r.data.templates.map(t=>t.id).sort(),['feiyue','dptv','quest','aivideo','ggtv','appstore','ultraplay','yacinetv','dptvplus','fizzio','kyss','sparkle','newf','soccerqueens','cinema','noxxtv','smarttrade','stockvault','loveapp','qiyou','stripchat','pornparadise','pornhub','chatee','cosplay','lustylive','nightplay','bokep','xhamster','mylive','kuaibo','tikapk','jiaoyou','cyberheart','promotions','india','apuestamx'].sort());
   for(const item of r.data.templates){assert.equal(item.usedCount,0);assert.equal(item.allowedCount,0);assert.deepEqual(item.projects,[]);assert.equal(item.previewUrl,'/templates/'+item.id+'/preview');}
   const page=await request('/');assert.match(page.text,/data-view="templates"/);assert.match(page.text,/data-preview-size="desktop"/);
  });
@@ -142,7 +142,7 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
   const counts=JSON.parse(execFileSync('php',['-r','require "app/bootstrap.php"; echo json_encode([query("SELECT COUNT(*) FROM projects")->fetchColumn(),query("SELECT COUNT(*) FROM visits")->fetchColumn(),query("SELECT COUNT(*) FROM events")->fetchColumn()]);'],{cwd:root,env,encoding:'utf8'}));assert.deepEqual(counts,[0,0,0]);
   assert.equal((await request('/templates/missing/preview',master)).status,404);assert.equal((await post('/templates/dptv/preview',{},master)).status,404);assert.equal((await post('/api/templates',{},master)).status,404);
  });
- await t.test('project creation returns unique generated account, slug, one-time password',async()=>{A=(await post('/api/projects',{name:'客户 A',appName:'Alpha',note:'PRIVATE A',template:'feiyue'},master)).data;B=(await post('/api/projects',{name:'客户 B',appName:'Beta',note:'PRIVATE B',template:'dptv',username:'mtx',password:'mtx123',slug:'fixedslug'},master)).data;assert.match(A.project.slug,/^[a-f0-9]{9}$/);for(const item of [A,B]){assert.match(item.credentials.username,/^[a-z2-9]{10}$/);assert.doesNotMatch(item.credentials.username,/^lp/);assert.match(item.credentials.password,/^[A-Za-z2-9]{10}$/);assert.match(item.credentials.password,/[a-z]/);assert.match(item.credentials.password,/[A-Z]/);assert.match(item.credentials.password,/[2-9]/);assert.equal(item.credentials.username.length,item.credentials.password.length);}assert.notEqual(A.credentials.password,B.credentials.password);assert.notEqual(B.credentials.password,'mtx123');assert.notEqual(B.credentials.username,'mtx');assert.notEqual(B.project.slug,'fixedslug');assert.notEqual(A.project.slug,B.project.slug);assert.notEqual(A.credentials.username,B.credentials.username);assert.equal(A.credentials.adminUrl,base+'/p/'+A.project.slug+'/admin');assert.equal(A.project.password_hash,undefined);});
+ await t.test('project creation returns unique generated account, slug, one-time password',async()=>{A=(await post('/api/projects',{name:'客户 A',appName:'Alpha',note:'PRIVATE A',allowedTemplates:['feiyue','dptv'],template:'feiyue'},master)).data;B=(await post('/api/projects',{name:'客户 B',appName:'Beta',note:'PRIVATE B',allowedTemplates:['feiyue','dptv'],template:'dptv',username:'mtx',password:'mtx123',slug:'fixedslug'},master)).data;assert.match(A.project.slug,/^[a-f0-9]{9}$/);for(const item of [A,B]){assert.match(item.credentials.username,/^[a-z2-9]{10}$/);assert.doesNotMatch(item.credentials.username,/^lp/);assert.match(item.credentials.password,/^[A-Za-z2-9]{10}$/);assert.match(item.credentials.password,/[a-z]/);assert.match(item.credentials.password,/[A-Z]/);assert.match(item.credentials.password,/[2-9]/);assert.equal(item.credentials.username.length,item.credentials.password.length);}assert.notEqual(A.credentials.password,B.credentials.password);assert.notEqual(B.credentials.password,'mtx123');assert.notEqual(B.credentials.username,'mtx');assert.notEqual(B.project.slug,'fixedslug');assert.notEqual(A.project.slug,B.project.slug);assert.notEqual(A.credentials.username,B.credentials.username);assert.equal(A.credentials.adminUrl,base+'/p/'+A.project.slug+'/admin');assert.equal(A.project.password_hash,undefined);});
  await t.test('new projects have an empty APK URL without a fallback redirect',async()=>{for(const item of [A,B]){assert.equal(item.project.download_url,'');assert.equal(item.project.pixel_id,'');const r=await request('/p/'+item.project.slug+'/dl');assert.equal(r.status,404);assert.equal(r.headers.get('location'),null);assert.match(r.text,/下载地址尚未配置/);}});
  await t.test('project lists contain no credential hashes or passwords',async()=>{const r=await request('/api/projects',master);assert.equal(r.data.projects.length,2);assert.equal(r.data.totals.visits,0);assert.doesNotMatch(r.text,/password|\$2y\$/);assert.ok(!r.text.includes(A.credentials.password));});
  await t.test('each customer signs in only at their own entry',async()=>{ca=await signIn('/p/'+A.project.slug+'/api/login',A.credentials.username,A.credentials.password);cb=await signIn('/p/'+B.project.slug+'/api/login',B.credentials.username,B.credentials.password);assert.match(ca.headers.get('set-cookie'),new RegExp('path=/p/'+A.project.slug,'i'));assert.equal((await post('/p/'+B.project.slug+'/api/login',A.credentials)).status,401);});
@@ -253,7 +253,7 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
   try{assert.equal((await post('/api/projects/'+A.project.slug+'/credentials',{},master)).status,503);const failed=await post('/api/projects',{name:'missing-key-project'},master);assert.equal(failed.status,503);assert.equal((await request('/api/projects',master)).data.projects.length,2);assert.throws(()=>statSync(key));}
   finally{renameSync(key+'.backup',key);}
  });
- await t.test('legacy templates remain the default grants, and master permissions persist per account',async()=>{
+ await t.test('explicit grants persist per account and master can update them',async()=>{
   for(const [path,ctx] of [[aPath(),ca],[bPath(),cb]])assert.deepEqual((await request(path+'/api/dashboard',ctx)).data.project.allowedTemplates,['feiyue','dptv']);
   const r=await post('/api/projects/'+A.project.slug,{allowedTemplates:['dptv']},master);assert.equal(r.status,200,r.text);assert.deepEqual(r.data.project.allowedTemplates,['dptv']);assert.equal(r.data.project.template,'dptv');assert.deepEqual((await request(aPath()+'/api/dashboard',ca)).data.project.allowedTemplates,['dptv']);assert.deepEqual((await request(bPath()+'/api/dashboard',cb)).data.project.allowedTemplates,['feiyue','dptv']);
  });
@@ -356,4 +356,21 @@ test('new projects store empty optional app names rather than copying internal p
   `],{cwd:root,env:{...process.env,HUB_DATA_DIR:dir,HUB_DEV:'1',HUB_ORIGIN:'http://127.0.0.1'},encoding:'utf8'}));
   assert.deepEqual(result,[['','ReelShort','ReelShort'],['','DPTV','DPTV'],['Customer Name','Customer Name','ReelShort']]);
  }finally{rmSync(dir,{recursive:true,force:true});}
+});
+
+test('new accounts start with one template; master adds grants without changing other accounts',()=>{
+ const runtime=mkdtempSync(join(tmpdir(),'landing-hub-single-template-'));
+ try{
+  const data=JSON.parse(execFileSync('php',['-r',`require "app/bootstrap.php";
+   $a=create_project(['name'=>'Default fixture'],'fixture')['project'];
+   $b=create_project(['name'=>'Selected fixture','template'=>'quest'],'fixture')['project'];
+   $updated=save_project(project($a['slug']),['allowedTemplates'=>['feiyue','dptv']],'fixture',true);
+   echo json_encode(['a'=>$a,'b'=>$b,'updated'=>$updated,'other'=>admin_project(project($b['slug']))]);`],{cwd:root,env:{...process.env,HUB_DATA_DIR:runtime},encoding:'utf8'}));
+  assert.deepEqual(data.a.allowedTemplates,['feiyue']);
+  assert.deepEqual(data.b.allowedTemplates,['quest']);
+  assert.equal(data.b.template,'quest');
+  assert.deepEqual(data.updated.allowedTemplates,['feiyue','dptv']);
+  assert.equal(data.updated.template,'feiyue');
+  assert.deepEqual(data.other,data.b);
+ }finally{rmSync(runtime,{recursive:true,force:true});}
 });
