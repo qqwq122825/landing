@@ -21,7 +21,27 @@
   function interactive(node, fn){if(!node)return;node.addEventListener('click',e=>{e.preventDefault();fn(e);});if(!['A','BUTTON'].includes(node.tagName)){node.tabIndex=0;node.setAttribute('role','button');node.addEventListener('keydown',e=>{if(['Enter',' '].includes(e.key)){e.preventDefault();fn(e);}});}}
   const books=$$('[class*="BookItem_bookItem"]');
   const titles=[...new Set(books.map(n=>n.querySelector('h3')?.textContent.trim()).filter(Boolean))];
-  books.forEach(book=>interactive(book.querySelector('[data-slider-poster]'),()=>download(book.querySelector('h3')?.textContent.trim())));
+  // Posters use real links: one click, one project download, no intermediate prompt.
+  // Move existing children so language bindings and loaded images keep their nodes.
+  function directDownload(node){
+    if(!node)return;
+    if(node.tagName!=='A'){
+      const link=document.createElement('a');
+      [...node.attributes].forEach(attr=>link.setAttribute(attr.name,attr.value));
+      link.append(...node.childNodes);node.replaceWith(link);node=link;
+    }
+    dl(node);
+  }
+  books.forEach(book=>{
+    directDownload(book.querySelector('[data-slider-poster]'));
+    directDownload(book.querySelector('h3 a'));
+  });
+  // Run before the shared capture listeners: a swipe-generated click is not a download.
+  const swipedRows=new WeakSet();
+  document.addEventListener('click',e=>{
+    const row=e.target.closest?.('.Slider_sliderContainer__2F8gq');
+    if(row&&swipedRows.has(row)){swipedRows.delete(row);e.preventDefault();e.stopImmediatePropagation();}
+  },true);
   $$('a[href="javascript:;"]').forEach(a=>{
     if(a.closest('footer'))return;
     interactive(a,()=>download(a.querySelector('h1,h2,h3')?.textContent.trim()||a.textContent.trim()||config.appName));
@@ -32,9 +52,8 @@
     const prev=box.querySelector('[aria-label="Previous"]'),next=box.querySelector('[aria-label="Next"]');let offset=0;
     const move=delta=>{offset=Math.max(0,Math.min(offset+delta,Math.max(0,track.scrollWidth-box.clientWidth)));track.style.transform=`translate3d(${-offset}px,0,0)`;prev?.parentElement.classList.toggle('Slider_disable__GAXYV',offset<1);next?.parentElement.classList.toggle('Slider_disable__GAXYV',offset>=track.scrollWidth-box.clientWidth-1);if(prev)prev.disabled=offset<1;if(next)next.disabled=offset>=track.scrollWidth-box.clientWidth-1;};
     prev?.addEventListener('click',()=>move(-box.clientWidth*.85));next?.addEventListener('click',()=>move(box.clientWidth*.85));
-    let start=null,swiped=false;box.addEventListener('touchstart',e=>{start=[e.touches[0].clientX,e.touches[0].clientY];swiped=false;},{passive:true});
-    box.addEventListener('touchend',e=>{if(!start)return;const dx=e.changedTouches[0].clientX-start[0],dy=e.changedTouches[0].clientY-start[1];if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){move((dx<0?1:-1)*box.clientWidth*.8);swiped=true;}start=null;},{passive:true});
-    box.addEventListener('click',e=>{if(swiped){e.preventDefault();e.stopPropagation();swiped=false;}},true);
+    let start=null;box.addEventListener('touchstart',e=>{start=[e.touches[0].clientX,e.touches[0].clientY];swipedRows.delete(box);},{passive:true});
+    box.addEventListener('touchend',e=>{if(!start)return;const dx=e.changedTouches[0].clientX-start[0],dy=e.changedTouches[0].clientY-start[1];if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){move((dx<0?1:-1)*box.clientWidth*.8);swipedRows.add(box);}start=null;},{passive:true});
     window.addEventListener('resize',()=>move(0));move(0);
     const row=box.closest('.Slider_slider__g_dkb');
     interactive(row?.querySelector('[data-i18n="common.viewAll"]'),()=>{row.classList.toggle('tv-expanded');move(-offset);});

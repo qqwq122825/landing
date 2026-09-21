@@ -39,6 +39,7 @@ test('collector reports views, clicks and visible duration regardless of DNT or 
 test('collector preview still blocks downloads and sends no statistics with browser signals set',()=>{
  const f=fixture({page:{...config,preview:true},signals:{doNotTrack:'1',globalPrivacyControl:true}});
  const click=f.click();assert.equal(click.prevented,true);assert.equal(click.stopped,true);
+ const middle=f.click({type:'auxclick',button:1});assert.equal(middle.prevented,true);assert.equal(middle.stopped,true);
  f.visibility('hidden');f.pagehide();assert.deepEqual(f.requests,[]);assert.equal(f.timers.length,0);
  assert.equal(f.links[0].href,config.downloadUrl);assert.equal(f.settings[0].detail.preview,true);
 });
