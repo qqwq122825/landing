@@ -131,3 +131,13 @@ test('card grant drafts distinguish saved state, empty grants and current-templa
  checks[2].checked=false;sync();assert.equal(save.disabled,true);assert.match(hint.textContent,/至少保留/);
  checks[0].checked=true;sync();assert.equal(save.disabled,true);assert.equal(reset.disabled,true);
 });
+
+test('select-all only updates checkboxes in the requested form and preserves initial selection',()=>{
+ const checks=ids.map(value=>({value,checked:false}));let queried;
+ const begin=source.indexOf(' function selectAllTemplates('),end=source.indexOf(' function syncTemplatePermissions(',begin);
+ const selectAll=vm.runInNewContext(source.slice(begin,end)+';selectAllTemplates',{$$:selector=>{queried=selector;return checks;}});
+ selectAll('#template-permissions-form');assert.equal(queried,'#template-permissions-form [name=allowedTemplates]');
+ assert.ok(checks.every(c=>c.checked));assert.match(source,/id="template-permissions-all"/);
+ assert.match(html,/data-action="create-select-all"/);
+ const f=fixture();f.allow(['quest']);f.allow(ids);assert.equal(f.select.value,'quest');
+});

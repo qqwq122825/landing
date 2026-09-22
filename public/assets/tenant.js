@@ -14,6 +14,18 @@
   const previewUrl = id => '/p/' + realm + '/preview/' + id + '?lang=zh';
   const dialog = $('#template-preview');
 
+  function resizeTemplatePreviews() {
+    $$('.phone').forEach(phone => {
+      const width = phone.getBoundingClientRect().width;
+      if (width > 0) phone.style.setProperty('--preview-scale', String(width / 390));
+    });
+  }
+  if (typeof ResizeObserver === 'function') {
+    const previewResizeObserver = new ResizeObserver(resizeTemplatePreviews);
+    $$('.phone').forEach(phone => previewResizeObserver.observe(phone));
+  }
+  window.addEventListener('resize', resizeTemplatePreviews);
+
   function duration(ms) {
     const seconds = Math.max(0, Math.round(Number(ms || 0) / 1000));
     if (seconds < 60) return seconds + 's';
@@ -139,6 +151,7 @@
       if (request !== state.request) return;
       state.days = days; updateProject(data.project); renderStats(data.stats);
       $('#boot').hidden = true; $('#login-panel').hidden = true; $('#dashboard').hidden = false;
+      resizeTemplatePreviews();
       // Refresh statistics without replacing unsaved form edits.
       if (initial) fillSettings(data.project);
     } catch (error) {

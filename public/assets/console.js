@@ -83,7 +83,7 @@
  }
  function templatePermissions(p){
   return `<section class="card"><div class="card-header"><h2 class="card-title">落地页模板</h2><span class="badge bg-primary-lt">${p.allowedTemplates.length} / ${templateIds.length} 款对客户开放</span></div><div class="card-body"><form id="template-permissions-form">
-   ${isSuper?'<div class="template-permissions-toolbar sticky-top bg-body border rounded p-3 mb-3"><div class="d-flex align-items-center justify-content-between flex-wrap gap-2"><span id="template-permissions-status" class="text-secondary" role="status" aria-live="polite"></span><div class="btn-list"><button type="button" class="btn btn-outline-secondary btn-sm" id="template-permissions-reset" disabled>撤销勾选</button><button type="submit" class="btn btn-primary btn-sm" id="template-permissions-save" disabled>保存模板权限</button></div></div><p class="form-hint mb-0 mt-2">左上角勾选开放权限，点击卡片预览；保存后客户后台生效，仅影响当前账号。</p></div>':''}
+   ${isSuper?'<div class="template-permissions-toolbar sticky-top bg-body border rounded p-3 mb-3"><div class="d-flex align-items-center justify-content-between flex-wrap gap-2"><span id="template-permissions-status" class="text-secondary" role="status" aria-live="polite"></span><div class="btn-list"><button type="button" class="btn btn-outline-primary btn-sm" id="template-permissions-all">全选模板</button><button type="button" class="btn btn-outline-secondary btn-sm" id="template-permissions-reset" disabled>撤销勾选</button><button type="submit" class="btn btn-primary btn-sm" id="template-permissions-save" disabled>保存模板权限</button></div></div><p class="form-hint mb-0 mt-2">左上角勾选开放权限，点击卡片预览；保存后客户后台生效，仅影响当前账号。</p></div>':''}
    <div class="template-grid">${templateIds.map(t=>`<article class="card mb-0 ${p.template===t?'border-primary':''}">
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 p-3 border-bottom">
      ${isSuper?`<label class="form-check mb-0"><input class="form-check-input" type="checkbox" name="allowedTemplates" value="${t}" aria-label="对客户开放：${escape(templateName(t))}" ${p.allowedTemplates.includes(t)?'checked':''}><span class="form-check-label">对客户开放</span></label>`:`<span class="text-secondary">已对客户开放</span>`}
@@ -94,6 +94,9 @@
      <span class="card-body d-block"><strong class="d-block mb-2">${escape(templateName(t))}</strong><span class="d-block text-secondary fs-5" data-permission-label="${t}">${p.allowedTemplates.includes(t)?'已对客户开放':'未对客户开放'}</span><span class="d-block text-primary mt-2">预览模板 ↗</span></span>
     </button></article>`).join('')}</div>
    <p class="form-hint mt-3 mb-0">预览不改变权限或当前模板，也不计入访问；切换模板需在预览中确认。</p></form></div></section>`;
+ }
+ function selectAllTemplates(formSelector){
+  $$(formSelector+' [name=allowedTemplates]').forEach(input=>{input.checked=true;});
  }
  function syncTemplatePermissions(){
   const p=state.project,checks=$$('#template-permissions-form [name=allowedTemplates]');
@@ -120,6 +123,7 @@
   const permissions=$('#template-permissions-form');
   if(isSuper&&permissions){
    permissions.addEventListener('change',syncTemplatePermissions);
+   $('#template-permissions-all').addEventListener('click',()=>{selectAllTemplates('#template-permissions-form');syncTemplatePermissions();});
    $('#template-permissions-reset').addEventListener('click',()=>{permissions.reset();syncTemplatePermissions();});
    permissions.addEventListener('submit',async e=>{
     e.preventDefault();
@@ -197,6 +201,7 @@
   const size=e.target.closest('[data-preview-size]');if(size){setPreviewSize(size.dataset.previewSize);return;}
   const nav=e.target.closest('[data-view]');if(nav&&isSuper){sidebar.closeMobileMenu();busy(nav,()=>({overview,templates:templateLibrary,analytics,audit:auditView}[nav.dataset.view])());return;}
   const el=e.target.closest('[data-action]');if(!el)return;const a=el.dataset.action;
+  if(a==='create-select-all'){selectAllTemplates('#create-form');syncCreateTemplates();$('#create-error').textContent='';}
   if(a==='create'){$('#create-form').reset();syncCreateTemplates(true);$('#create-error').textContent='';showModal('#create-dialog');}
   if(a==='reload')busy(el,refresh);
   if(a==='manage'){state.page=1;busy(el,()=>detail(el.dataset.slug));}
