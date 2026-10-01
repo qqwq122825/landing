@@ -7,6 +7,7 @@ function template_catalog():array {
   ['id'=>'dptv','name'=>'DPTV / MinuteDrama','brand'=>'DPTV','description'=>'影音展示风格，包含内容海报与应用下载区域。','tags'=>['影音展示','海报布局','自适应'],'appName'=>HUB_TEMPLATE_NAMES['dptv']],
   ['id'=>'quest','name'=>'Quest / Pasion TV','brand'=>'Pasion TV','description'=>'黑橙色视频目录，竖版卡片、搜索与下载弹窗；内置中英西葡四语界面。','tags'=>['黑橙风格','视频卡片','四语界面'],'appName'=>HUB_TEMPLATE_NAMES['quest']],
   ['id'=>'aivideo','name'=>'AI Video / 阿语短视频','brand'=>'AI Video','description'=>'黑黄竖屏视频风格，原生阿语 RTL，扩展中英西葡界面，含下载浮层。','tags'=>['竖屏视频','阿语 RTL','五语界面'],'appName'=>HUB_TEMPLATE_NAMES['aivideo']],
+  ['id'=>'lumama','name'=>'LumamaTV','brand'=>'LumamaTV','description'=>'黑绿影视目录，横版海报、下载区与西班牙语界面；海报点击仅滚动，公共 Pixel 与项目统计。','tags'=>['影视目录','西班牙语','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['lumama']],
   ['id'=>'ggtv','name'=>'GGTV','brand'=>'GGTV','description'=>'参考后台 68 号模板的平台适配版；语言与交互差异详见接入记录。','tags'=>['参考 68','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['ggtv']],
   ['id'=>'appstore','name'=>'Google Play / 应用详情','brand'=>'Cast','description'=>'参考后台 69 号模板的平台适配版；语言与交互差异详见接入记录。','tags'=>['参考 69','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['appstore']],
   ['id'=>'ultraplay','name'=>'Ultra Play','brand'=>'Ultra Play','description'=>'参考后台 74 号模板的平台适配版；语言与交互差异详见接入记录。','tags'=>['参考 74','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['ultraplay']],
