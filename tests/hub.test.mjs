@@ -150,6 +150,7 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
  const bPath=()=>'/p/'+B.project.slug;
  await t.test('both templates embed their own saved Pixel ID and versioned shared tracking scripts',async()=>{
   const version=createHash('sha256').update(readFileSync(root+'public/assets/brand-settings.js')).digest('hex').slice(0,12);
+  const browserGuideVersion=createHash('sha256').update(readFileSync(root+'public/assets/in-app-browser.js')).digest('hex').slice(0,12);
   const collectorVersion=createHash('sha256').update(readFileSync(root+'public/assets/collector.js')).digest('hex').slice(0,12);
   try{
    for(const [p,ctx,id] of [[A,ca,'1000000000000001'],[B,cb,'2000000000000002']]){
@@ -157,6 +158,7 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
     const r=await request('/p/'+p.project.slug);assert.equal(r.status,200);
     const config=JSON.parse(r.text.match(/window\.HUB_PAGE=(.*?);window\.APP_CONFIG/s)[1]);assert.equal(config.pixelId,id);assert.equal(config.preview,false);
     assert.equal((r.text.match(/src="\/assets\/brand-settings\.js\?v=/g)||[]).length,1);assert.ok(r.text.includes('/assets/brand-settings.js?v='+version));
+    assert.equal((r.text.match(/src="\/assets\/in-app-browser\.js\?v=/g)||[]).length,1);assert.ok(r.text.includes('/assets/in-app-browser.js?v='+browserGuideVersion));
     assert.equal((r.text.match(/src="\/assets\/collector\.js\?v=/g)||[]).length,1);assert.ok(r.text.includes('/assets/collector.js?v='+collectorVersion));
     const admin=await request('/p/'+p.project.slug+'/admin');assert.doesNotMatch(admin.text,/src="[^"]*(?:brand-settings|fbevents)\.js/);assert.match(admin.text,/PageView（访问）和 DownloadClick/);
     assert.doesNotMatch(admin.text,/尊重浏览器 DNT/);assert.match(admin.text,/不因浏览器 DNT \/ GPC 信号自动停报/);
