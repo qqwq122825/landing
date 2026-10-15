@@ -6,62 +6,62 @@ import vm from 'node:vm';
 const source=readFileSync(new URL('../public/assets/in-app-browser.js',import.meta.url),'utf8');
 
 class Element {
-  constructor(tag){this.tagName=tag.toUpperCase();this.children=[];this.style={overflow:''};this.attrs={};this.dataset={};this.listeners={};this.textContent='';this.className='';}
+  constructor(tag){this.tagName=tag.toUpperCase();this.attrs={};this.className='';this.children=[];}
   append(...nodes){for(const node of nodes){node.parentElement=this;this.children.push(node);}}
-  remove(){this.parentElement.children=this.parentElement.children.filter(node=>node!==this);}
-  setAttribute(name,value){this.attrs[name]=value;}
+  setAttribute(name,value){this.attrs[name]=String(value);}
   getAttribute(name){return this.attrs[name]??null;}
-  addEventListener(type,fn){this.listeners[type]=fn;}
-  focus(){this.focused=true;}
-  closest(selector){return selector==='.download-link'&&this.className.includes('download-link')?this:null;}
-  find(className){if(this.className===className)return this;for(const child of this.children){const found=child.find?.(className);if(found)return found;}return null;}
+  closest(selector){
+    if(selector==='.download-link'&&this.className.split(/\s+/).includes('download-link'))return this;
+    return this.parentElement?.closest?.(selector)||null;
+  }
 }
 
-function fixture({userAgent='Mozilla/5.0 (Linux; Android 14) [FBAN/FB4A;FBAV/500.0]',language='zh-CN',preview=false,readyState='complete'}={}){
-  const html=new Element('html'),body=new Element('body'),listeners={};html.append(body);let ready;
-  const document={documentElement:html,body,readyState,activeElement:null,createElement:tag=>new Element(tag),addEventListener(type,fn,options){(listeners[type]??=[]).push({fn,options});}};
+function fixture({userAgent='Mozilla/5.0 (Linux; Android 14) [FBAN/FB4A;FBAV/500.0]',preview=false}={}){
+  const body=new Element('body'),listeners={};let ready;
+  const document={body,addEventListener(type,fn){(listeners[type]??=[]).push(fn);}};
   const location={protocol:'https:',host:'example.test',pathname:'/p/abc123456',search:'?utm=fb',href:'https://example.test/p/abc123456?utm=fb'};
-  const navigator={userAgent,language,clipboard:{writes:[],async writeText(value){this.writes.push(value);}}};
   const window={location,TV_PREVIEW:preview,TV_SETTINGS_READY:{then(fn){ready=fn;}},addEventListener(type,fn){this[type]=fn;}};
-  vm.runInNewContext(source,{window,document,navigator});
-  const dispatch=(type,event)=>{for(const {fn} of listeners[type]||[])fn(event);};
-  const clickEvent=target=>({button:0,target,prevented:false,stopped:false,preventDefault(){this.prevented=true;},stopImmediatePropagation(){this.stopped=true;}});
-  return {window,document,navigator,body,listeners,ready:data=>ready?.(data),dispatch,clickEvent};
+  vm.runInNewContext(source,{window,document,navigator:{userAgent},URL});
+  const dispatch=(type,event)=>{for(const fn of listeners[type]||[])fn(event);};
+  const clickEvent=target=>({button:0,target,prevented:false,propagationStopped:false,immediateStopped:false,preventDefault(){this.prevented=true;},stopPropagation(){this.propagationStopped=true;},stopImmediatePropagation(){this.immediateStopped=true;}});
+  const link=(href='/p/abc123456/dl')=>{const node=new Element('a');node.className='download-link';node.href=new URL(href,location.href).href;node.setAttribute('href',href);return node;};
+  return {window,document,body,listeners,ready:data=>ready?.(data),dispatch,clickEvent,link};
 }
 
-test('Facebook Android opens an automatic guide on actual landing pages',()=>{
-  const f=fixture();f.ready({preview:false});
-  const guide=f.body.find('hub-browser-guide');assert.ok(guide);
-  assert.equal(guide.find('hub-browser-guide__card').attrs.role,'dialog');
-  assert.equal(guide.find('hub-browser-guide__primary').textContent,'打开系统浏览器');
-  assert.equal(f.document.documentElement.style.overflow,'hidden');
+const settings={preview:false,downloadUrl:'/p/abc123456/dl'};
+
+test('Facebook Android shows no automatic prompt or overlay',()=>{
+  const f=fixture();f.ready(settings);
+  assert.deepEqual(f.body.children,[]);
+  assert.doesNotMatch(source,/hub-browser-guide|showPrompt|clipboard/);
 });
 
-test('system-browser action uses an Android browsable intent for the same HTTPS page',()=>{
-  const f=fixture();f.ready({preview:false});
-  f.body.find('hub-browser-guide').find('hub-browser-guide__primary').listeners.click();
-  assert.equal(f.window.location.href,'intent://example.test/p/abc123456?utm=fb#Intent;scheme=https;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;end');
+test('download click directly opens its final project route through an Android browsable intent',()=>{
+  const f=fixture();f.ready(settings);const event=f.clickEvent(f.link());f.dispatch('click',event);
+  assert.equal(event.prevented,true);assert.equal(event.propagationStopped,true);assert.equal(event.immediateStopped,false);
+  assert.equal(f.window.location.href,'intent://example.test/p/abc123456/dl#Intent;scheme=https;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;end');
 });
 
-test('iOS copies the current link and keeps manual Safari instructions visible',async()=>{
-  const f=fixture({userAgent:'Mozilla/5.0 (iPhone) [FBAN/FBIOS;FBAV/500.0]',language:'en-US'});f.ready({preview:false});
-  const guide=f.body.find('hub-browser-guide'),button=guide.find('hub-browser-guide__primary');assert.equal(button.textContent,'Copy page link');
-  await button.listeners.click();assert.deepEqual(f.navigator.clipboard.writes,['https://example.test/p/abc123456?utm=fb']);
-  assert.match(button.textContent,/Link copied/);assert.match(guide.find('hub-browser-guide__manual').textContent,/top-right corner/);
+test('a nested download-button child resolves its server-rendered anchor destination',()=>{
+  const f=fixture();f.ready(settings);const link=f.link('/p/abc123456/dl?campaign=fb'),icon=new Element('span');link.append(icon);
+  const event=f.clickEvent(icon);f.dispatch('click',event);
+  assert.equal(event.prevented,true);
+  assert.equal(f.window.location.href,'intent://example.test/p/abc123456/dl?campaign=fb#Intent;scheme=https;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;end');
 });
 
-test('previews and ordinary external browsers do not show the guide',()=>{
-  const preview=fixture({preview:true});preview.ready({preview:true});assert.equal(preview.body.find('hub-browser-guide'),null);
-  const chrome=fixture({userAgent:'Mozilla/5.0 Chrome/140.0.0.0 Mobile'});assert.equal(chrome.listeners.click,undefined);assert.equal(chrome.body.find('hub-browser-guide'),null);
+test('iOS receives no prompt and keeps normal link behavior because APK delivery is Android-only',()=>{
+  const f=fixture({userAgent:'Mozilla/5.0 (iPhone) [FBAN/FBIOS;FBAV/500.0]'});f.ready(settings);
+  const event=f.clickEvent(f.link());f.dispatch('click',event);
+  assert.equal(event.prevented,false);assert.equal(f.body.children.length,0);assert.equal(f.window.location.href,'https://example.test/p/abc123456?utm=fb');
 });
 
-test('closing is temporary and a real download click reopens the guide without navigating',()=>{
-  const f=fixture();f.ready({preview:false});let guide=f.body.find('hub-browser-guide');guide.find('hub-browser-guide__close').listeners.click();
-  assert.equal(f.body.find('hub-browser-guide'),null);assert.equal(f.document.documentElement.style.overflow,'');
-  const link=new Element('a');link.className='download-link';const event=f.clickEvent(link);f.dispatch('click',event);
-  assert.equal(event.prevented,true);assert.equal(event.stopped,true);assert.ok(f.body.find('hub-browser-guide'));
+test('previews, ordinary browsers, disabled controls and unrelated links are untouched',()=>{
+  const preview=fixture({preview:true});preview.ready({...settings,preview:true});let event=preview.clickEvent(preview.link());preview.dispatch('click',event);assert.equal(event.prevented,false);
+  const chrome=fixture({userAgent:'Mozilla/5.0 Chrome/140.0.0.0 Mobile'});assert.equal(chrome.listeners.click,undefined);
+  const disabled=fixture();disabled.ready(settings);const link=disabled.link();link.setAttribute('aria-disabled','true');event=disabled.clickEvent(link);disabled.dispatch('click',event);assert.equal(event.prevented,false);
+  const unrelated=new Element('a');event=disabled.clickEvent(unrelated);disabled.dispatch('click',event);assert.equal(event.prevented,false);
 });
 
 test('Facebook crawler user agents are excluded',()=>{
-  const f=fixture({userAgent:'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)'});assert.equal(f.listeners.click,undefined);assert.equal(f.body.find('hub-browser-guide'),null);
+  const f=fixture({userAgent:'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)'});assert.equal(f.listeners.click,undefined);
 });
