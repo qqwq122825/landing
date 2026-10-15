@@ -10,6 +10,18 @@ import {randomUUID,createHash} from 'node:crypto';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 
+test('template sources contain no legacy APK route and DPTV binds only marked downloads to the project route',()=>{
+ const legacy=['https://alpha','pundits.com/p/p6y2sej/dl'].join('');
+ const page=readFileSync(root+'resources/pages/dptv.html','utf8');
+ const integration=readFileSync(root+'public/themes/dptv/assets/integration.js','utf8');
+ const routes=readFileSync(root+'app/routes.php','utf8');
+ assert.equal(page.includes(legacy),false);
+ assert.equal(integration.includes(legacy),false);
+ assert.equal(routes.includes(legacy),false);
+ assert.match(integration,/if \(el\.matches\('a\[href\]'\)\) el\.href = config\.apkUrl/);
+ assert.doesNotMatch(integration,/querySelectorAll\('a\[href\]'\)/);
+});
+
 test('master UI uses local Tabler components without Vue or a frontend build step',()=>{
  const html=readFileSync(root+'app/console.html','utf8');
  const js=readFileSync(root+'public/assets/console.js','utf8');
@@ -137,6 +149,7 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
  await t.test('standalone previews render both real templates without accounts, tokens or analytics writes',async()=>{
   for(const id of ['feiyue','dptv']){
    const r=await request('/templates/'+id+'/preview',master);assert.equal(r.status,200,r.text);assert.match(r.text,new RegExp('<base href="/themes/'+id+'/">'));assert.equal(r.headers.get('x-frame-options'),'SAMEORIGIN');assert.match(r.headers.get('cache-control'),/no-store/);
+   assert.doesNotMatch(r.text,/alphapundits\.com\/p\/p6y2sej\/dl/);
    const config=JSON.parse(r.text.match(/window\.HUB_PAGE=(.*?);window\.APP_CONFIG/s)[1]);assert.equal(config.preview,true);assert.equal(config.token,'');assert.equal(config.pixelId,'');assert.equal(config.logoData,'');assert.equal(config.appName,id==='dptv'?'DPTV':'ReelShort');assert.equal(config.slug,'template-demo');
   }
   const counts=JSON.parse(execFileSync('php',['-r','require "app/bootstrap.php"; echo json_encode([query("SELECT COUNT(*) FROM projects")->fetchColumn(),query("SELECT COUNT(*) FROM visits")->fetchColumn(),query("SELECT COUNT(*) FROM events")->fetchColumn()]);'],{cwd:root,env,encoding:'utf8'}));assert.deepEqual(counts,[0,0,0]);

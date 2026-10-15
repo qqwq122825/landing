@@ -7,13 +7,12 @@
 
   // Mark only real download/store CTAs, not posters, search, legal links or carousel arrows.
   // The unchanged shared tracker binds these elements after this script runs.
-  document.querySelectorAll('[onclick*="downloadApp"], .vip-btn, .vip-btn-mobile, .sidebar-vip-btn, #desktopLoginBtn, #sidebarLoginBtn, #sidebarRegisterBtn, #mobileMenu a.font-semibold[onclick], .md-ru-store-btn, .download-modal__store-row a').forEach(el => {
+  function markDownload(el) {
     el.classList.add('download-link');
-  });
-  document.querySelectorAll('#mobileMenu a img').forEach(img => img.closest('a').classList.add('download-link'));
-  document.querySelectorAll('a[href]').forEach(el => {
-    if (el.getAttribute('href').startsWith('https://alphapundits.com/p/p6y2sej/dl')) el.href = config.apkUrl;
-  });
+    if (el.matches('a[href]')) el.href = config.apkUrl;
+  }
+  document.querySelectorAll('[onclick*="downloadApp"], .vip-btn, .vip-btn-mobile, .sidebar-vip-btn, #desktopLoginBtn, #sidebarLoginBtn, #sidebarRegisterBtn, #mobileMenu a.font-semibold[onclick], .md-ru-store-btn, .download-modal__store-row a:first-child').forEach(markDownload);
+  document.querySelectorAll('#mobileMenu a img').forEach(img => markDownload(img.closest('a')));
 
   const languageAliases = { Deutsch: 'de', Français: 'fr', Español: 'es', Filipino: 'fil', Português: 'pt', 한국어: 'ko', ไทย: 'th', 'Bahasa Melayu': 'ms', 'Bahasa Indonesia': 'id', 日本語: 'ja', 简体中文: 'zh', 繁體中文: 'zh-tw' };
   const labels = { en: 'English', zh: '中文', 'zh-tw': '繁體中文', es: 'Español', pt: 'Português', fr: 'Français', de: 'Deutsch', ru: 'Русский', fil: 'Filipino', ko: '한국어', th: 'ไทย', ms: 'Bahasa Melayu', id: 'Bahasa Indonesia', ja: '日本語' };

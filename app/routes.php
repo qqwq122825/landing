@@ -102,7 +102,6 @@ function handle_api(string $realm,string $route):array {
 function render_landing(array $p,bool $preview=false,?string $template=null):void {
  $template=$template??$p['template'];if(!in_array($template,HUB_TEMPLATES,true))throw new HubError('模板不存在',404);
  $html=file_get_contents(HUB_ROOT.'/resources/pages/'.$template.'.html');
- $html=str_replace('https://alphapundits.com/p/p6y2sej/dl','/p/'.$p['slug'].'/dl',$html);
  $html=preg_replace('#<script\b[^>]*src=["\'][^"\']*(?:config|site-settings|brand-settings|analytics)\.js[^"\']*["\'][^>]*>\s*</script>#i','',$html);
  $html=preg_replace('#<base\b[^>]*>#i','',$html);
  $data=public_settings($p,$template);$visit=bin2hex(random_bytes(16));$issued=time();$data['preview']=$preview;$data['visitId']=$visit;$data['issued']=$issued;$data['token']=$preview?'':page_token((int)$p['id'],$visit,$issued);
