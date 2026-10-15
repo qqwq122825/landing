@@ -22,9 +22,9 @@ function fixture({preview=false,pixelId='1000000000000001'}={}){
   querySelector(s){if(s==='[data-slider-poster]')return this.childNodes.find(n=>n.getAttribute('data-slider-poster'));if(s==='h3 a')return title;if(s==='h3')return {textContent:'Fixture drama'};if(s==='.Slider_sliderList__o0xyY')return track;return null;}
   closest(s){if(s==='.download-link'&&(this.attrs.class||'').split(' ').includes('download-link'))return this;if(s==='.Slider_sliderContainer__2F8gq'&&this===row)return this;return this.parent?.closest(s)||null;}
  }
- const row=new El('div'),track=new El('div'),book=new El('div'),poster=new El('div',{'data-slider-poster':'true',class:'BookItem_poster__CsSCp',style:'transform-origin:center'}),image=new El('img',{src:'fixture.jpg'}),title=new El('a',{href:'javascript:;'}),hero=new El('a',{href:'/?app=36&auto=android'});
- row.append(track);track.append(book);book.append(poster,title);poster.append(image);
  const config={appName:'ReelShort',downloadUrl:'/p/fixture01/dl',slug:'fixture01',preview,pixelId,visitId:'view1',token:'fixture-token',issued:123};
+ const row=new El('div'),track=new El('div'),book=new El('div'),poster=new El('div',{'data-slider-poster':'true',class:'BookItem_poster__CsSCp',style:'transform-origin:center'}),image=new El('img',{src:'fixture.jpg'}),title=new El('a',{href:'javascript:;'}),hero=new El('a',{href:config.downloadUrl,class:'download-link'});
+ row.append(track);track.append(book);book.append(poster,title);poster.append(image);
  const document={documentElement:{lang:'en'},visibilityState:'visible',body:new El('body'),head:new El('head'),createElement:tag=>new El(tag),querySelector:()=>null,
   querySelectorAll(s){if(s==='[class*="BookItem_bookItem"]')return [book];if(s==='a[href*="?app="], #rs-download-fab')return [hero];if(s==='a[href="javascript:;"]')return title.href==='javascript:;'?[title]:[];if(s==='.Slider_sliderContainer__2F8gq')return [row];if(s==='.download-link'||s==='a.download-link')return elements.filter(el=>el.tagName==='A'&&(el.attrs.class||'').split(' ').includes('download-link'));return [];},
   addEventListener:(type,fn)=>{(listeners[type]??=[]).push(fn);},
@@ -42,7 +42,7 @@ test('ReelShort posters and titles are native project downloads, not modal trigg
  assert.ok(f.elements.filter(el=>el.tagName==='DIALOG').every(el=>!el.open));
  assert.deepEqual(f.calls,[['init',f.config.pixelId],['track','PageView'],...Array.from({length:3},()=>['trackCustom','DownloadClick'])]);
  assert.deepEqual(f.beacons.map(x=>x.type),['view','download','download','download']);
- f.settings({...f.config,downloadUrl:'/p/fixture02/dl'});assert.equal(f.poster.href,'/p/fixture02/dl');assert.equal(f.title.href,'/p/fixture02/dl');
+ f.settings({...f.config,downloadUrl:'/p/fixture02/dl'});assert.equal(f.poster.href,f.config.downloadUrl);assert.equal(f.title.href,f.config.downloadUrl);
 });
 
 test('ReelShort preview blocks poster navigation and all tracking; blank Pixel still allows downloading',()=>{

@@ -40,7 +40,6 @@
   // The common brand observer remains the only owner of project branding.
  }
  picker.addEventListener('change',()=>applyLanguage(picker.value,true));applyLanguage(language);
- $$('.download-link').forEach(a=>a.href=config.downloadUrl);
  function showInfo(text){if(text)$('[data-ref-dialog-description]').textContent=text;if(!dialog.open)dialog.showModal();}
  dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});
  document.addEventListener('click',e=>{

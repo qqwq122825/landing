@@ -2628,8 +2628,8 @@
 <script src="/assets/brand-settings.js" defer></script>
   <script src="assets/reference-language.js" defer></script>
   <script src="assets/reference-locales.js" defer></script>
-  <script src="assets/reference-interactions.js" defer></script>
-  <script src="assets/integration.js?v=20261015-legacy-cleanup" defer></script>
+  <script src="assets/reference-interactions.js?v=20261015-server-rendered-download" defer></script>
+  <script src="assets/integration.js?v=20261015-server-rendered-download" defer></script>
   <script src="/assets/analytics.js" defer></script>
 </head>
 
@@ -2649,7 +2649,7 @@
                     <a class="absolute left-1/2 transform -translate-x-1/2" href="#download">
                         <img data-hub-logo alt="logo" class="h-8 w-auto" src="assets/dptv-logo.png">
                     </a>
-                    <a class="vip-btn-mobile" href="#download" onclick="return openDownloadModal(event)" id="mobileVipBtn">
+                    <a class="vip-btn-mobile download-link" href="#download" onclick="return openDownloadModal(event)" id="mobileVipBtn">
                         <i class="fas fa-download"></i>
                     </a>
                 </div>
@@ -2731,15 +2731,15 @@
                     <a class="text-white hover:text-white transition-colors" href="#download">
                         <i class="fas fa-history text-lg"></i>
                     </a>
-                    <a class="vip-btn" href="#download" onclick="return openDownloadModal(event)" id="desktopVipBtn">
+                    <a class="vip-btn download-link" href="#download" onclick="return openDownloadModal(event)" id="desktopVipBtn">
                         <i class="fas fa-download"></i>
                         <span>Download</span>
                     </a>
-                    <a class="auth-btn" href="#download" id="desktopLoginBtn" onclick="return openDownloadModal(event)">
+                    <a class="auth-btn download-link" href="#download" id="desktopLoginBtn" onclick="return openDownloadModal(event)">
                         <i class="fab fa-google-play"></i>
                         <span>Google Play</span>
                     </a>
-                    <a class="auth-btn hidden" href="#download" onclick="return openDownloadModal(event)" id="desktopProfileBtn">
+                    <a class="auth-btn hidden download-link" href="#download" onclick="return openDownloadModal(event)" id="desktopProfileBtn">
                         <i class="fas fa-user-circle"></i>
                         <span>Profile</span>
                     </a>
@@ -2820,28 +2820,28 @@
                             Privacy Policy
                         </a>
                         <div class="w-full h-px bg-[#312F2F]"></div>
-                        <a class="block text-white text-sm font-semibold py-2 hover:text-gray-300 transition-colors" href="#download" onclick="return openDownloadModal(event)">
+                        <a class="block text-white text-sm font-semibold py-2 hover:text-gray-300 transition-colors download-link" href="#download" onclick="return openDownloadModal(event)">
                             Download
                         </a>
                         <div class="w-full h-px bg-[#312F2F]"></div>
-                        <a class="sidebar-vip-btn" href="#download" onclick="return openDownloadModal(event)" id="sidebarVipBtn">
+                        <a class="sidebar-vip-btn download-link" href="#download" onclick="return openDownloadModal(event)" id="sidebarVipBtn">
                             <i class="fas fa-download me-2"></i>Download APK
                         </a>
-                        <a class="block text-white py-2 hover:text-gray-300 transition-colors menu-item" href="#download" id="sidebarLoginBtn" onclick="return openDownloadModal(event)">
+                        <a class="block text-white py-2 hover:text-gray-300 transition-colors menu-item download-link" href="#download" id="sidebarLoginBtn" onclick="return openDownloadModal(event)">
                             <i class="fas fa-mobile-alt me-2"></i>Watch in the app
                         </a>
-                        <a class="block text-white py-2 hover:text-gray-300 transition-colors menu-item" href="#download" id="sidebarRegisterBtn" target="_blank" rel="noopener">
+                        <a class="block text-white py-2 hover:text-gray-300 transition-colors menu-item download-link" href="#download" id="sidebarRegisterBtn" target="_blank" rel="noopener">
                             <i class="fab fa-google-play me-2"></i>Google Play
                         </a>
-                        <a class="block text-white py-2 hover:text-gray-300 transition-colors menu-item hidden" href="#download" onclick="return openDownloadModal(event)" id="sidebarProfileBtn">
+                        <a class="block text-white py-2 hover:text-gray-300 transition-colors menu-item hidden download-link" href="#download" onclick="return openDownloadModal(event)" id="sidebarProfileBtn">
                             <i class="fas fa-user-circle me-2"></i>Profile
                         </a>
                     </div>
                     <div class="space-y-3">
-                        <a class="block" href="#download" target="_blank">
+                        <a class="block download-link" href="#download" target="_blank">
                             <img alt="Download on the App Store" class="h-10 w-auto" src="98/index_files/app_store_downlaod.png">
                         </a>
-                        <a class="block" href="#download" target="_blank">
+                        <a class="block download-link" href="#download" target="_blank">
                             <img alt="Get it on Google Play" class="h-10 w-auto" src="98/index_files/google_play_download.png">
                         </a>
                     </div>
@@ -3353,7 +3353,7 @@
                                     <span>Download APK for Android</span>
                                 </button>
                                 
-                                <a class="md-ru-store-btn" href="https://apps.apple.com/in/app/minutedrama-short-drama/id6496203668" target="_blank" rel="noopener">
+                                <a class="md-ru-store-btn download-link" href="https://apps.apple.com/in/app/minutedrama-short-drama/id6496203668" target="_blank" rel="noopener">
                                     <i class="fab fa-apple"></i>
                                     <span>App Store</span>
                                 </a>
@@ -6765,7 +6765,7 @@
                     <span>Download APK</span>
                 </button>
                 <div class="download-modal__store-row">
-                    <a href="#download" target="_blank" rel="noopener">Google Play</a>
+                    <a href="#download" target="_blank" rel="noopener" class="download-link">Google Play</a>
                     <a href="https://apps.apple.com/in/app/minutedrama-short-drama/id6496203668" target="_blank" rel="noopener">App Store</a>
                 </div>
                 <p class="download-modal__note">After installation, open the app to continue watching. Free to install; selected features may require in-app purchases or a subscription.</p>

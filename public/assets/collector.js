@@ -1,8 +1,6 @@
 (() => {
  'use strict';const config=window.HUB_PAGE;if(!config)return;
  window.dispatchEvent(new CustomEvent('tv:settings',{detail:config}));
- // All template downloads stay inside the current project's /dl route.
- document.querySelectorAll('a.download-link').forEach(a=>a.href=config.downloadUrl);
  if(config.preview){const blockDownload=e=>{if(e.target.closest?.('.download-link')){e.preventDefault();e.stopImmediatePropagation();}};document.addEventListener('click',blockDownload,true);document.addEventListener('auxclick',blockDownload,true);return;}
  const endpoint='/p/'+config.slug+'/api/event';let visibleAt=document.visibilityState==='visible'?performance.now():null,stored=0;
  const elapsed=()=>Math.min(86400000,Math.round(stored+(visibleAt===null?0:performance.now()-visibleAt)));

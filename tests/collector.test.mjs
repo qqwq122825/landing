@@ -7,7 +7,7 @@ const source=readFileSync(new URL('../public/assets/collector.js',import.meta.ur
 const config={slug:'123456789',visitId:'fixture-visit',issued:123,token:'fixture-token',downloadUrl:'/p/123456789/dl',preview:false};
 // Local VM doubles only: no browser, real network, real visitors or Meta SDK.
 function fixture({page=config,signals={},beacon=true}={}){
- const listeners=new Map(),windowListeners=new Map(),requests=[],settings=[],timers=[],links=[{href:'old'}];let time=0,id=0;
+ const listeners=new Map(),windowListeners=new Map(),requests=[],settings=[],timers=[],links=[{href:page?.downloadUrl||'server-rendered'}];let time=0,id=0;
  const add=(map,type,fn)=>map.set(type,[...(map.get(type)||[]),fn]);
  const document={visibilityState:'visible',querySelectorAll:()=>links,addEventListener:(type,fn)=>add(listeners,type,fn)};
  const window={HUB_PAGE:page,dispatchEvent:event=>settings.push(event),addEventListener:(type,fn)=>add(windowListeners,type,fn)};

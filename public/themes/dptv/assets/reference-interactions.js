@@ -82,7 +82,6 @@
             updateCurrentLanguage();
             updateAuthButtons();
             updateVipButtons();
-            updateVipButtonsHref();
         });
 
         function updateAuthButtons() {
@@ -116,26 +115,6 @@
             const userToken = localStorage.getItem('userToken');
             const userData = localStorage.getItem('userData');
             return !!(userToken && userData);
-        }
-
-        function updateVipButtonsHref() {
-            try {
-                const currentPageUrl = window.location.href;
-                const separator = (url) => (url.indexOf('?') === -1 ? '?' : '&');
-                const setHref = (el) => {
-                    if (!el || typeof el.getAttribute !== 'function') return;
-                    const base = el.getAttribute('href') || el.href || '';
-                    if (!base) return;
-                    el.setAttribute('href', base + separator(base) + 'redirect=' + encodeURIComponent(currentPageUrl));
-                };
-                setHref(document.getElementById('desktopVipBtn'));
-                setHref(document.getElementById('mobileVipBtn'));
-                setHref(document.getElementById('sidebarVipBtn'));
-                setHref(document.getElementById('desktopProfileBtn'));
-                setHref(document.getElementById('sidebarProfileBtn'));
-            } catch (e) {
-                console.warn('[navbar] updateVipButtonsHref failed:', e);
-            }
         }
 
         function updateVipButtons() {
@@ -1273,4 +1252,3 @@
                 closeDownloadModal(event);
             }
         });
-    

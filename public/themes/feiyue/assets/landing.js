@@ -3,11 +3,7 @@
   const config = window.APP_CONFIG;
   const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
   const text = (zh,en) => document.documentElement.lang.startsWith('zh') ? zh : en;
-  let downloadUrl = config.apkUrl;
-  const dl = node => { node.href=downloadUrl; node.classList.add('download-link'); node.rel='noopener noreferrer'; };
-  $$('a[href*="?app="], #rs-download-fab').forEach(dl);
-  window.addEventListener('tv:settings',event=>{downloadUrl=event.detail.downloadUrl;$$('.download-link').forEach(dl);});
-  window.TV_SETTINGS_READY?.then(()=>{downloadUrl=window.APP_CONFIG.apkUrl;$$('.download-link').forEach(dl);});
+  const dl = node => { node.href=config.apkUrl; node.classList.add('download-link'); node.rel='noopener noreferrer'; };
   const dialog = document.createElement('dialog'); dialog.className='tv-dialog'; dialog.setAttribute('aria-labelledby','tv-dialog-title');
   const close = document.createElement('button'); close.className='tv-close'; close.type='button'; close.textContent='×'; close.setAttribute('aria-label','关闭 / Close');
   const heading = document.createElement('h2'); heading.id='tv-dialog-title';

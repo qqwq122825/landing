@@ -10,7 +10,7 @@ import {randomUUID,createHash} from 'node:crypto';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 
-test('template sources contain no legacy APK route and DPTV binds only marked downloads to the project route',()=>{
+test('template sources contain no legacy APK route and PHP finalizes marked downloads before responding',()=>{
  const legacy=['https://alpha','pundits.com/p/p6y2sej/dl'].join('');
  const page=readFileSync(root+'resources/pages/dptv.html','utf8');
  const integration=readFileSync(root+'public/themes/dptv/assets/integration.js','utf8');
@@ -18,8 +18,11 @@ test('template sources contain no legacy APK route and DPTV binds only marked do
  assert.equal(page.includes(legacy),false);
  assert.equal(integration.includes(legacy),false);
  assert.equal(routes.includes(legacy),false);
- assert.match(integration,/if \(el\.matches\('a\[href\]'\)\) el\.href = config\.apkUrl/);
+ assert.match(routes,/function render_download_links\(/);
+ assert.match(routes,/render_download_links\(\$html,\$data\['downloadUrl'\],\$template\)/);
+ assert.doesNotMatch(integration,/\.href\s*=\s*config\.apkUrl/);
  assert.doesNotMatch(integration,/querySelectorAll\('a\[href\]'\)/);
+ assert.ok((page.match(/<a\b[^>]*class="[^"]*download-link/g)||[]).length>=13);
 });
 
 test('master UI uses local Tabler components without Vue or a frontend build step',()=>{
@@ -146,11 +149,13 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
   for(const item of r.data.templates){assert.equal(item.usedCount,0);assert.equal(item.allowedCount,0);assert.deepEqual(item.projects,[]);assert.equal(item.previewUrl,'/templates/'+item.id+'/preview');}
   const page=await request('/');assert.match(page.text,/data-view="templates"/);assert.match(page.text,/data-preview-size="desktop"/);
  });
- await t.test('standalone previews render both real templates without accounts, tokens or analytics writes',async()=>{
-  for(const id of ['feiyue','dptv']){
+ await t.test('standalone previews server-render final download routes without accounts, tokens or analytics writes',async()=>{
+  const names={feiyue:'ReelShort',dptv:'DPTV',quest:'Pasion TV',aivideo:'AI Video',lumama:'LumamaTV'};
+  for(const id of Object.keys(names)){
    const r=await request('/templates/'+id+'/preview',master);assert.equal(r.status,200,r.text);assert.match(r.text,new RegExp('<base href="/themes/'+id+'/">'));assert.equal(r.headers.get('x-frame-options'),'SAMEORIGIN');assert.match(r.headers.get('cache-control'),/no-store/);
    assert.doesNotMatch(r.text,/alphapundits\.com\/p\/p6y2sej\/dl/);
-   const config=JSON.parse(r.text.match(/window\.HUB_PAGE=(.*?);window\.APP_CONFIG/s)[1]);assert.equal(config.preview,true);assert.equal(config.token,'');assert.equal(config.pixelId,'');assert.equal(config.logoData,'');assert.equal(config.appName,id==='dptv'?'DPTV':'ReelShort');assert.equal(config.slug,'template-demo');
+   const links=[...r.text.matchAll(/<a\b[^>]*class="[^"]*download-link[^>]*>/g)].map(match=>match[0]);assert.ok(links.length>0,id);for(const link of links)assert.ok(link.includes('href="/p/template-demo/dl"'),link);
+   const config=JSON.parse(r.text.match(/window\.HUB_PAGE=(.*?);window\.APP_CONFIG/s)[1]);assert.equal(config.preview,true);assert.equal(config.token,'');assert.equal(config.pixelId,'');assert.equal(config.logoData,'');assert.equal(config.appName,names[id]);assert.equal(config.slug,'template-demo');
   }
   const counts=JSON.parse(execFileSync('php',['-r','require "app/bootstrap.php"; echo json_encode([query("SELECT COUNT(*) FROM projects")->fetchColumn(),query("SELECT COUNT(*) FROM visits")->fetchColumn(),query("SELECT COUNT(*) FROM events")->fetchColumn()]);'],{cwd:root,env,encoding:'utf8'}));assert.deepEqual(counts,[0,0,0]);
   assert.equal((await request('/templates/missing/preview',master)).status,404);assert.equal((await post('/templates/dptv/preview',{},master)).status,404);assert.equal((await post('/api/templates',{},master)).status,404);

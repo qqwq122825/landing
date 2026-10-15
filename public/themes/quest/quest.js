@@ -39,8 +39,6 @@
  }
  function closeMenu(){menu.hidden=true;$('#menu-toggle').setAttribute('aria-expanded','false');}
  function open(index=-1){selected=index;returnFocus=document.activeElement;closeMenu();$('#selected-title').hidden=selected<0;$('#selected-title').textContent=catalog[selected]?.title||'';copyState='';copyAttempt++;$('#copy-status').textContent='';if(!dialog.open)dialog.showModal();}
- function downloads(data){if(!data?.downloadUrl)return;document.querySelectorAll('a.download-link').forEach(link=>link.setAttribute('href',data.downloadUrl));}
- downloads(config);window.addEventListener('tv:settings',event=>downloads(event.detail));
  $('#menu-toggle').addEventListener('click',()=>{menu.hidden=!menu.hidden;$('#menu-toggle').setAttribute('aria-expanded',String(!menu.hidden));});
  $('#search-toggle').addEventListener('click',()=>{const panel=$('#search-panel');panel.hidden=!panel.hidden;$('#search-toggle').setAttribute('aria-expanded',String(!panel.hidden));closeMenu();if(!panel.hidden)$('#search').focus();});
  $('#search-panel').addEventListener('submit',event=>{event.preventDefault();query=$('#search').value.trim();count=8;render();});

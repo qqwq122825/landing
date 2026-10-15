@@ -20,7 +20,7 @@ test('all imported templates: isolated rendering, permissions, brand defaults, P
  for(const item of catalog){await t.test(item.id+' actual, global/project previews and every download slot',async()=>{
   assert.equal((await req(path+'/api/settings',tenant,{template:item.id,pixelId:'1000000000000001',appName:'',logoData:'',downloadUrl:''})).status,200);
   const page=await req(path);assert.equal(page.status,200);const f=pixel(page.text);assert.equal(f.config.appName,item.brand);assert.equal(f.config.downloadUrl,path+'/dl');assert.deepEqual(f.calls,[['init','1000000000000001'],['track','PageView']]);
-  const count=[...page.text.matchAll(/<a\b[^>]*class="[^"]*download-link[^>]*>/g)].length;assert.ok(count>0);for(let n=0;n<count;n++)f.click();assert.equal(f.calls.filter(x=>x[1]==='DownloadClick').length,count);assert.deepEqual(pixel(page.text,true).calls,[]);
+  const links=[...page.text.matchAll(/<a\b[^>]*class="[^"]*download-link[^>]*>/g)].map(match=>match[0]);const count=links.length;assert.ok(count>0);for(const link of links)assert.ok(link.includes('href="'+path+'/dl"'),link);for(let n=0;n<count;n++)f.click();assert.equal(f.calls.filter(x=>x[1]==='DownloadClick').length,count);assert.deepEqual(pixel(page.text,true).calls,[]);
   assert.equal((page.text.match(/src="\/assets\/brand-settings\.js/g)||[]).length,1);assert.equal((page.text.match(/src="\/assets\/collector\.js/g)||[]).length,1);
   assert.equal((await req(path+'/dl')).status,404);
   for(const url of ['/templates/'+item.id+'/preview',path+'/preview/'+item.id]){const r=await req(url,master);assert.equal(r.status,200);assert.deepEqual(pixel(r.text).calls,[]);assert.equal(pixel(r.text).config.token,'');}

@@ -23,8 +23,6 @@
   if(result)$('#close-result').focus();
  }
  function close(){clearTimeout(promptTimer);dialog.close();}
- function downloads(data){if(data?.downloadUrl)document.querySelectorAll('a.download-link').forEach(link=>link.setAttribute('href',data.downloadUrl));}
- downloads(config);window.addEventListener('tv:settings',event=>downloads(event.detail));
  document.querySelectorAll('[data-language]').forEach(select=>select.addEventListener('change',event=>{
   lang=normalize(event.target.value)||'ar';try{localStorage.setItem(key,lang);}catch{}
   const next=new URL(location.href);next.searchParams.set('lang',lang);history.replaceState(null,'',next);translate();

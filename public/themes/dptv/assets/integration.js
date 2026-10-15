@@ -9,7 +9,6 @@
   // The unchanged shared tracker binds these elements after this script runs.
   function markDownload(el) {
     el.classList.add('download-link');
-    if (el.matches('a[href]')) el.href = config.apkUrl;
   }
   document.querySelectorAll('[onclick*="downloadApp"], .vip-btn, .vip-btn-mobile, .sidebar-vip-btn, #desktopLoginBtn, #sidebarLoginBtn, #sidebarRegisterBtn, #mobileMenu a.font-semibold[onclick], .md-ru-store-btn, .download-modal__store-row a:first-child').forEach(markDownload);
   document.querySelectorAll('#mobileMenu a img').forEach(img => markDownload(img.closest('a')));

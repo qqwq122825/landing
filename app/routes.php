@@ -99,6 +99,25 @@ function handle_api(string $realm,string $route):array {
  }
  throw new HubError('接口不存在或请求方法不匹配',404);
 }
+function render_download_links(string $html,string $downloadUrl,?string $template=null):string {
+ $escaped=htmlspecialchars($downloadUrl,ENT_QUOTES|ENT_SUBSTITUTE,'UTF-8');
+ $rendered=preg_replace_callback('#<a\b[^>]*>#i',static function(array $match)use($escaped,$template):string {
+  $tag=$match[0];
+  $hasClass=preg_match('#\bclass\s*=\s*(["\'])(.*?)\1#is',$tag,$class,PREG_OFFSET_CAPTURE)===1;
+  $classes=$hasClass?$class[2][0]:'';
+  $marked=$hasClass&&preg_match('/(?:^|\s)download-link(?:\s|$)/i',$classes);
+  $capturedFeiyue=$template==='feiyue'&&preg_match('#\bhref\s*=\s*(["\'])[^"\']*\?app=[^"\']*\1#i',$tag);
+  if(!$marked&&!$capturedFeiyue)return $tag;
+  if(!$marked){
+   if($hasClass)$tag=substr_replace($tag,$classes.' download-link',$class[2][1],strlen($classes));
+   else $tag=substr($tag,0,-1).' class="download-link">';
+  }
+  if(preg_match('#\bhref\s*=\s*(["\']).*?\1#is',$tag))return preg_replace('#\bhref\s*=\s*(["\']).*?\1#is','href="'.$escaped.'"',$tag,1);
+  return substr($tag,0,-1).' href="'.$escaped.'">';
+ },$html);
+ if($rendered===null)throw new HubError('下载地址渲染失败',500);
+ return $rendered;
+}
 function render_landing(array $p,bool $preview=false,?string $template=null):void {
  $template=$template??$p['template'];if(!in_array($template,HUB_TEMPLATES,true))throw new HubError('模板不存在',404);
  $html=file_get_contents(HUB_ROOT.'/resources/pages/'.$template.'.html');
@@ -109,6 +128,8 @@ function render_landing(array $p,bool $preview=false,?string $template=null):voi
  $head='<base href="/themes/'.$template.'/"><script>window.HUB_PAGE='.$encoded.';window.APP_CONFIG=Object.freeze({appName:HUB_PAGE.appName,apkUrl:HUB_PAGE.downloadUrl});window.TV_PREVIEW=HUB_PAGE.preview;window.TV_SETTINGS_READY=Promise.resolve(HUB_PAGE);</script>';
  $html=preg_replace_callback('#<title>.*?</title>#s',function()use($data){return '<title>'.htmlspecialchars($data['appName'],ENT_QUOTES,'UTF-8').'</title>';},$html,1);
  $html=preg_replace_callback('#(<head[^>]*>)#i',function($m)use($head){return $m[1].$head;},$html,1);
+ // Download destinations are finalized on the server before any response bytes reach the browser.
+ $html=render_download_links($html,$data['downloadUrl'],$template);
  $browserGuideVersion=substr(hash_file('sha256',HUB_ROOT.'/public/assets/in-app-browser.js'),0,12);
  $brandVersion=substr(hash_file('sha256',HUB_ROOT.'/public/assets/brand-settings.js'),0,12);
  $collectorVersion=substr(hash_file('sha256',HUB_ROOT.'/public/assets/collector.js'),0,12);
