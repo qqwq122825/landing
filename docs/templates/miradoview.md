@@ -18,6 +18,8 @@
 
 页面有 2 个真实下载入口，全部标记为 `.download-link`。PHP 在响应 HTML 前把它们统一写成当前项目 `/p/{slug}/dl`，所以浏览器收到页面时下载地址已经完成，不再依赖前端替换。34 张内容卡片与“Mas Info”由模板脚本拦截默认链接行为并平滑滚动到下载区；这样即使总站注入了模板资源 `<base>`，也不会错误跳到 `/themes/miradoview/#download`，且不触发下载。
 
+MiradoView 的 CSS 与交互脚本使用版本化查询参数；模板更新后浏览器和 CDN 会请求新版本，避免旧缓存继续保留页头或“Mas Info”行为。
+
 参考页面自带的 Meta Pixel、归因接口、运行时下载地址、跳转脚本及其 Pixel ID 均已移除。本站只注入公共 `brand-settings.js`、`collector.js` 与项目自己的 Pixel ID / 下载路由。
 
 ## 抓取 UA 核查与收录控制

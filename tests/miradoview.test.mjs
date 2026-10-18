@@ -25,6 +25,8 @@ test('MiradoView structure, media, server download markers and newest-first regi
  assert.match(page,/data-hub-wordmark/);assert.equal((page.match(/data-hub-name/g)||[]).length,3);assert.equal((page.match(/data-hub-logo/g)||[]).length,2);
  assert.equal((page.match(/data-scroll-download/g)||[]).length,1);
  assert.match(page,/<a class="btn btn-secondary" data-scroll-download="" href="#download">Mas Info<\/a>/);
+ assert.match(page,/<link href="theme\.css\?v=20261019b" rel="stylesheet"\/>/);
+ assert.match(page,/<script defer="True" src="miradoview\.js\?v=20261019b"><\/script>/);
  assert.match(script,/\[data-prompt-download\],\[data-scroll-download\]/);assert.match(script,/preventDefault\(\)/);assert.match(script,/scrollIntoView/);assert.doesNotMatch(script,/location\.(?:assign|href)|window\.open/);
  const consolePage=readFileSync(root+'app/console.html','utf8'),tenantPage=readFileSync(root+'app/tenant.html','utf8');
  assert.equal(consolePage.match(/name="allowedTemplates" value="([^"]+)"/)[1],'miradoview');
