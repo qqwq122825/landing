@@ -11,7 +11,7 @@ function db():PDO {
  $db=new PDO('sqlite:'.$dir.'/hub.sqlite',null,null,[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_ASSOC]);
  $db->exec('PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL; PRAGMA busy_timeout=5000;');
  $db->exec('CREATE TABLE IF NOT EXISTS admins(id INTEGER PRIMARY KEY, username TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, version INTEGER NOT NULL DEFAULT 1);
- CREATE TABLE IF NOT EXISTS projects(id INTEGER PRIMARY KEY, slug TEXT NOT NULL UNIQUE, name TEXT NOT NULL, username TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, version INTEGER NOT NULL DEFAULT 1, status TEXT NOT NULL DEFAULT "active", template TEXT NOT NULL DEFAULT "feiyue", app_name TEXT NOT NULL, download_url TEXT NOT NULL DEFAULT "", pixel_id TEXT NOT NULL DEFAULT "", verify_code TEXT NOT NULL DEFAULT "", logo_data TEXT NOT NULL DEFAULT "", note TEXT NOT NULL DEFAULT "", created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL);
+ CREATE TABLE IF NOT EXISTS projects(id INTEGER PRIMARY KEY, slug TEXT NOT NULL UNIQUE, name TEXT NOT NULL, username TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, version INTEGER NOT NULL DEFAULT 1, status TEXT NOT NULL DEFAULT "active", template TEXT NOT NULL DEFAULT "feiyue", app_name TEXT NOT NULL, download_url TEXT NOT NULL DEFAULT "", pixel_id TEXT NOT NULL DEFAULT "", verify_code TEXT NOT NULL DEFAULT "", logo_data TEXT NOT NULL DEFAULT "", note TEXT NOT NULL DEFAULT "", block_search_index INTEGER NOT NULL DEFAULT 0, created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL);
  CREATE TABLE IF NOT EXISTS deleted_projects(id INTEGER PRIMARY KEY, slug TEXT NOT NULL UNIQUE, deleted_at INTEGER NOT NULL);
  CREATE TABLE IF NOT EXISTS visits(project_id INTEGER NOT NULL REFERENCES projects(id), id TEXT NOT NULL, started_at INTEGER NOT NULL, ip_address TEXT NOT NULL, country TEXT NOT NULL, region TEXT NOT NULL, city TEXT NOT NULL, device TEXT NOT NULL, os TEXT NOT NULL, browser TEXT NOT NULL, duration_ms INTEGER NOT NULL DEFAULT 0, clicked INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(project_id,id));
  CREATE INDEX IF NOT EXISTS visits_project_time ON visits(project_id,started_at DESC);
@@ -20,12 +20,13 @@ function db():PDO {
  CREATE TABLE IF NOT EXISTS audit(id INTEGER PRIMARY KEY, actor TEXT NOT NULL, action TEXT NOT NULL, project_id INTEGER, detail TEXT NOT NULL DEFAULT "", created_at INTEGER NOT NULL);');
  // Additive migration: existing accounts keep their hashes and both existing templates.
  $columns=array_column($db->query('PRAGMA table_info(projects)')->fetchAll(),'name');
- if(!in_array('password_cipher',$columns,true)||!in_array('allowed_templates',$columns,true)){
+ if(!in_array('password_cipher',$columns,true)||!in_array('allowed_templates',$columns,true)||!in_array('block_search_index',$columns,true)){
   $db->exec('BEGIN IMMEDIATE');
   try{
    $columns=array_column($db->query('PRAGMA table_info(projects)')->fetchAll(),'name');
    if(!in_array('password_cipher',$columns,true))$db->exec("ALTER TABLE projects ADD COLUMN password_cipher TEXT NOT NULL DEFAULT ''");
    if(!in_array('allowed_templates',$columns,true))$db->exec("ALTER TABLE projects ADD COLUMN allowed_templates TEXT NOT NULL DEFAULT '[\"feiyue\",\"dptv\"]'");
+   if(!in_array('block_search_index',$columns,true))$db->exec("ALTER TABLE projects ADD COLUMN block_search_index INTEGER NOT NULL DEFAULT 0");
    $db->exec('COMMIT');
   }catch(Throwable $e){$db->exec('ROLLBACK');throw $e;}
  }
@@ -105,11 +106,11 @@ function url_value($value):string {
  $value=clean_text($value,2048,'下载地址',false);if($value==='')return '';$parts=parse_url($value);
  if(!filter_var($value,FILTER_VALIDATE_URL)||!in_array(strtolower($parts['scheme']??''),['https','http'],true)||isset($parts['user'])||isset($parts['pass'])||preg_match('/\s/',$value))throw new HubError('下载地址需为完整 HTTP / HTTPS 链接');return $value;
 }
-const HUB_TEMPLATES=['feiyue','dptv','quest','aivideo','lumama','ggtv','appstore','ultraplay','yacinetv','dptvplus','fizzio','kyss','sparkle','newf','soccerqueens','cinema','noxxtv','smarttrade','stockvault','loveapp','qiyou','stripchat','pornparadise','pornhub','chatee','cosplay','lustylive','nightplay','bokep','xhamster','mylive','kuaibo','tikapk','jiaoyou','cyberheart','promotions','india','apuestamx'];
+const HUB_TEMPLATES=['miradoview','feiyue','dptv','quest','aivideo','lumama','ggtv','appstore','ultraplay','yacinetv','dptvplus','fizzio','kyss','sparkle','newf','soccerqueens','cinema','noxxtv','smarttrade','stockvault','loveapp','qiyou','stripchat','pornparadise','pornhub','chatee','cosplay','lustylive','nightplay','bokep','xhamster','mylive','kuaibo','tikapk','jiaoyou','cyberheart','promotions','india','apuestamx'];
 const HUB_DEFAULT_TEMPLATES=['feiyue','dptv'];
-const HUB_TEMPLATE_NAMES=['lumama'=>'LumamaTV','feiyue'=>'ReelShort','dptv'=>'DPTV','quest'=>'Pasion TV','aivideo'=>'AI Video','ggtv'=>'GGTV','appstore'=>'Cast','ultraplay'=>'Ultra Play','yacinetv'=>'Yacine TV','dptvplus'=>'DPTV','fizzio'=>'Fizzio','kyss'=>'KYSS','sparkle'=>'Sparkle','newf'=>'NEW-F','soccerqueens'=>'Soccer Queens','cinema'=>'Netflix Gratis','noxxtv'=>'NOXX','smarttrade'=>'SmartTrade','stockvault'=>'StockVault','loveapp'=>'LoveApp','qiyou'=>'qiyou','stripchat'=>'STRIPCHAT','pornparadise'=>'Porm Paradise','pornhub'=>'Pornhub','chatee'=>'Chatee','cosplay'=>'Cosplay','lustylive'=>'Lusty Live','nightplay'=>'NightPlay','bokep'=>'Website Bokep','xhamster'=>'XHAMSTER','mylive'=>'MyLive','kuaibo'=>'KuaiBo','tikapk'=>'Tik APK','jiaoyou'=>'交友','cyberheart'=>'Cyber Heart Show','promotions'=>'VELOCITY GAMING','india'=>'印度','apuestamx'=>'ApuestaMX'];
+const HUB_TEMPLATE_NAMES=['miradoview'=>'MiradoView','lumama'=>'LumamaTV','feiyue'=>'ReelShort','dptv'=>'DPTV','quest'=>'Pasion TV','aivideo'=>'AI Video','ggtv'=>'GGTV','appstore'=>'Cast','ultraplay'=>'Ultra Play','yacinetv'=>'Yacine TV','dptvplus'=>'DPTV','fizzio'=>'Fizzio','kyss'=>'KYSS','sparkle'=>'Sparkle','newf'=>'NEW-F','soccerqueens'=>'Soccer Queens','cinema'=>'Netflix Gratis','noxxtv'=>'NOXX','smarttrade'=>'SmartTrade','stockvault'=>'StockVault','loveapp'=>'LoveApp','qiyou'=>'qiyou','stripchat'=>'STRIPCHAT','pornparadise'=>'Porm Paradise','pornhub'=>'Pornhub','chatee'=>'Chatee','cosplay'=>'Cosplay','lustylive'=>'Lusty Live','nightplay'=>'NightPlay','bokep'=>'Website Bokep','xhamster'=>'XHAMSTER','mylive'=>'MyLive','kuaibo'=>'KuaiBo','tikapk'=>'Tik APK','jiaoyou'=>'交友','cyberheart'=>'Cyber Heart Show','promotions'=>'VELOCITY GAMING','india'=>'印度','apuestamx'=>'ApuestaMX'];
 function effective_app_name(array $p,?string $template=null):string {$name=trim($p['app_name']??'');return $name!==''?$name:HUB_TEMPLATE_NAMES[$template??$p['template']];}
-function public_settings(array $p,?string $template=null):array {$template=$template??$p['template'];return ['slug'=>$p['slug'],'appName'=>effective_app_name($p,$template),'appNameOverride'=>$p['app_name'],'template'=>$template,'downloadUrl'=>'/p/'.$p['slug'].'/dl','pixelId'=>$p['pixel_id'],'verifyCode'=>$p['verify_code'],'logoData'=>$p['logo_data']];}
+function public_settings(array $p,?string $template=null):array {$template=$template??$p['template'];return ['slug'=>$p['slug'],'appName'=>effective_app_name($p,$template),'appNameOverride'=>$p['app_name'],'template'=>$template,'downloadUrl'=>'/p/'.$p['slug'].'/dl','pixelId'=>$p['pixel_id'],'verifyCode'=>$p['verify_code'],'logoData'=>$p['logo_data'],'blockSearchIndex'=>(bool)($p['block_search_index']??false)];}
 function validate_templates($value):array {
  if(!is_array($value)||!array_is_list($value)||!$value||count($value)>count(HUB_TEMPLATES))throw new HubError('请至少开放一款模板');
  foreach($value as $id)if(!is_string($id)||!in_array($id,HUB_TEMPLATES,true))throw new HubError('请选择已有模板');
@@ -123,6 +124,7 @@ function project_templates(array $p):array {
 }
 function admin_project(array $p,bool $super=true):array {
  $p['allowedTemplates']=project_templates($p);
+ $p['block_search_index']=(bool)($p['block_search_index']??false);
  $p['effectiveAppName']=effective_app_name($p);$p['defaultAppName']=HUB_TEMPLATE_NAMES[$p['template']];
  if($super)$p['credentialsAvailable']=($p['password_cipher']??'')!=='';
  unset($p['password_hash'],$p['password_cipher'],$p['allowed_templates'],$p['version']);if(!$super)unset($p['note']);$p['id']=(int)$p['id'];return $p;
@@ -167,6 +169,7 @@ function save_project(array $p,array $b,string $actor,bool $super):array {
 
  foreach(['appName'=>['app_name',80,'应用名',false],'note'=>['note',500,'备注',false],'name'=>['name',80,'项目名称',true]] as $key=>$spec){if(!array_key_exists($key,$b)||(!$super&&in_array($key,['name','note'],true)))continue;$fields[]=$spec[0].'=?';$args[]=clean_text($b[$key],$spec[1],$spec[2],$spec[3]);}
  if(array_key_exists('downloadUrl',$b)){$fields[]='download_url=?';$args[]=url_value($b['downloadUrl']);}
+ if(array_key_exists('blockSearchIndex',$b)){if(!is_bool($b['blockSearchIndex']))throw new HubError('搜索引擎收录设置格式错误');$fields[]='block_search_index=?';$args[]=$b['blockSearchIndex']?1:0;}
  if(isset($b['template'])){if(!in_array($b['template'],HUB_TEMPLATES,true))throw new HubError('模板不存在');if(!in_array($b['template'],$allowed,true))throw new HubError('该模板尚未对当前账号开放',403);$fields[]='template=?';$args[]=$b['template'];}
  foreach(['pixelId'=>['pixel_id','/^[0-9]{5,30}$/D']] as $key=>$spec){if(!array_key_exists($key,$b))continue;$v=$b[$key];if(!is_string($v)||($v!==''&&!preg_match($spec[1],$v)))throw new HubError('Pixel ID 格式错误');$fields[]=$spec[0].'=?';$args[]=$v;}
  if(array_key_exists('logoData',$b)){$v=$b['logoData'];if(!is_string($v))throw new HubError('图标格式错误');if($v!==''){if(!preg_match('#^data:image/(png|jpeg|webp);base64,([A-Za-z0-9+/=]+)$#D',$v,$m))throw new HubError('请选择 PNG / JPG / WebP 图片');$raw=base64_decode($m[2],true);$info=$raw===false?false:@getimagesizefromstring($raw);if(!$info||strlen($raw)>204800||$info[0]>4096||$info[1]>4096||$info['mime']!=='image/'.$m[1])throw new HubError('图片需在 200 KB 和 4096 像素以内');}$fields[]='logo_data=?';$args[]=$v;}

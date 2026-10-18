@@ -14,9 +14,9 @@ const brand=readFileSync(root+'public/assets/brand-settings.js','utf8');
 test('Lumama Spanish layout, hotlinked media, branding and only two real downloads',()=>{
  assert.match(page,/<html lang="es-MX">/);
  const consolePage=readFileSync(root+'app/console.html','utf8'),tenantPage=readFileSync(root+'app/tenant.html','utf8');
- assert.equal(consolePage.match(/name="allowedTemplates" value="([^"]+)"/)[1],'lumama');
- assert.equal(tenantPage.match(/data-template="([^"]+)"/)[1],'lumama');
- assert.match(readFileSync(root+'public/assets/console.js','utf8'),/const templateLabels=\{lumama:/);
+ assert.equal([...consolePage.matchAll(/name="allowedTemplates" value="([^"]+)"/g)][1][1],'lumama');
+ assert.equal([...tenantPage.matchAll(/data-template="([^"]+)"/g)][1][1],'lumama');
+ assert.match(readFileSync(root+'public/assets/console.js','utf8'),/const templateLabels=\{miradoview:'MiradoView',lumama:/);
  assert.doesNotMatch(page+script,/__LANDING_RUNTIME__|fbq\(|fbevents|landing-bind-session|public-manifest|intent:\/\/|\.apk|atob/);
  assert.equal((page.match(/download-link/g)||[]).length,2);
  assert.equal((page.match(/data-prompt-download/g)||[]).length,34);
@@ -51,7 +51,7 @@ test('Lumama isolated HTTP integration: registration, grants, preview, branding,
  for(let i=0;i<60;i++){try{await fetch(base);break;}catch{await new Promise(r=>setTimeout(r,30));}}
  async function request(path,ctx={},body){const response=await fetch(base+path,{method:body===undefined?'GET':'POST',redirect:'manual',headers:{Origin:base,...(ctx.cookie?{Cookie:ctx.cookie}:{}),...(ctx.csrf?{'X-CSRF-Token':ctx.csrf}:{}),...(body===undefined?{}:{'Content-Type':'application/json'})},body:body===undefined?undefined:JSON.stringify(body)});const text=await response.text();let json;try{json=JSON.parse(text);}catch{}return {status:response.status,text,json,headers:response.headers,cookie:response.headers.get('set-cookie')?.split(';')[0]||ctx.cookie};}
  const session=await request('/api/login',{}, {username:'fixture',password:'Fixture-Lumama-Only!'});assert.equal(session.status,200);const master={cookie:session.cookie,csrf:session.json.csrf};
- const inventory=await request('/api/templates',master);assert.equal(inventory.json.projectCount,0);assert.equal(inventory.json.templates[0].id,'lumama');assert.equal(inventory.json.templates.find(x=>x.id==='lumama').allowedCount,0);
+ const inventory=await request('/api/templates',master);assert.equal(inventory.json.projectCount,0);assert.equal(inventory.json.templates[0].id,'miradoview');assert.equal(inventory.json.templates.find(x=>x.id==='lumama').allowedCount,0);
  assert.equal((await request('/templates/lumama/preview')).status,401);
  const global=await request('/templates/lumama/preview',master);assert.equal(global.status,200);assert.equal(pixel(global.text).config.appName,'LumamaTV');assert.equal(pixel(global.text).config.token,'');assert.deepEqual(pixel(global.text).calls,[]);
  const a=await request('/api/projects',master,{name:'Lumama isolated account',allowedTemplates:['feiyue','lumama'],template:'lumama'});assert.equal(a.status,200);const slug=a.json.project.slug,path='/p/'+slug;assert.equal(a.json.project.app_name,'');assert.equal(a.json.project.pixel_id,'');assert.equal(a.json.project.download_url,'');

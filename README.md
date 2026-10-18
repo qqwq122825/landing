@@ -57,7 +57,7 @@ https://你的域名/p/随机项目编号/dl        跳转该项目配置的下�
 - 项目列表的红色“删除”需输入完整项目编号确认。仅总站可操作；永久删除该客户账号、配置、访问与下载记录，原落地页和子后台失效，其他项目及共享模板保留。无回收站，操作前请备份；仅临时停用使用“暂停”。删除保留操作日志及编号停用记录，防止新项目复用旧身份。详见 [项目删除说明](docs/updates/项目删除功能说明.md)。
 - 总站「模板管理」：集中展示全部模板，按名称或编号搜索，手机 / 桌面真实预览，查看使用数量、开放账号数量与关联项目。无项目也能预览；预览使用模板原始显示名，不创建账号、不改动客户配置、不记录访问、不启用 Pixel。模板目录与全局预览仅限总站登录后访问。
 - 客户：沿用原版深色窄版后台，7 项统计、趋势、国家 / 设备分布、分页明细；独立登录，只管理所属项目的显示名、图标、下载地址、模板、Pixel ID。总站保留浅色管理界面。
-- 当前目录共 **38** 款模板：原有 Feiyue / ReelShort、DPTV / MinuteDrama、Quest / Pasion TV、AI Video，加上参考后台两批共 33 款平台适配版，以及 LumamaTV。带手机框预览，确认后切换；总站逐账号勾选开放范围，客户仅显示、预览和使用已开放模板。参考站共有 35 款入口（含已有 ReelShort / MinuteDrama）；新增清单、语言缺口与视觉差异见 [批次记录](docs/templates/reference-batch.md)。
+- 当前目录共 **39** 款模板：原有 Feiyue / ReelShort、DPTV / MinuteDrama、Quest / Pasion TV、AI Video，加上参考后台两批共 33 款平台适配版，以及 LumamaTV、MiradoView。带手机框预览，确认后切换；总站逐账号勾选开放范围，客户仅显示、预览和使用已开放模板。参考站共有 35 款入口（含已有 ReelShort / MinuteDrama）；新增清单、语言缺口与视觉差异见 [批次记录](docs/templates/reference-batch.md)。
 - ReelShort 剧集封面及对应标题点击直接走当前项目下载入口，不再弹二次下载提示；一次点击对应一次公共 `DownloadClick`。横向滑动不误触下载，全局 / 项目预览保持不下载、不计数。详见 [ReelShort 点击行为](docs/templates/feiyue.md)。
 - 真实落地页在 Facebook、Instagram 或 Messenger 内置浏览器中打开时，自动显示系统浏览器引导；Android 可点击按钮发起可浏览 Intent，iOS 可复制当前链接并按右上角菜单打开 Safari。预览与普通外部浏览器不显示，关闭后点击下载会重新引导而不直连 APK。详见 [Facebook 内置浏览器引导](docs/updates/Facebook内置浏览器引导.md)。
 - AI Video 来自用户提供的 `cs.php`：黑黄竖屏视频，保留阿语 RTL 并扩展中英西葡界面；视频 / 海报随 Git 交付。按要求保留非交互区域点击真实打开项目下载入口的行为，同步公共 `DownloadClick`；语言、关闭和视频控件排除，预览不下载不上报。原素材中的字幕 / 图片文字保留，不属于界面翻译。详见 [AI Video 接入记录](docs/templates/aivideo.md)。
@@ -220,6 +220,13 @@ docs/                   网页安装指南及 updates/ 历史更新记录
 新增 `lumama` 黑绿影视目录：保留参考页的西班牙语界面、34 张横版海报、居中首屏及下载区。海报与“Mas Info”只滚动到下载区；两个真实下载按钮复用项目 `/dl`、公共 Pixel 和第一方统计。默认 Pixel / APK 留空，已有客户的开放权限不变，须由总站明确勾选。名称 / 图标独立覆盖，展示媒体热链参考站。
 
 接入、原站语言核查、验证范围和素材清单见 [LumamaTV 记录](docs/templates/lumama.md)。Git 推送只更新代码，未部署到线上；未维护历史 ZIP。
+
+
+## MiradoView 模板与标准收录开关（2026-10-18）
+
+新增西班牙语 MiradoView 影视目录模板，复刻深色珊瑚色视觉、34 张内容卡片、下载区、功能区与响应式布局。展示素材按核查结果热链参考站资源；参考站 Pixel、下载地址、归因和运行时脚本均未接入，下载按钮统一由服务端在返回 HTML 前写成当前项目 `/p/{slug}/dl`，并复用本站 Pixel 与统计。
+
+客户后台新增“禁止搜索引擎收录”一键开关。开启时，实际落地页对所有访问者统一返回完整页面，并同时输出 `X-Robots-Tag` 与 `robots` meta；不开启时不输出。该设置不依据 User-Agent 分流内容。目标页面对桌面、移动端、Googlebot 和 Facebook 抓取 UA 的实测也均返回相同完整主体，而非空壳页。接入与核查记录见 [MiradoView 记录](docs/templates/miradoview.md)。
 
 ## 模板排序（2026-10-01）
 

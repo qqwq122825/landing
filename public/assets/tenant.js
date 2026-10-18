@@ -10,7 +10,7 @@
   const regionNames = typeof Intl.DisplayNames === 'function' ? new Intl.DisplayNames(['zh-CN'], { type: 'region' }) : null;
   const country = code => { try { return code ? regionNames?.of(code) || code : '未知'; } catch { return '未知'; } };
   const devices = { mobile: '手机', desktop: '电脑', tablet: '平板', other: '其他' };
-  const templateName = id => ({feiyue:'Feiyue / ReelShort',dptv:'DPTV / MinuteDrama',quest:'Quest / Pasion TV',aivideo:'AI Video / 阿语短视频',ggtv:'GGTV',appstore:'Google Play / 应用详情',ultraplay:'Ultra Play',yacinetv:'Yacine TV',dptvplus:'DPTV / 电视介绍',fizzio:'Fizzio Live',kyss:'KYSS',sparkle:'Sparkle',newf:'NEW-F',lumama:'LumamaTV',soccerqueens:'Soccer Queens',cinema:'Netflix Gratis / 影视目录',noxxtv:'NOXX TV',smarttrade:'SmartTrade',stockvault:'StockVault',kuaibo:'KuaiBo',tikapk:'Tik APK',jiaoyou:'交友',cyberheart:'Cyber Heart Show',promotions:'Promotions',india:'印度',apuestamx:'ApuestaMX',loveapp:'LoveApp',qiyou:'qiyou',stripchat:'STRIPCHAT',pornparadise:'Porm Paradise',pornhub:'Pornhub',chatee:'Chatee Live Now',cosplay:'Cosplay',lustylive:'Lusty Live',nightplay:'NightPlay',bokep:'Website Bokep',xhamster:'XHAMSTER',mylive:'MyLive'})[id] || id;
+  const templateName = id => ({miradoview:'MiradoView',feiyue:'Feiyue / ReelShort',dptv:'DPTV / MinuteDrama',quest:'Quest / Pasion TV',aivideo:'AI Video / 阿语短视频',ggtv:'GGTV',appstore:'Google Play / 应用详情',ultraplay:'Ultra Play',yacinetv:'Yacine TV',dptvplus:'DPTV / 电视介绍',fizzio:'Fizzio Live',kyss:'KYSS',sparkle:'Sparkle',newf:'NEW-F',lumama:'LumamaTV',soccerqueens:'Soccer Queens',cinema:'Netflix Gratis / 影视目录',noxxtv:'NOXX TV',smarttrade:'SmartTrade',stockvault:'StockVault',kuaibo:'KuaiBo',tikapk:'Tik APK',jiaoyou:'交友',cyberheart:'Cyber Heart Show',promotions:'Promotions',india:'印度',apuestamx:'ApuestaMX',loveapp:'LoveApp',qiyou:'qiyou',stripchat:'STRIPCHAT',pornparadise:'Porm Paradise',pornhub:'Pornhub',chatee:'Chatee Live Now',cosplay:'Cosplay',lustylive:'Lusty Live',nightplay:'NightPlay',bokep:'Website Bokep',xhamster:'XHAMSTER',mylive:'MyLive'})[id] || id;
   const previewUrl = id => '/p/' + realm + '/preview/' + id + '?lang=zh';
   const dialog = $('#template-preview');
 
@@ -42,9 +42,9 @@
     $('#password').value = ''; $('#login-error').textContent = text;
     if (dialog.open) dialog.close();
     $$('.phone iframe').forEach(frame => frame.removeAttribute('src'));
-    ['pixel-form', 'brand-form', 'settings-form'].forEach(id => $('#' + id).reset());
+    ['pixel-form', 'brand-form', 'settings-form', 'search-visibility-form'].forEach(id => $('#' + id).reset());
     $('#app-logo').disabled = false;
-    ['pixel-message', 'brand-message', 'settings-message'].forEach(id => message($('#' + id), ''));
+    ['pixel-message', 'brand-message', 'settings-message', 'search-visibility-message'].forEach(id => message($('#' + id), ''));
     $('#visit-rows').replaceChildren(); $('#daily-rows').replaceChildren();
     $('#logo-preview').removeAttribute('src'); $('#logo-preview').hidden = true;
   }
@@ -134,6 +134,7 @@
   function fillSettings(project) {
     $('#app-name').value = project.app_name; $('#download-url').value = project.download_url;
     $('#pixel-id').value = project.pixel_id;
+    $('#block-search-index').checked = Boolean(project.block_search_index);
     $('#logo-preview').hidden = !project.logo_data;
     if (project.logo_data) $('#logo-preview').src = project.logo_data; else $('#logo-preview').removeAttribute('src');
     const url = location.origin + '/p/' + realm;
@@ -187,6 +188,12 @@
       const result = await post({ downloadUrl: $('#download-url').value.trim() }); updateProject(result.project);
       $('#download-url').value = result.project.download_url;
     }, '下载地址已保存；留空时不跳转到任何 APK。');
+  });
+  $('#search-visibility-form').addEventListener('submit', event => {
+    event.preventDefault(); saveForm(event.currentTarget, $('#search-visibility-message'), async () => {
+      const result = await post({ blockSearchIndex: $('#block-search-index').checked }); updateProject(result.project);
+      $('#block-search-index').checked = Boolean(result.project.block_search_index);
+    }, '搜索引擎收录设置已保存；所有访客继续看到同一完整页面。');
   });
   $('#reset-logo').addEventListener('change',event=>{const file=$('#app-logo');file.disabled=event.target.checked;if(event.target.checked)file.value='';});
   $('#brand-form').addEventListener('submit', event => {

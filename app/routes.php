@@ -4,6 +4,7 @@ require __DIR__.'/analytics.php';
 function template_catalog():array {
  // Display newest templates first; append future additions at the head of this catalog.
  return [
+  ['id'=>'miradoview','name'=>'MiradoView','brand'=>'MiradoView','description'=>'深色珊瑚色影视目录，西班牙语界面、34 张横版海报与项目下载接入。','tags'=>['影视目录','西班牙语','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['miradoview']],
   ['id'=>'lumama','name'=>'LumamaTV','brand'=>'LumamaTV','description'=>'黑绿影视目录，横版海报、下载区与西班牙语界面；海报点击仅滚动，公共 Pixel 与项目统计。','tags'=>['影视目录','西班牙语','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['lumama']],
   ['id'=>'feiyue','name'=>'Feiyue / ReelShort','brand'=>'ReelShort','description'=>'深色短剧风格，包含剧集推荐与悬浮下载入口。','tags'=>['短剧推荐','深色风格','自适应'],'appName'=>HUB_TEMPLATE_NAMES['feiyue']],
   ['id'=>'dptv','name'=>'DPTV / MinuteDrama','brand'=>'DPTV','description'=>'影音展示风格，包含内容海报与应用下载区域。','tags'=>['影音展示','海报布局','自适应'],'appName'=>HUB_TEMPLATE_NAMES['dptv']],
@@ -125,7 +126,9 @@ function render_landing(array $p,bool $preview=false,?string $template=null):voi
  $html=preg_replace('#<base\b[^>]*>#i','',$html);
  $data=public_settings($p,$template);$visit=bin2hex(random_bytes(16));$issued=time();$data['preview']=$preview;$data['visitId']=$visit;$data['issued']=$issued;$data['token']=$preview?'':page_token((int)$p['id'],$visit,$issued);
  $encoded=json_encode($data,JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
- $head='<base href="/themes/'.$template.'/"><script>window.HUB_PAGE='.$encoded.';window.APP_CONFIG=Object.freeze({appName:HUB_PAGE.appName,apkUrl:HUB_PAGE.downloadUrl});window.TV_PREVIEW=HUB_PAGE.preview;window.TV_SETTINGS_READY=Promise.resolve(HUB_PAGE);</script>';
+ $blockSearch=!$preview&&!empty($p['block_search_index']);
+ $robots=$blockSearch?'<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">':'';
+ $head='<base href="/themes/'.$template.'/">'.$robots.'<script>window.HUB_PAGE='.$encoded.';window.APP_CONFIG=Object.freeze({appName:HUB_PAGE.appName,apkUrl:HUB_PAGE.downloadUrl});window.TV_PREVIEW=HUB_PAGE.preview;window.TV_SETTINGS_READY=Promise.resolve(HUB_PAGE);</script>';
  $html=preg_replace_callback('#<title>.*?</title>#s',function()use($data){return '<title>'.htmlspecialchars($data['appName'],ENT_QUOTES,'UTF-8').'</title>';},$html,1);
  $html=preg_replace_callback('#(<head[^>]*>)#i',function($m)use($head){return $m[1].$head;},$html,1);
  // Download destinations are finalized on the server before any response bytes reach the browser.
@@ -134,7 +137,9 @@ function render_landing(array $p,bool $preview=false,?string $template=null):voi
  $brandVersion=substr(hash_file('sha256',HUB_ROOT.'/public/assets/brand-settings.js'),0,12);
  $collectorVersion=substr(hash_file('sha256',HUB_ROOT.'/public/assets/collector.js'),0,12);
  $html=str_replace('</head>','<script src="/assets/in-app-browser.js?v='.$browserGuideVersion.'" defer></script><script src="/assets/brand-settings.js?v='.$brandVersion.'" defer></script><script src="/assets/collector.js?v='.$collectorVersion.'" defer></script></head>',$html);
- header('Content-Type: text/html; charset=utf-8');header('Cache-Control: no-store');header('Referrer-Policy: strict-origin-when-cross-origin');echo $html;
+ header('Content-Type: text/html; charset=utf-8');header('Cache-Control: no-store');header('Referrer-Policy: strict-origin-when-cross-origin');
+ if($blockSearch)header('X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex');
+ echo $html;
 }
 function render_console(string $realm):void {
  $role=$realm==='super'?'super':'customer';$title=$role==='super'?'LANDING · 总管理后台':effective_app_name(project($realm,true)).' · 项目后台';
