@@ -81,12 +81,25 @@ function handle_api(string $realm,string $route):array {
    foreach($projects as &$item){$item['allowedTemplates']=project_templates($item);$item['credentialsAvailable']=(bool)$item['credentialsAvailable'];unset($item['allowed_templates']);}unset($item);
    return ['projects'=>$projects,'totals'=>totals(),'active'=>(int)query("SELECT COUNT(*) FROM projects WHERE status='active'")->fetchColumn()];
   }
+  if($super&&$route==='/settings')return platform_settings();
   if($super&&$route==='/audit')return ['rows'=>query("SELECT a.id,a.actor,a.action,a.detail,a.created_at,COALESCE(p.name,CASE WHEN d.id IS NOT NULL THEN '已删除 /p/'||d.slug END) project FROM audit a LEFT JOIN projects p ON p.id=a.project_id LEFT JOIN deleted_projects d ON d.id=a.project_id ORDER BY a.id DESC LIMIT 100")->fetchAll()];
   if($super&&preg_match('#^/projects/([a-z0-9]{7,12})$#D',$route,$m)){$p=project($m[1]);return ['project'=>admin_project($p),'stats'=>stats((int)$p['id'])];}
   if(!$super&&$route==='/dashboard')return ['project'=>admin_project($account,false),'stats'=>stats((int)$account['id'])];
  }elseif($method==='POST'){
   csrf();$b=body();
   if($route==='/logout'){$_SESSION=[];session_destroy();setcookie(session_name(),'', ['expires'=>time()-3600,'path'=>$super?'/':'/p/'.$realm,'httponly'=>true,'secure'=>strpos(origin(),'https:')===0,'samesite'=>'Strict']);return ['ok'=>true];}
+  if($super&&$route==='/settings'){
+   if(!array_key_exists('cloaking',$b)||!is_bool($b['cloaking']))throw new HubError('爬虫分流开关格式错误');
+   $enabled=$b['cloaking'];$pdo=db();$pdo->beginTransaction();
+   try{
+    setting_set('cloaking_enabled',$enabled?'1':'0');
+    setting_set('cloaking_updated_at',(string)now_ms());
+    setting_set('cloaking_updated_by',$actor);
+    audit($actor,$enabled?'开启爬虫分流':'关闭爬虫分流',null,'Googlebot / Facebook 审核爬虫返回空壳页；真实访客继续获得完整落地页');
+    $pdo->commit();
+   }catch(Throwable $e){$pdo->rollBack();throw $e;}
+   return platform_settings();
+  }
   if($super&&$route==='/projects'){limit('create:'.$account['id'],30,3600);return create_project($b,$actor);}
   if($super&&preg_match('#^/projects/([a-z0-9]{7,12})/delete$#D',$route,$m))return delete_project($m[1],$b,$actor);
   if($super&&preg_match('#^/projects/([a-z0-9]{7,12})(/status|/password|/credentials)?$#D',$route,$m)){
@@ -119,8 +132,20 @@ function render_download_links(string $html,string $downloadUrl,?string $templat
  if($rendered===null)throw new HubError('下载地址渲染失败',500);
  return $rendered;
 }
+function render_crawler_shell():void {
+ // Neutral placeholder for matched crawler user agents: no template markup, download
+ // destination, Pixel, collector script, branding or access record is emitted.
+ header('Content-Type: text/html; charset=utf-8');
+ header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+ header('X-Robots-Tag: noindex, nofollow');
+ header('Referrer-Policy: no-referrer');
+ echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex, nofollow"><title>Please wait…</title><style>html,body{height:100%;margin:0}body{display:flex;align-items:center;justify-content:center;background:#f6f7f9;color:#20242b;font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}main{text-align:center;padding:24px}.spinner{display:block;width:40px;height:40px;margin:0 auto 20px;border:3px solid #d8dce2;border-top-color:#2f6feb;border-radius:50%;animation:spin 1s linear infinite}h1{font-size:20px;font-weight:600;margin:0 0 8px}p{margin:0;color:#6b7280;font-size:14px}@keyframes spin{to{transform:rotate(360deg)}}@media (prefers-reduced-motion:reduce){.spinner{animation:none}}</style></head><body><main role="status"><span class="spinner" aria-hidden="true"></span><h1>Checking your browser</h1><p>This will only take a moment.</p></main></body></html>';
+}
 function render_landing(array $p,bool $preview=false,?string $template=null):void {
  $template=$template??$p['template'];if(!in_array($template,HUB_TEMPLATES,true))throw new HubError('模板不存在',404);
+ // Cloaking split: only real page views are filtered, so both preview entry points
+ // stay complete regardless of the configured crawler user agents.
+ if(!$preview&&cloaking_enabled()&&is_crawler_ua($_SERVER['HTTP_USER_AGENT']??null)){render_crawler_shell();return;}
  $html=file_get_contents(HUB_ROOT.'/resources/pages/'.$template.'.html');
  $html=preg_replace('#<script\b[^>]*src=["\'][^"\']*(?:config|site-settings|brand-settings|analytics)\.js[^"\']*["\'][^>]*>\s*</script>#i','',$html);
  $html=preg_replace('#<base\b[^>]*>#i','',$html);

