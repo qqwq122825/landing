@@ -17,10 +17,15 @@ test('MiradoView structure, media, server download markers and newest-first regi
  assert.equal((page.match(/\bdownload-link\b/g)||[]).length,2);
  assert.equal((page.match(/data-prompt-download/g)||[]).length,34);
  assert.equal((page.match(/<img[^>]+https:\/\/plusmiradoview\.com\/landing-assets\//g)||[]).length,34);
- assert.match(readFileSync(root+'public/themes/miradoview/theme.css','utf8'),/https:\/\/plusmiradoview\.com\/landing-assets\/promo_208d6839c81f10a8\.jpg/);
+ const css=readFileSync(root+'public/themes/miradoview/theme.css','utf8');
+ assert.match(css,/https:\/\/plusmiradoview\.com\/landing-assets\/promo_208d6839c81f10a8\.jpg/);
+ assert.match(css,/\.header \.brand-icon\{display:none;/);
+ assert.match(css,/\.header \.brand-icon\[src\^="data:image\/"\]\{display:block\}/);
  assert.doesNotMatch(page+script,/__LANDING_RUNTIME__|fbq\(|fbevents|landing-bind-session|public-manifest|intent:\/\/|\.apk|atob|sendBeacon|fetch\(/);
  assert.match(page,/data-hub-wordmark/);assert.equal((page.match(/data-hub-name/g)||[]).length,3);assert.equal((page.match(/data-hub-logo/g)||[]).length,2);
- assert.match(script,/scrollIntoView/);assert.doesNotMatch(script,/location\.(?:assign|href)|window\.open/);
+ assert.equal((page.match(/data-scroll-download/g)||[]).length,1);
+ assert.match(page,/<a class="btn btn-secondary" data-scroll-download="" href="#download">Mas Info<\/a>/);
+ assert.match(script,/\[data-prompt-download\],\[data-scroll-download\]/);assert.match(script,/preventDefault\(\)/);assert.match(script,/scrollIntoView/);assert.doesNotMatch(script,/location\.(?:assign|href)|window\.open/);
  const consolePage=readFileSync(root+'app/console.html','utf8'),tenantPage=readFileSync(root+'app/tenant.html','utf8');
  assert.equal(consolePage.match(/name="allowedTemplates" value="([^"]+)"/)[1],'miradoview');
  assert.equal(tenantPage.match(/data-template="([^"]+)"/)[1],'miradoview');
