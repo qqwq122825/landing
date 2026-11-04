@@ -145,12 +145,29 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
  await t.test('mutation rejects missing CSRF and cross-origin requests',async()=>{assert.equal((await post('/api/projects',{name:'bad'},{cookie:master.cookie})).status,403);assert.equal((await post('/api/projects',{name:'bad'},{...master,origin:'https://other.example'})).status,403);});
  await t.test('master sees the complete template catalog before creating any project',async()=>{
   const r=await request('/api/templates',master);assert.equal(r.status,200);assert.match(r.headers.get('cache-control'),/no-store/);assert.equal(r.data.projectCount,0);
-  assert.deepEqual(r.data.templates.map(t=>t.id).sort(),['miradoview','feiyue','dptv','quest','aivideo','lumama','ggtv','appstore','ultraplay','yacinetv','dptvplus','fizzio','kyss','sparkle','newf','soccerqueens','cinema','noxxtv','smarttrade','stockvault','loveapp','qiyou','stripchat','pornparadise','pornhub','chatee','cosplay','lustylive','nightplay','bokep','xhamster','mylive','kuaibo','tikapk','jiaoyou','cyberheart','promotions','india','apuestamx'].sort());
+  assert.deepEqual(r.data.templates.map(t=>t.id).sort(),['liv3es','miradoview','feiyue','dptv','quest','aivideo','lumama','ggtv','appstore','ultraplay','yacinetv','dptvplus','fizzio','kyss','sparkle','newf','soccerqueens','cinema','noxxtv','smarttrade','stockvault','loveapp','qiyou','stripchat','pornparadise','pornhub','chatee','cosplay','lustylive','nightplay','bokep','xhamster','mylive','kuaibo','tikapk','jiaoyou','cyberheart','promotions','india','apuestamx'].sort());
   for(const item of r.data.templates){assert.equal(item.usedCount,0);assert.equal(item.allowedCount,0);assert.deepEqual(item.projects,[]);assert.equal(item.previewUrl,'/templates/'+item.id+'/preview');}
   const page=await request('/');assert.match(page.text,/data-view="templates"/);assert.match(page.text,/data-preview-size="desktop"/);
  });
+ await t.test('Liv3es is registered first with 24 marked download anchors',async()=>{
+  const catalog=await request('/api/templates',master);
+  assert.equal(catalog.data.templates[0].id,'liv3es');
+  assert.equal(catalog.data.templates[0].name,'MiradoView / Liv3es');
+  const page=readFileSync(root+'resources/pages/liv3es.html','utf8');
+  assert.match(page,/<html lang="es">/);
+  assert.equal((page.match(/<img[^>]+https:\/\/liv3es\.com\/static\/picture\//g)||[]).length,19);
+  assert.doesNotMatch(page,/handleDownload|onclick=|onkeydown=|fbq|fbevents|meta-capi|datingrealmx/);
+  assert.equal((page.match(/<a[^>]+class="[^"]*download-link/g)||[]).length,24);
+  for(const file of ['theme.css','liv3es.js','logo.svg'])assert.equal((await request('/themes/liv3es/'+file)).status,200);
+  const preview=await request('/templates/liv3es/preview',master);
+  assert.equal((preview.text.match(/href="\/p\/template-demo\/dl"/g)||[]).length,24);
+  for(const script of ['brand-settings','collector']){
+   assert.equal(preview.text.split('src="/assets/'+script+'.js?v=').length,2);
+  }
+  assert.match((await request('/')).text,/name="allowedTemplates" value="liv3es">/);
+ });
  await t.test('standalone previews server-render final download routes without accounts, tokens or analytics writes',async()=>{
-  const names={miradoview:'MiradoView',feiyue:'ReelShort',dptv:'DPTV',quest:'Pasion TV',aivideo:'AI Video',lumama:'LumamaTV'};
+  const names={liv3es:'MiradoView',miradoview:'MiradoView',feiyue:'ReelShort',dptv:'DPTV',quest:'Pasion TV',aivideo:'AI Video',lumama:'LumamaTV'};
   for(const id of Object.keys(names)){
    const r=await request('/templates/'+id+'/preview',master);assert.equal(r.status,200,r.text);assert.match(r.text,new RegExp('<base href="/themes/'+id+'/">'));assert.equal(r.headers.get('x-frame-options'),'SAMEORIGIN');assert.match(r.headers.get('cache-control'),/no-store/);
    assert.doesNotMatch(r.text,/alphapundits\.com\/p\/p6y2sej\/dl/);
@@ -207,6 +224,30 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
  await t.test('customer APIs omit the master-only private note and password hash',async()=>{for(const route of ['/session','/dashboard']){const r=await request(aPath()+'/api'+route,ca);assert.equal(r.status,200);assert.equal(r.data.project.note,undefined);assert.equal(r.data.project.password_hash,undefined);assert.ok(!r.text.includes('PRIVATE A'));}});
  await t.test('tenant session has no access to another tenant or master APIs',async()=>{assert.equal((await request(bPath()+'/api/dashboard',ca)).status,401);assert.equal((await request('/api/projects',ca)).status,401);assert.equal((await request(aPath()+'/api/projects',ca)).status,404);});
  await t.test('tenant cannot elevate role or change the project identity / private note',async()=>{const r=await post(aPath()+'/api/settings',{appName:'Alpha Updated',note:'stolen',name:'renamed',slug:B.project.slug,id:B.project.id,status:'paused',role:'super',downloadUrl:'https://example.com/alpha.apk'},ca);assert.equal(r.status,200,r.text);assert.equal(r.data.project.slug,A.project.slug);assert.equal(r.data.project.name,'客户 A');assert.equal(r.data.project.status,'active');assert.equal(r.data.project.note,undefined);const all=await request('/api/projects/'+A.project.slug,master);assert.equal(all.data.project.note,'PRIVATE A');assert.equal((await request(bPath()+'/api/dashboard',cb)).data.project.download_url,'');});
+ await t.test('Liv3es project permission, preview, activation and server-rendered download isolation',async()=>{
+  const preview=aPath()+'/preview/liv3es';
+  assert.equal((await request(preview,ca)).status,403);
+  assert.equal((await post(aPath()+'/api/settings',{template:'liv3es'},ca)).status,403);
+  const route='/api/projects/'+A.project.slug;
+  try{
+   const allow=await post(route,{allowedTemplates:['feiyue','dptv','liv3es']},master);
+   assert.equal(allow.status,200,allow.text);
+   assert.equal(allow.data.project.template,'feiyue');
+   assert.equal((await request(preview,ca)).status,200);
+   assert.equal((await request(bPath()+'/preview/liv3es',cb)).status,403);
+   const use=await post(aPath()+'/api/settings',{template:'liv3es'},ca);
+   assert.equal(use.status,200,use.text);
+   const landing=await request(aPath());
+   assert.equal(landing.status,200);
+   assert.match(landing.text,/<base href="\/themes\/liv3es\/">/);
+   assert.equal(landing.text.split('href="'+aPath()+'/dl"').length,25);
+   assert.equal(landing.text.split('src="/assets/brand-settings.js?v=').length,2);
+   assert.equal(landing.text.split('src="/assets/collector.js?v=').length,2);
+  }finally{
+   const restored=await post(route,{allowedTemplates:['feiyue','dptv'],template:'feiyue'},master);
+   assert.equal(restored.status,200,restored.text);
+  }
+ });
  await t.test('optional branding slots resolve per template, preserve icons unless cleared and stay isolated',async()=>{
   const path=aPath()+'/api/settings';
   const config=async(route,ctx)=>JSON.parse((await request(route,ctx)).text.match(/window\.HUB_PAGE=(.*?);window\.APP_CONFIG/s)[1]);

@@ -11,7 +11,7 @@ const root=fileURLToPath(new URL('../',import.meta.url));
 const page=readFileSync(root+'resources/pages/miradoview.html','utf8');
 const script=readFileSync(root+'public/themes/miradoview/miradoview.js','utf8');
 
-test('MiradoView structure, media, server download markers and newest-first registries',()=>{
+test('MiradoView structure, media, server download markers and console registries',()=>{
  assert.match(page,/<html dir="ltr" lang="es-MX">/);
  assert.equal((page.match(/<!doctype html>/gi)||[]).length,1);
  assert.equal((page.match(/\bdownload-link\b/g)||[]).length,2);
@@ -29,10 +29,10 @@ test('MiradoView structure, media, server download markers and newest-first regi
  assert.match(page,/<script defer="True" src="miradoview\.js\?v=20261019b"><\/script>/);
  assert.match(script,/\[data-prompt-download\],\[data-scroll-download\]/);assert.match(script,/preventDefault\(\)/);assert.match(script,/scrollIntoView/);assert.doesNotMatch(script,/location\.(?:assign|href)|window\.open/);
  const consolePage=readFileSync(root+'app/console.html','utf8'),tenantPage=readFileSync(root+'app/tenant.html','utf8');
- assert.equal(consolePage.match(/name="allowedTemplates" value="([^"]+)"/)[1],'miradoview');
- assert.equal(tenantPage.match(/data-template="([^"]+)"/)[1],'miradoview');
- assert.match(readFileSync(root+'public/assets/console.js','utf8'),/const templateLabels=\{miradoview:/);
- assert.match(readFileSync(root+'public/assets/tenant.js','utf8'),/\(\{miradoview:'MiradoView'/);
+ assert.match(consolePage,/name="allowedTemplates" value="miradoview">/);
+ assert.match(tenantPage,/data-template="miradoview" hidden/);
+ assert.match(readFileSync(root+'public/assets/console.js','utf8'),/const templateLabels=\{[^}]*miradoview:/);
+ assert.match(readFileSync(root+'public/assets/tenant.js','utf8'),/\(\{[^}]*miradoview:'MiradoView'/);
  for(const file of ['theme.css','miradoview.js','logo.svg'])assert.ok(existsSync(root+'public/themes/miradoview/'+file));
 });
 
@@ -45,7 +45,7 @@ test('MiradoView HTTP integration and uniform standards-based noindex switch',as
  for(let i=0;i<60;i++){try{await fetch(base);break;}catch{if(i===59)throw Error(log);await new Promise(resolve=>setTimeout(resolve,30));}}
  async function request(path,ctx={},body,headers={}){const response=await fetch(base+path,{method:body===undefined?'GET':'POST',redirect:'manual',headers:{Origin:base,...headers,...(ctx.cookie?{Cookie:ctx.cookie}:{}),...(ctx.csrf?{'X-CSRF-Token':ctx.csrf}:{}),...(body===undefined?{}:{'Content-Type':'application/json'})},body:body===undefined?undefined:JSON.stringify(body)});const text=await response.text();let json;try{json=JSON.parse(text);}catch{}return {status:response.status,text,json,headers:response.headers,cookie:response.headers.get('set-cookie')?.split(';')[0]||ctx.cookie};}
  const auth=await request('/api/login',{}, {username:'fixture',password:'Fixture-MiradoView-2026!'});assert.equal(auth.status,200);const master={cookie:auth.cookie,csrf:auth.json.csrf};
- const inventory=await request('/api/templates',master);assert.equal(inventory.status,200);assert.equal(inventory.json.templates[0].id,'miradoview');assert.equal(inventory.json.templates[0].name,'MiradoView');
+ const inventory=await request('/api/templates',master);assert.equal(inventory.status,200);assert.equal(inventory.json.templates.find(x=>x.id==='miradoview')?.name,'MiradoView');
  const preview=await request('/templates/miradoview/preview',master);assert.equal(preview.status,200);assert.match(preview.text,/<base href="\/themes\/miradoview\/">/);assert.equal(preview.headers.get('x-robots-tag'),'noindex, nofollow');
  const created=await request('/api/projects',master,{name:'MiradoView fixture',allowedTemplates:['miradoview'],template:'miradoview'});assert.equal(created.status,200,created.text);assert.equal(created.json.project.template,'miradoview');assert.equal(created.json.project.block_search_index,false);
  const slug=created.json.project.slug,path='/p/'+slug;

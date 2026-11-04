@@ -58,7 +58,7 @@ https://你的域名/p/随机项目编号/dl        跳转该项目配置的下�
 - 项目列表的红色“删除”需输入完整项目编号确认。仅总站可操作；永久删除该客户账号、配置、访问与下载记录，原落地页和子后台失效，其他项目及共享模板保留。无回收站，操作前请备份；仅临时停用使用“暂停”。删除保留操作日志及编号停用记录，防止新项目复用旧身份。详见 [项目删除说明](docs/updates/项目删除功能说明.md)。
 - 总站「模板管理」：集中展示全部模板，按名称或编号搜索，手机 / 桌面真实预览，查看使用数量、开放账号数量与关联项目。无项目也能预览；预览使用模板原始显示名，不创建账号、不改动客户配置、不记录访问、不启用 Pixel。模板目录与全局预览仅限总站登录后访问。
 - 客户：沿用原版深色窄版后台，7 项统计、趋势、国家 / 设备分布、分页明细；独立登录，只管理所属项目的显示名、图标、下载地址、模板、Pixel ID。总站保留浅色管理界面。
-- 当前目录共 **39** 款模板：原有 Feiyue / ReelShort、DPTV / MinuteDrama、Quest / Pasion TV、AI Video，加上参考后台两批共 33 款平台适配版，以及 LumamaTV、MiradoView。带手机框预览，确认后切换；总站逐账号勾选开放范围，客户仅显示、预览和使用已开放模板。参考站共有 35 款入口（含已有 ReelShort / MinuteDrama）；新增清单、语言缺口与视觉差异见 [批次记录](docs/templates/reference-batch.md)。
+- 当前目录共 **40** 款模板：原有 Feiyue / ReelShort、DPTV / MinuteDrama、Quest / Pasion TV、AI Video，加上参考后台两批共 33 款平台适配版，以及 LumamaTV、MiradoView、[MiradoView / Liv3es](docs/templates/liv3es.md)。带手机框预览，确认后切换；总站逐账号勾选开放范围，客户仅显示、预览和使用已开放模板。参考站共有 35 款入口（含已有 ReelShort / MinuteDrama）；新增清单、语言缺口与视觉差异见 [批次记录](docs/templates/reference-batch.md)。
 - ReelShort 剧集封面及对应标题点击直接走当前项目下载入口，不再弹二次下载提示；一次点击对应一次公共 `DownloadClick`。横向滑动不误触下载，全局 / 项目预览保持不下载、不计数。详见 [ReelShort 点击行为](docs/templates/feiyue.md)。
 - 真实落地页在 Facebook、Instagram 或 Messenger 内置浏览器中打开时，自动显示系统浏览器引导；Android 可点击按钮发起可浏览 Intent，iOS 可复制当前链接并按右上角菜单打开 Safari。预览与普通外部浏览器不显示，关闭后点击下载会重新引导而不直连 APK。详见 [Facebook 内置浏览器引导](docs/updates/Facebook内置浏览器引导.md)。
 - AI Video 来自用户提供的 `cs.php`：黑黄竖屏视频，保留阿语 RTL 并扩展中英西葡界面；视频 / 海报随 Git 交付。按要求保留非交互区域点击真实打开项目下载入口的行为，同步公共 `DownloadClick`；语言、关闭和视频控件排除，预览不下载不上报。原素材中的字幕 / 图片文字保留，不属于界面翻译。详见 [AI Video 接入记录](docs/templates/aivideo.md)。

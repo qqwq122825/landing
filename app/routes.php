@@ -4,6 +4,7 @@ require __DIR__.'/analytics.php';
 function template_catalog():array {
  // Display newest templates first; append future additions at the head of this catalog.
  return [
+  ['id'=>'liv3es','name'=>'MiradoView / Liv3es','brand'=>'MiradoView','description'=>'黑底荧光绿西语影视专题，含电影、剧集、直播与频道。','tags'=>['影视目录','西班牙语','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['liv3es']],
   ['id'=>'miradoview','name'=>'MiradoView','brand'=>'MiradoView','description'=>'深色珊瑚色影视目录，西班牙语界面、34 张横版海报与项目下载接入。','tags'=>['影视目录','西班牙语','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['miradoview']],
   ['id'=>'lumama','name'=>'LumamaTV','brand'=>'LumamaTV','description'=>'黑绿影视目录，横版海报、下载区与西班牙语界面；海报点击仅滚动，公共 Pixel 与项目统计。','tags'=>['影视目录','西班牙语','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['lumama']],
   ['id'=>'feiyue','name'=>'Feiyue / ReelShort','brand'=>'ReelShort','description'=>'深色短剧风格，包含剧集推荐与悬浮下载入口。','tags'=>['短剧推荐','深色风格','自适应'],'appName'=>HUB_TEMPLATE_NAMES['feiyue']],
