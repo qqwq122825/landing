@@ -160,6 +160,8 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
   assert.equal((page.match(/<a[^>]+class="[^"]*download-link/g)||[]).length,24);
   for(const file of ['theme.css','liv3es.js','logo.svg'])assert.equal((await request('/themes/liv3es/'+file)).status,200);
   const preview=await request('/templates/liv3es/preview',master);
+  assert.doesNotMatch(preview.text,/Ficha de la película|www\.netflix\.com\/title\/81698654/);
+  assert.match(preview.text,/<a class="watch-button download-link" href="\/p\/template-demo\/dl">\s*Ver ahora\s*<\/a>/);
   assert.equal((preview.text.match(/href="\/p\/template-demo\/dl"/g)||[]).length,24);
   for(const script of ['brand-settings','collector']){
    assert.equal(preview.text.split('src="/assets/'+script+'.js?v=').length,2);
