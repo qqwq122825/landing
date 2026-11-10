@@ -1138,3 +1138,63 @@ main > section[id] { scroll-margin-top: 72px; }
   html { scroll-behavior: auto; }
   .ticker-track { animation: none; }
 }
+
+/* Native language selector: separate from download actions and safe at narrow widths. */
+.language-picker[hidden] { display: none; }
+.language-picker {
+  position: fixed; inset-inline-end: 16px; bottom: 16px; z-index: 15;
+  display: flex; align-items: center; gap: 8px; max-width: calc(100% - 32px);
+  padding: 8px 10px; background: #111317; color: #f2ede5;
+  border: 1px solid rgba(255,253,250,.3); border-radius: 4px;
+  font: 12px/1.5 var(--body); box-shadow: 0 4px 16px #0006;
+}
+.language-picker select {
+  max-width: 120px; min-height: 32px; border: 1px solid #817b73;
+  border-radius: 3px; padding: 3px 6px; color: #f2ede5; background: #111317;
+  font: inherit;
+}
+.language-picker select:focus-visible { outline: 2px solid var(--acid); outline-offset: 2px; }
+html:not([lang="es"]) .section h2,
+html:not([lang="es"]) .more-movies-button,
+html:not([lang="es"]) .app-cta h2 {
+  font-family: var(--body); font-size: clamp(32px, 5vw, 64px);
+  font-weight: 700; line-height: 1.25; letter-spacing: 0; overflow-wrap: anywhere;
+}
+html:not([lang="es"]) .nav-links,
+html:not([lang="es"]) .section-kicker,
+html:not([lang="es"]) .hero-meta,
+html:not([lang="es"]) .movie-genre,
+html:not([lang="es"]) .schedule-head,
+html:not([lang="es"]) .ticker-track { letter-spacing: 0; }
+.hero-note strong, .schedule-time, .movie-rank { direction: ltr; unicode-bidi: isolate; }
+.movie-info, .schedule-name, .cta-inner > *, .footer-bottom > * { min-width: 0; }
+html[dir="rtl"] .section-intro { text-align: start; }
+html[dir="rtl"] .movie-card, html[dir="rtl"] .more-movies-button { text-align: start; }
+html[dir="rtl"] .hero-meta span:not(:last-child)::after { margin-left: 0; margin-right: 12px; }
+html[dir="rtl"] .ticker-track { direction: ltr; }
+html[dir="rtl"] .ticker-track span { direction: rtl; unicode-bidi: isolate; }
+html[dir="rtl"] .hero-note { border-right: 1px solid var(--line); border-left: 0; padding-left: 0; padding-right: 20px; }
+html[dir="rtl"] .movie-rank { right: 13px; left: auto; }
+html[dir="rtl"] .movie-play { left: 13px; right: auto; }
+footer { padding-bottom: 96px; }
+@media (max-width: 560px) {
+  html:not([lang="es"]) .hero .download-button { font-size: 10px; }
+  html:not([lang="es"]) .section-intro { max-width: 100%; }
+  html:not([lang="es"]) .hero-note { font-size: 10px; line-height: 1.7; }
+}
+.hero-content > * { min-width: 0; }
+.hero h1 { overflow-wrap: anywhere; }
+/* Long original titles stay whole at desktop sizes; RTL copy gets a readable backdrop. */
+.hero h1 { max-width: min(100%, 820px); }
+html[dir="rtl"] .hero::after {
+  background:
+    linear-gradient(270deg, rgba(9,10,12,.94), rgba(9,10,12,.12)),
+    linear-gradient(0deg, var(--ink) 0%, transparent 40%, rgba(9,10,12,.2) 100%);
+}
+html[dir="rtl"] .hero-note, html[dir="rtl"] .section-kicker,
+html[dir="rtl"] .movie-genre, html[dir="rtl"] .live-badge,
+html[dir="rtl"] .schedule-head, html[dir="rtl"] .ticker-track {
+  font-family: var(--body); letter-spacing: 0;
+}
+html[dir="rtl"] .movie-genre, html[dir="rtl"] .hero-note { font-size: 11px; line-height: 1.7; }
+.hero-copy { max-width: 820px; }

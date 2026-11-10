@@ -39,7 +39,7 @@ $required = [
     'resources/pages/liv3es.html', 'resources/pages/miradoview.html', 'resources/pages/feiyue.html', 'resources/pages/dptv.html', 'resources/pages/quest.html', 'resources/pages/aivideo.html', 'resources/pages/lumama.html',
     'public/themes/aivideo/aivideo.css', 'public/themes/aivideo/aivideo.js', 'public/themes/aivideo/i18n.js', 'public/themes/aivideo/logo.svg',
     'public/themes/aivideo/teaser.jpg', 'public/themes/aivideo/teaser.mp4', 'public/themes/aivideo/stories.webp',
-    'public/themes/liv3es/theme.css', 'public/themes/liv3es/liv3es.js', 'public/themes/liv3es/logo.svg',
+    'public/themes/liv3es/theme.css', 'public/themes/liv3es/liv3es.js', 'public/themes/liv3es/i18n.js', 'public/themes/liv3es/logo.svg',
     'public/themes/miradoview/theme.css', 'public/themes/miradoview/miradoview.js', 'public/themes/miradoview/logo.svg',
     'public/themes/lumama/theme.css', 'public/themes/lumama/lumama.js', 'public/themes/lumama/logo.svg',
     'public/themes/quest/quest.css', 'public/themes/quest/quest.js', 'public/themes/quest/i18n.js', 'public/themes/quest/logo.svg',

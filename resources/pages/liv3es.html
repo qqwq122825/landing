@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" dir="ltr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MiradoView — Cine, series y directo en español</title>
     <meta
-      name="description"
+      name="description" data-i18n-content="description"
       content="Una cartelera en español con cine, series y una selección de televisión en directo."
     />
     <meta name="theme-color" content="#090a0c" />
@@ -18,24 +18,54 @@
     />
 
 
-    <link rel="stylesheet" href="theme.css?v=1" />
+    <link rel="stylesheet" href="theme.css?v=20261110-i18n" />
     <link rel="icon" type="image/svg+xml" href="logo.svg" data-hub-logo />
-    <script defer src="liv3es.js?v=1"></script>
+    <script defer src="i18n.js?v=20261110-i18n"></script>
+    <script defer src="liv3es.js?v=20261110-i18n"></script>
   </head>
   <body>
+    <label class="language-picker" hidden>
+      <span data-i18n="language">Idioma</span>
+      <select id="liv3es-language" aria-label="Idioma" data-i18n-aria-label="language">
+        <option value="es" lang="es">Español</option>
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="fr" lang="fr">Français</option>
+        <option value="de" lang="de">Deutsch</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="pt" lang="pt">Português</option>
+        <option value="it" lang="it">Italiano</option>
+        <option value="ru" lang="ru">Русский</option>
+        <option value="ar" lang="ar">العربية</option>
+        <option value="hi" lang="hi">हिन्दी</option>
+        <option value="id" lang="id">Bahasa Indonesia</option>
+        <option value="th" lang="th">ไทย</option>
+        <option value="vi" lang="vi">Tiếng Việt</option>
+        <option value="tr" lang="tr">Türkçe</option>
+        <option value="nl" lang="nl">Nederlands</option>
+        <option value="pl" lang="pl">Polski</option>
+        <option value="sv" lang="sv">Svenska</option>
+        <option value="da" lang="da">Dansk</option>
+        <option value="fi" lang="fi">Suomi</option>
+        <option value="ms" lang="ms">Bahasa Melayu</option>
+        <option value="bn" lang="bn">বাংলা</option>
+      </select>
+    </label>
     <header class="site-header" id="site-header">
       <div class="shell nav">
         <a class="brand" href="#inicio">
           <img class="brand-mark" data-hub-logo src="logo.svg" width="33" height="33" alt="" />
-          <span data-hub-name>MiradoView</span>
+          <span data-hub-name dir="auto">MiradoView</span>
         </a>
-        <nav class="nav-links" aria-label="Navegación principal">
-          <a href="#peliculas">Películas</a>
-          <a href="#series">Series</a>
-          <a href="#directo">En directo</a>
-          <a href="#canales">Canales</a>
+        <nav class="nav-links" aria-label="Navegación principal" data-i18n-aria-label="navLabel">
+          <a href="#peliculas" data-i18n="films">Películas</a>
+          <a href="#series" data-i18n="series">Series</a>
+          <a href="#directo" data-i18n="live">En directo</a>
+          <a href="#canales" data-i18n="channels">Canales</a>
         </nav>
-        <a class="download-button download-link" href="#">
+        <a class="download-button download-link" href="#" data-i18n="downloadApp">
           Descargar app
         </a>
       </div>
@@ -45,46 +75,46 @@
       <section class="hero" id="inicio">
         <div class="shell hero-content">
           <div class="hero-copy reveal">
-            <div class="eyebrow">Estreno 2026 · España</div>
-            <h1><a class="download-link" href="#" aria-label="Descargar la app desde La desconocida">La desconocida</a></h1>
-            <p class="hero-tagline">
+            <div class="eyebrow" data-i18n="premiere">Estreno 2026 · España</div>
+            <h1><a class="download-link" href="#" aria-label="Descargar la app desde La desconocida" data-i18n-aria-label="heroLabel">La desconocida</a></h1>
+            <p class="hero-tagline" data-i18n="heroDescription">
               Una mujer sin identificar aparece en el puerto de Barcelona. Dos detectives deben reconstruir lo ocurrido antes de que amanezca.
             </p>
             <div class="hero-meta">
               <span>2026</span>
-              <span>Thriller</span>
-              <span>Barcelona</span>
+              <span data-i18n="thriller">Thriller</span>
+              <span data-i18n="barcelona">Barcelona</span>
               <span>Netflix</span>
             </div>
             <div class="hero-actions">
-              <a class="watch-button download-link" href="#">
+              <a class="watch-button download-link" href="#" data-i18n="watch">
                 Ver ahora
               </a>
             </div>
           </div>
-          <aside class="hero-note reveal" aria-label="Información editorial">
+          <aside class="hero-note reveal" aria-label="Información editorial" data-i18n-aria-label="editorialLabel">
             <strong>01 / 07</strong>
-            Selección audiovisual 2026
+            <span data-i18n="selection">Selección audiovisual 2026</span>
             <br />
-            Actualizada · agosto de 2026
+            <span data-i18n="updated">Actualizada · agosto de 2026</span>
           </aside>
         </div>
       </section>
 
       <div class="ticker" aria-hidden="true">
         <div class="ticker-track">
-          <span>Estrenos 2026</span>
-          <span>Películas españolas</span>
-          <span>Series en español</span>
-          <span>TV en directo</span>
-          <span>Deporte en vivo</span>
-          <span>Una sola pantalla</span>
-          <span>Estrenos 2026</span>
-          <span>Películas españolas</span>
-          <span>Series en español</span>
-          <span>TV en directo</span>
-          <span>Deporte en vivo</span>
-          <span>Una sola pantalla</span>
+          <span data-i18n="new2026">Estrenos 2026</span>
+          <span data-i18n="spanishFilms">Películas españolas</span>
+          <span data-i18n="spanishSeries">Series en español</span>
+          <span data-i18n="liveTV">TV en directo</span>
+          <span data-i18n="liveSport">Deporte en vivo</span>
+          <span data-i18n="oneScreen">Una sola pantalla</span>
+          <span data-i18n="new2026">Estrenos 2026</span>
+          <span data-i18n="spanishFilms">Películas españolas</span>
+          <span data-i18n="spanishSeries">Series en español</span>
+          <span data-i18n="liveTV">TV en directo</span>
+          <span data-i18n="liveSport">Deporte en vivo</span>
+          <span data-i18n="oneScreen">Una sola pantalla</span>
         </div>
       </div>
 
@@ -92,10 +122,10 @@
         <div class="shell">
           <div class="section-heading reveal">
             <div>
-              <div class="section-kicker">01 / Cine 2026</div>
-              <h2><a class="download-link" href="#" aria-label="Descargar la app: Los estrenos del año">Los estrenos<br />del año</a></h2>
+              <div class="section-kicker" data-i18n="filmKicker">01 / Cine 2026</div>
+              <h2><a class="download-link" href="#" aria-label="Descargar la app: Los estrenos del año" data-i18n-aria-label="filmsLabel"><span data-i18n="filmHeading1">Los estrenos</span><br /><span data-i18n="filmHeading2">del año</span></a></h2>
             </div>
-            <p class="section-intro">
+            <p class="section-intro" data-i18n="filmIntro">
               Comedias, thrillers y dramas españoles para elegir qué ver en tu próxima sesión.
             </p>
           </div>
@@ -103,111 +133,111 @@
           <div class="movie-grid">
             <a class="movie-card reveal download-link" href="#">
               <div class="movie-poster">
-                <img src="https://liv3es.com/static/picture/films/torrente-presidente.jpg" alt="Cartel de Torrente, presidente" loading="lazy" />
+                <img src="https://liv3es.com/static/picture/films/torrente-presidente.jpg" data-i18n-alt="image0" alt="Cartel de Torrente, presidente" loading="lazy" />
                 <span class="movie-rank">01</span>
                 <span class="movie-play">▶</span>
               </div>
               <div class="movie-info">
                 <div class="movie-title">Torrente, presidente</div>
-                <div class="movie-genre">2026 · Comedia · España</div>
+                <div class="movie-genre" data-i18n="comedySpain">2026 · Comedia · España</div>
               </div>
             </a>
 
             <a class="movie-card reveal download-link" href="#">
               <div class="movie-poster">
-                <img src="https://liv3es.com/static/picture/films/la-desconocida.jpg" alt="Cartel de La desconocida" loading="lazy" />
+                <img src="https://liv3es.com/static/picture/films/la-desconocida.jpg" data-i18n-alt="image1" alt="Cartel de La desconocida" loading="lazy" />
                 <span class="movie-rank">02</span>
                 <span class="movie-play">▶</span>
               </div>
               <div class="movie-info">
                 <div class="movie-title">La desconocida</div>
-                <div class="movie-genre">2026 · Thriller · Netflix</div>
+                <div class="movie-genre" data-i18n="thrillerNetflix">2026 · Thriller · Netflix</div>
               </div>
             </a>
 
             <a class="movie-card reveal download-link" href="#">
               <div class="movie-poster">
-                <img src="https://liv3es.com/static/picture/films/idolos.jpg" alt="Cartel de Ídolos" loading="lazy" />
+                <img src="https://liv3es.com/static/picture/films/idolos.jpg" data-i18n-alt="image2" alt="Cartel de Ídolos" loading="lazy" />
                 <span class="movie-rank">03</span>
                 <span class="movie-play">▶</span>
               </div>
               <div class="movie-info">
                 <div class="movie-title">Ídolos</div>
-                <div class="movie-genre">2026 · Drama deportivo</div>
+                <div class="movie-genre" data-i18n="sportsDrama">2026 · Drama deportivo</div>
               </div>
             </a>
 
             <a class="movie-card reveal download-link" href="#">
               <div class="movie-poster">
-                <img src="https://liv3es.com/static/picture/films/cada-dia-nace-un-listo.jpg" alt="Cartel de Cada día nace un listo" loading="lazy" />
+                <img src="https://liv3es.com/static/picture/films/cada-dia-nace-un-listo.jpg" data-i18n-alt="image3" alt="Cartel de Cada día nace un listo" loading="lazy" />
                 <span class="movie-rank">04</span>
                 <span class="movie-play">▶</span>
               </div>
               <div class="movie-info">
                 <div class="movie-title">Cada día nace un listo</div>
-                <div class="movie-genre">2026 · Comedia · Próximo</div>
+                <div class="movie-genre" data-i18n="comingComedy">2026 · Comedia · Próximo</div>
               </div>
             </a>
 
             <a class="movie-card reveal download-link" href="#">
               <div class="movie-poster">
-                <img src="https://liv3es.com/static/picture/films/aida-y-vuelta.jpg" alt="Cartel de Aída y vuelta" loading="lazy" />
+                <img src="https://liv3es.com/static/picture/films/aida-y-vuelta.jpg" data-i18n-alt="image4" alt="Cartel de Aída y vuelta" loading="lazy" />
                 <span class="movie-rank">05</span>
                 <span class="movie-play">▶</span>
               </div>
               <div class="movie-info">
                 <div class="movie-title">Aída y vuelta</div>
-                <div class="movie-genre">2026 · Comedia · Sony Pictures</div>
+                <div class="movie-genre" data-i18n="sonyComedy">2026 · Comedia · Sony Pictures</div>
               </div>
             </a>
 
             <a class="movie-card reveal download-link" href="#">
               <div class="movie-poster">
-                <img src="https://liv3es.com/static/picture/films/53-domingos.jpg" alt="Cartel de 53 domingos" loading="lazy" />
+                <img src="https://liv3es.com/static/picture/films/53-domingos.jpg" data-i18n-alt="image5" alt="Cartel de 53 domingos" loading="lazy" />
                 <span class="movie-rank">06</span>
                 <span class="movie-play">▶</span>
               </div>
               <div class="movie-info">
                 <div class="movie-title">53 domingos</div>
-                <div class="movie-genre">2026 · Comedia dramática · Netflix</div>
+                <div class="movie-genre" data-i18n="netflixDramedy">2026 · Comedia dramática · Netflix</div>
               </div>
             </a>
 
             <a class="movie-card reveal download-link" href="#">
               <div class="movie-poster">
-                <img src="https://liv3es.com/static/picture/films/familia-beneton-2.jpg" alt="Cartel de La familia Benetón 2" loading="lazy" />
+                <img src="https://liv3es.com/static/picture/films/familia-beneton-2.jpg" data-i18n-alt="image6" alt="Cartel de La familia Benetón 2" loading="lazy" />
                 <span class="movie-rank">07</span>
                 <span class="movie-play">▶</span>
               </div>
               <div class="movie-info">
                 <div class="movie-title">La familia Benetón 2</div>
-                <div class="movie-genre">2026 · Comedia · Atresmedia Cine</div>
+                <div class="movie-genre" data-i18n="atresComedy">2026 · Comedia · Atresmedia Cine</div>
               </div>
             </a>
 
             <a class="movie-card reveal download-link" href="#">
               <div class="movie-poster">
-                <img src="https://liv3es.com/static/picture/films/gracias-equipo.webp" alt="Imagen de Gracias, equipo" loading="lazy" />
+                <img src="https://liv3es.com/static/picture/films/gracias-equipo.webp" data-i18n-alt="image7" alt="Imagen de Gracias, equipo" loading="lazy" />
                 <span class="movie-rank">08</span>
                 <span class="movie-play">▶</span>
               </div>
               <div class="movie-info">
                 <div class="movie-title">Gracias, equipo</div>
-                <div class="movie-genre">2026 · Comedia · Netflix</div>
+                <div class="movie-genre" data-i18n="netflixComedy">2026 · Comedia · Netflix</div>
               </div>
             </a>
           </div>
 
           <p class="source-note">
-            Materiales consultados en
+            <span data-i18n="filmSources">Materiales consultados en</span>
             <a href="https://www.sonypictures.es/pelicula/aida-y-vuelta" target="_blank" rel="noopener">Sony Pictures</a>,
             <a href="https://www.atresmedia.com/prensa/notas/cine/familia-beneton-2-nueva-pelicula-atresmedia-cine-presenta-cartel-principal_2026030469a7f52ce1ff634075d71d15.html" target="_blank" rel="noopener">Atresmedia Cine</a>,
-            <a href="https://www.rtve.es/noticias/20251112/idolos-oscar-casas-ana-mena/16812091.shtml" target="_blank" rel="noopener">RTVE</a> y
+            <a href="https://www.rtve.es/noticias/20251112/idolos-oscar-casas-ana-mena/16812091.shtml" target="_blank" rel="noopener">RTVE</a> <span data-i18n="and">y</span>
             <a href="https://about.netflix.com/es_es/news/netflix-presents-its-2026-series-and-films-and-announces-new-projects" target="_blank" rel="noopener">Netflix España</a>.
           </p>
 
-          <a class="more-movies-button reveal download-link" href="#" aria-label="Descargar la app para ver más películas nuevas">
-            <span>Más películas nuevas</span>
+          <a class="more-movies-button reveal download-link" href="#" aria-label="Descargar la app para ver más películas nuevas" data-i18n-aria-label="moreLabel">
+            <span data-i18n="moreFilms">Más películas nuevas</span>
             <span aria-hidden="true">↗</span>
           </a>
         </div>
@@ -217,10 +247,10 @@
         <div class="shell">
           <div class="section-heading reveal">
             <div>
-              <div class="section-kicker">02 / Series 2026</div>
-              <h2><a class="download-link" href="#" aria-label="Descargar la app: Historias que siguen vivas">Historias que<br />siguen vivas</a></h2>
+              <div class="section-kicker" data-i18n="seriesKicker">02 / Series 2026</div>
+              <h2><a class="download-link" href="#" aria-label="Descargar la app: Historias que siguen vivas" data-i18n-aria-label="seriesLabel"><span data-i18n="seriesHeading1">Historias que</span><br /><span data-i18n="seriesHeading2">siguen vivas</span></a></h2>
             </div>
-            <p class="section-intro">
+            <p class="section-intro" data-i18n="seriesIntro">
               Ficción española y series documentales para elegir tu próximo maratón.
             </p>
           </div>
@@ -228,92 +258,92 @@
           <div class="series-grid">
             <a class="movie-card reveal download-link" href="#">
               <div class="series-poster movie-poster">
-                <img src="https://liv3es.com/static/picture/series/rafa.jpg" alt="Cartel de RAFA" loading="lazy" />
+                <img src="https://liv3es.com/static/picture/series/rafa.jpg" data-i18n-alt="image8" alt="Cartel de RAFA" loading="lazy" />
                 <span class="movie-rank">01</span>
                 <span class="movie-play">▶</span>
               </div>
               <div class="movie-info">
                 <div class="movie-title">RAFA</div>
-                <div class="movie-genre">2026 · Docuserie · Netflix</div>
+                <div class="movie-genre" data-i18n="docuseries">2026 · Docuserie · Netflix</div>
               </div>
             </a>
 
             <a class="movie-card reveal download-link" href="#">
               <div class="series-poster movie-poster">
-                <img src="https://liv3es.com/static/picture/series/el-depredador.jpg" alt="Cartel de El depredador de Sevilla" loading="lazy" />
+                <img src="https://liv3es.com/static/picture/series/el-depredador.jpg" data-i18n-alt="image9" alt="Cartel de El depredador de Sevilla" loading="lazy" />
                 <span class="movie-rank">02</span>
                 <span class="movie-play">▶</span>
               </div>
               <div class="movie-info">
                 <div class="movie-title">El depredador de Sevilla</div>
-                <div class="movie-genre">2026 · True crime · Netflix</div>
+                <div class="movie-genre" data-i18n="trueCrime">2026 · True crime · Netflix</div>
               </div>
             </a>
 
             <a class="movie-card reveal download-link" href="#">
               <div class="series-poster movie-poster">
-                <img src="https://liv3es.com/static/picture/series/barrio-esperanza.jpg" alt="Cartel de Barrio Esperanza" loading="lazy" />
+                <img src="https://liv3es.com/static/picture/series/barrio-esperanza.jpg" data-i18n-alt="image10" alt="Cartel de Barrio Esperanza" loading="lazy" />
                 <span class="movie-rank">03</span>
                 <span class="movie-play">▶</span>
               </div>
               <div class="movie-info">
                 <div class="movie-title">Barrio Esperanza</div>
-                <div class="movie-genre">2026 · Comedia · RTVE Play</div>
+                <div class="movie-genre" data-i18n="rtveComedy">2026 · Comedia · RTVE Play</div>
               </div>
             </a>
 
             <a class="movie-card reveal download-link" href="#">
               <div class="series-poster movie-poster">
-                <img src="https://liv3es.com/static/picture/series/salvador.jpg" alt="Imagen de Salvador" loading="lazy" />
+                <img src="https://liv3es.com/static/picture/series/salvador.jpg" data-i18n-alt="image11" alt="Imagen de Salvador" loading="lazy" />
                 <span class="movie-rank">04</span>
                 <span class="movie-play">▶</span>
               </div>
               <div class="movie-info">
                 <div class="movie-title">Salvador</div>
-                <div class="movie-genre">2026 · Drama · Netflix</div>
+                <div class="movie-genre" data-i18n="netflixDrama">2026 · Drama · Netflix</div>
               </div>
             </a>
 
             <a class="movie-card reveal download-link" href="#">
               <div class="series-poster movie-poster">
-                <img src="https://liv3es.com/static/picture/series/aquel.jpg" alt="Imagen de Aquel" loading="lazy" />
+                <img src="https://liv3es.com/static/picture/series/aquel.jpg" data-i18n-alt="image12" alt="Imagen de Aquel" loading="lazy" />
                 <span class="movie-rank">05</span>
                 <span class="movie-play">▶</span>
               </div>
               <div class="movie-info">
                 <div class="movie-title">Aquel</div>
-                <div class="movie-genre">2026 · Biográfica · Netflix</div>
+                <div class="movie-genre" data-i18n="biography">2026 · Biográfica · Netflix</div>
               </div>
             </a>
 
             <a class="movie-card reveal download-link" href="#">
               <div class="series-poster movie-poster">
-                <img src="https://liv3es.com/static/picture/series/el-problema-final.jpg" alt="Imagen de El problema final" loading="lazy" />
+                <img src="https://liv3es.com/static/picture/series/el-problema-final.jpg" data-i18n-alt="image13" alt="Imagen de El problema final" loading="lazy" />
                 <span class="movie-rank">06</span>
                 <span class="movie-play">▶</span>
               </div>
               <div class="movie-info">
                 <div class="movie-title">El problema final</div>
-                <div class="movie-genre">2026 · Miniserie · Netflix</div>
+                <div class="movie-genre" data-i18n="miniseries">2026 · Miniserie · Netflix</div>
               </div>
             </a>
 
             <a class="movie-card reveal download-link" href="#">
               <div class="series-poster movie-poster">
-                <img src="https://liv3es.com/static/picture/series/la-dama-del-norte.jpg" alt="Imagen de La dama del norte" loading="lazy" />
+                <img src="https://liv3es.com/static/picture/series/la-dama-del-norte.jpg" data-i18n-alt="image14" alt="Imagen de La dama del norte" loading="lazy" />
                 <span class="movie-rank">07</span>
                 <span class="movie-play">▶</span>
               </div>
               <div class="movie-info">
                 <div class="movie-title">La dama del norte</div>
-                <div class="movie-genre">2026 · Thriller · Netflix</div>
+                <div class="movie-genre" data-i18n="thrillerNetflix">2026 · Thriller · Netflix</div>
               </div>
             </a>
           </div>
 
           <p class="source-note">
-            Series y fechas verificadas en
-            <a href="https://about.netflix.com/es_es/news/a-day-like-no-other-the-series-that-chronicles-raphaels-life-arrives-on-netflix-on-9-october" target="_blank" rel="noopener">Netflix</a> y
+            <span data-i18n="seriesSources">Series y fechas verificadas en</span>
+            <a href="https://about.netflix.com/es_es/news/a-day-like-no-other-the-series-that-chronicles-raphaels-life-arrives-on-netflix-on-9-october" target="_blank" rel="noopener">Netflix</a> <span data-i18n="and">y</span>
             <a href="https://www.rtve.es/play/videos/barrio-esperanza/" target="_blank" rel="noopener">RTVE Play</a>.
           </p>
         </div>
@@ -323,48 +353,48 @@
         <div class="shell">
           <div class="section-heading reveal">
             <div>
-              <div class="section-kicker">03 / En directo</div>
-              <h2><a class="download-link" href="#" aria-label="Descargar la app: La pantalla no se detiene">La pantalla<br />no se detiene</a></h2>
+              <div class="section-kicker" data-i18n="liveKicker">03 / En directo</div>
+              <h2><a class="download-link" href="#" aria-label="Descargar la app: La pantalla no se detiene" data-i18n-aria-label="liveLabel"><span data-i18n="liveHeading1">La pantalla</span><br /><span data-i18n="liveHeading2">no se detiene</span></a></h2>
             </div>
-            <p class="section-intro">
+            <p class="section-intro" data-i18n="liveIntro">
               Carreras, finales y competiciones para seguir el deporte en directo.
             </p>
           </div>
 
           <div class="live-layout">
             <a class="live-feature reveal" href="https://www.rtve.es/play/teledeporte/" target="_blank" rel="noopener">
-              <img src="https://liv3es.com/static/picture/live/teledeporte.jpg" alt="Teledeporte en directo" loading="lazy" />
+              <img src="https://liv3es.com/static/picture/live/teledeporte.jpg" data-i18n-alt="image15" alt="Teledeporte en directo" loading="lazy" />
               <div class="live-feature-copy">
-                <div class="live-badge">Ahora en vivo · RTVE Play</div>
+                <div class="live-badge" data-i18n="liveBadge">Ahora en vivo · RTVE Play</div>
                 <h3>Teledeporte</h3>
-                <p>Un canal dedicado al tenis, el ciclismo, la natación y otras competiciones.</p>
+                <p data-i18n="sportDescription">Un canal dedicado al tenis, el ciclismo, la natación y otras competiciones.</p>
               </div>
             </a>
 
             <div class="schedule reveal">
               <div class="schedule-head">
-                <span>Agenda destacada</span>
-                <span>En directo</span>
+                <span data-i18n="schedule">Agenda destacada</span>
+                <span data-i18n="live">En directo</span>
               </div>
               <ul class="schedule-list">
                 <li>
                   <span class="schedule-time">15:45</span>
-                  <span class="schedule-name">Tour de Francia femenino <small class="schedule-type">Etapa 2 · Aigle › Genève</small></span>
+                  <span class="schedule-name"><span data-i18n="tour">Tour de Francia femenino</span> <small class="schedule-type" data-i18n="stage">Etapa 2 · Aigle › Genève</small></span>
                 </li>
                 <li>
                   <span class="schedule-time">16:00</span>
-                  <span class="schedule-name">Natación artística <small class="schedule-type">Campeonato de Europa</small></span>
+                  <span class="schedule-name"><span data-i18n="swimming">Natación artística</span> <small class="schedule-type" data-i18n="european">Campeonato de Europa</small></span>
                 </li>
                 <li>
                   <span class="schedule-time">19:00</span>
-                  <span class="schedule-name">Saltos de trampolín <small class="schedule-type">Finales europeas</small></span>
+                  <span class="schedule-name"><span data-i18n="diving">Saltos de trampolín</span> <small class="schedule-type" data-i18n="finals">Finales europeas</small></span>
                 </li>
                 <li>
                   <span class="schedule-time">20:30</span>
-                  <span class="schedule-name">La noche en directo <small class="schedule-type">Actualidad · TVE</small></span>
+                  <span class="schedule-name"><span data-i18n="nightLive">La noche en directo</span> <small class="schedule-type" data-i18n="newsTVE">Actualidad · TVE</small></span>
                 </li>
               </ul>
-              <a class="cta-button download-link" href="#">Abrir en la app</a>
+              <a class="cta-button download-link" href="#" data-i18n="openApp">Abrir en la app</a>
             </div>
           </div>
         </div>
@@ -374,34 +404,34 @@
         <div class="shell">
           <div class="section-heading reveal">
             <div>
-              <div class="section-kicker">04 / Canales</div>
-              <h2>Un directo<br />para cada momento</h2>
+              <div class="section-kicker" data-i18n="channelKicker">04 / Canales</div>
+              <h2><span data-i18n="channelHeading1">Un directo</span><br /><span data-i18n="channelHeading2">para cada momento</span></h2>
             </div>
-            <p class="section-intro">
+            <p class="section-intro" data-i18n="channelIntro">
               Accesos a canales de actualidad, cultura y deporte.
             </p>
           </div>
 
           <div class="channel-grid">
             <a class="channel-card reveal" href="https://www.rtve.es/play/videos/directo/" target="_blank" rel="noopener">
-              <img src="https://liv3es.com/static/picture/live/tve-directo.jpg" alt="Canal La 1 en directo" loading="lazy" />
+              <img src="https://liv3es.com/static/picture/live/tve-directo.jpg" data-i18n-alt="image16" alt="Canal La 1 en directo" loading="lazy" />
               <div class="channel-copy">
-                <small>RTVE Play · En directo</small>
+                <small data-i18n="rtveLive">RTVE Play · En directo</small>
                 <h3>La 1</h3>
               </div>
             </a>
             <a class="channel-card reveal" href="https://www.rtve.es/play/videos/directo/" target="_blank" rel="noopener">
-              <img src="https://liv3es.com/static/picture/live/canal-24h.jpg" alt="Canal 24 Horas en directo" loading="lazy" />
+              <img src="https://liv3es.com/static/picture/live/canal-24h.jpg" data-i18n-alt="image17" alt="Canal 24 Horas en directo" loading="lazy" />
               <div class="channel-copy">
-                <small>RTVE Play · Noticias</small>
+                <small data-i18n="rtveNews">RTVE Play · Noticias</small>
                 <h3>24 Horas</h3>
               </div>
             </a>
             <a class="channel-card reveal" href="https://www.rtve.es/play/teledeporte/" target="_blank" rel="noopener">
-              <img src="https://liv3es.com/static/picture/live/natacion.jpg" alt="Eventos deportivos en directo" loading="lazy" />
+              <img src="https://liv3es.com/static/picture/live/natacion.jpg" data-i18n-alt="image18" alt="Eventos deportivos en directo" loading="lazy" />
               <div class="channel-copy">
-                <small>RTVE Play · Deporte</small>
-                <h3>Eventos</h3>
+                <small data-i18n="rtveSport">RTVE Play · Deporte</small>
+                <h3 data-i18n="events">Eventos</h3>
               </div>
             </a>
           </div>
@@ -411,13 +441,13 @@
       <section class="app-cta">
         <div class="shell cta-inner">
           <div>
-            <div class="section-kicker">Tu próxima sesión empieza aquí</div>
-            <h2>Tu cine, tus series y la tele en una sola pantalla.</h2>
+            <div class="section-kicker" data-i18n="nextSession">Tu próxima sesión empieza aquí</div>
+            <h2 data-i18n="ctaHeading">Tu cine, tus series y la tele en una sola pantalla.</h2>
           </div>
           <div class="cta-copy">
-            Abre la app para llevar contigo tu selección de cine, series y televisión en español.
+            <span data-i18n="ctaDescription">Abre la app para llevar contigo tu selección de cine, series y televisión en español.</span>
             <br />
-            <a class="cta-button download-link" href="#"><span>Descargar <span data-hub-name>MiradoView</span></span></a>
+            <a class="cta-button download-link" href="#"><span><span data-i18n="download">Descargar</span> <span data-hub-name dir="auto">MiradoView</span></span></a>
           </div>
         </div>
       </section>
@@ -426,19 +456,19 @@
     <footer>
       <div class="shell">
         <div class="footer-top">
-          <div class="footer-brand" data-hub-name>MiradoView</div>
+          <div class="footer-brand" data-hub-name dir="auto">MiradoView</div>
           <div class="footer-links">
-            <a href="#peliculas">Películas</a>
-            <a href="#series">Series</a>
-            <a href="#directo">En directo</a>
-            <a href="#canales">Canales</a>
+            <a href="#peliculas" data-i18n="films">Películas</a>
+            <a href="#series" data-i18n="series">Series</a>
+            <a href="#directo" data-i18n="live">En directo</a>
+            <a href="#canales" data-i18n="channels">Canales</a>
             <a href="https://about.netflix.com/es_es/news/netflix-presents-its-2026-series-and-films-and-announces-new-projects" target="_blank" rel="noopener">Netflix 2026</a>
             <a href="https://www.rtve.es/play/videos/directo/" target="_blank" rel="noopener">RTVE Play</a>
           </div>
         </div>
         <div class="footer-bottom">
-          <span>© 2026 <span data-hub-name>MiradoView</span>. Una selección audiovisual en español.</span>
-          <span>Los nombres e imágenes pertenecen a sus respectivos titulares.</span>
+          <span>© 2026 <span data-hub-name dir="auto">MiradoView</span><span data-i18n="footerDescription">. Una selección audiovisual en español.</span></span>
+          <span data-i18n="rights">Los nombres e imágenes pertenecen a sus respectivos titulares.</span>
         </div>
       </div>
     </footer>

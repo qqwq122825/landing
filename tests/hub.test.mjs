@@ -154,14 +154,14 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
   assert.equal(catalog.data.templates[0].id,'liv3es');
   assert.equal(catalog.data.templates[0].name,'MiradoView / Liv3es');
   const page=readFileSync(root+'resources/pages/liv3es.html','utf8');
-  assert.match(page,/<html lang="es">/);
+  assert.match(page,/<html lang="es" dir="ltr">/);
   assert.equal((page.match(/<img[^>]+https:\/\/liv3es\.com\/static\/picture\//g)||[]).length,19);
   assert.doesNotMatch(page,/handleDownload|onclick=|onkeydown=|fbq|fbevents|meta-capi|datingrealmx/);
   assert.equal((page.match(/<a[^>]+class="[^"]*download-link/g)||[]).length,24);
   for(const file of ['theme.css','liv3es.js','logo.svg'])assert.equal((await request('/themes/liv3es/'+file)).status,200);
   const preview=await request('/templates/liv3es/preview',master);
   assert.doesNotMatch(preview.text,/Ficha de la película|www\.netflix\.com\/title\/81698654/);
-  assert.match(preview.text,/<a class="watch-button download-link" href="\/p\/template-demo\/dl">\s*Ver ahora\s*<\/a>/);
+  assert.match(preview.text,/<a class="watch-button download-link" href="\/p\/template-demo\/dl" data-i18n="watch">\s*Ver ahora\s*<\/a>/);
   assert.equal((preview.text.match(/href="\/p\/template-demo\/dl"/g)||[]).length,24);
   for(const script of ['brand-settings','collector']){
    assert.equal(preview.text.split('src="/assets/'+script+'.js?v=').length,2);
