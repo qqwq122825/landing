@@ -14,6 +14,7 @@ test('OndagoTV has 24 complete explicit UI dictionaries, not a language-menu-onl
  assert.deepEqual(Object.keys(dictionary),expected);
  const keys=Object.keys(dictionary.es).sort();
  assert.equal(keys.length,16);
+ assert.doesNotMatch(html,/<h3>Pobierz<\/h3>/);
  for(const lang of expected){
   assert.deepEqual(Object.keys(dictionary[lang]).sort(),keys,lang);
   for(const key of keys)assert.equal(typeof dictionary[lang][key]==='string'&&dictionary[lang][key].trim().length>0,true,lang+':'+key);
