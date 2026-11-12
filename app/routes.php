@@ -4,6 +4,7 @@ require __DIR__.'/analytics.php';
 function template_catalog():array {
  // Display newest templates first; append future additions at the head of this catalog.
  return [
+  ['id'=>'ondago','name'=>'OndagoTV','brand'=>'OndagoTV','description'=>'黑青色短剧目录，34 张海报、24 语界面、自动识别与阿语 RTL。','tags'=>['短剧目录','24 语界面','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['ondago']],
   ['id'=>'liv3es','name'=>'MiradoView / Liv3es','brand'=>'MiradoView','description'=>'黑底荧光绿影视专题，24 语界面、自动识别与阿语 RTL。','tags'=>['影视目录','24 语界面','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['liv3es']],
   ['id'=>'miradoview','name'=>'MiradoView','brand'=>'MiradoView','description'=>'深色珊瑚色影视目录，西班牙语界面、34 张横版海报与项目下载接入。','tags'=>['影视目录','西班牙语','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['miradoview']],
   ['id'=>'lumama','name'=>'LumamaTV','brand'=>'LumamaTV','description'=>'黑绿影视目录，横版海报、下载区与西班牙语界面；海报点击仅滚动，公共 Pixel 与项目统计。','tags'=>['影视目录','西班牙语','图片热链'],'appName'=>HUB_TEMPLATE_NAMES['lumama']],
