@@ -145,12 +145,12 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
  await t.test('mutation rejects missing CSRF and cross-origin requests',async()=>{assert.equal((await post('/api/projects',{name:'bad'},{cookie:master.cookie})).status,403);assert.equal((await post('/api/projects',{name:'bad'},{...master,origin:'https://other.example'})).status,403);});
  await t.test('master sees the complete template catalog before creating any project',async()=>{
   const r=await request('/api/templates',master);assert.equal(r.status,200);assert.match(r.headers.get('cache-control'),/no-store/);assert.equal(r.data.projectCount,0);
-  assert.deepEqual(r.data.templates.map(t=>t.id).sort(),['ondago','liv3es','miradoview','feiyue','dptv','quest','aivideo','lumama','ggtv','appstore','ultraplay','yacinetv','dptvplus','fizzio','kyss','sparkle','newf','soccerqueens','cinema','noxxtv','smarttrade','stockvault','loveapp','qiyou','stripchat','pornparadise','pornhub','chatee','cosplay','lustylive','nightplay','bokep','xhamster','mylive','kuaibo','tikapk','jiaoyou','cyberheart','promotions','india','apuestamx'].sort());
+  assert.deepEqual(r.data.templates.map(t=>t.id).sort(),['purpleai','ondago','liv3es','miradoview','feiyue','dptv','quest','aivideo','lumama','ggtv','appstore','ultraplay','yacinetv','dptvplus','fizzio','kyss','sparkle','newf','soccerqueens','cinema','noxxtv','smarttrade','stockvault','loveapp','qiyou','stripchat','pornparadise','pornhub','chatee','cosplay','lustylive','nightplay','bokep','xhamster','mylive','kuaibo','tikapk','jiaoyou','cyberheart','promotions','india','apuestamx'].sort());
   for(const item of r.data.templates){assert.equal(item.usedCount,0);assert.equal(item.allowedCount,0);assert.deepEqual(item.projects,[]);assert.equal(item.previewUrl,'/templates/'+item.id+'/preview');}
   const page=await request('/');assert.match(page.text,/data-view="templates"/);assert.match(page.text,/data-preview-size="desktop"/);
  });
  await t.test('OndagoTV is newest, defaults remain unchanged and all download anchors are finalized',async()=>{
-  const catalog=await request('/api/templates',master);assert.equal(catalog.data.templates[0].id,'ondago');
+  const catalog=await request('/api/templates',master);assert.equal(catalog.data.templates[1].id,'ondago');
   const preview=await request('/templates/ondago/preview',master);assert.equal(preview.status,200);
   assert.equal((preview.text.match(/href="\/p\/template-demo\/dl"/g)||[]).length,5);
   assert.equal((preview.text.match(/https:\/\/hubondagotv\.com\/landing-assets\//g)||[]).length,34);
@@ -160,8 +160,8 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
  });
  await t.test('Liv3es remains registered with 24 marked download anchors',async()=>{
   const catalog=await request('/api/templates',master);
-  assert.equal(catalog.data.templates[1].id,'liv3es');
-  assert.equal(catalog.data.templates[1].name,'MiradoView / Liv3es');
+  assert.equal(catalog.data.templates[2].id,'liv3es');
+  assert.equal(catalog.data.templates[2].name,'MiradoView / Liv3es');
   const page=readFileSync(root+'resources/pages/liv3es.html','utf8');
   assert.match(page,/<html lang="es" dir="ltr">/);
   assert.equal((page.match(/<img[^>]+https:\/\/liv3es\.com\/static\/picture\//g)||[]).length,19);
@@ -178,7 +178,7 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
   assert.match((await request('/')).text,/name="allowedTemplates" value="liv3es">/);
  });
  await t.test('standalone previews server-render final download routes without accounts, tokens or analytics writes',async()=>{
-  const names={ondago:'OndagoTV',liv3es:'MiradoView',miradoview:'MiradoView',feiyue:'ReelShort',dptv:'DPTV',quest:'Pasion TV',aivideo:'AI Video',lumama:'LumamaTV'};
+  const names={purpleai:'Shorts',ondago:'OndagoTV',liv3es:'MiradoView',miradoview:'MiradoView',feiyue:'ReelShort',dptv:'DPTV',quest:'Pasion TV',aivideo:'AI Video',lumama:'LumamaTV'};
   for(const id of Object.keys(names)){
    const r=await request('/templates/'+id+'/preview',master);assert.equal(r.status,200,r.text);assert.match(r.text,new RegExp('<base href="/themes/'+id+'/">'));assert.equal(r.headers.get('x-frame-options'),'SAMEORIGIN');assert.match(r.headers.get('cache-control'),/no-store/);
    assert.doesNotMatch(r.text,/alphapundits\.com\/p\/p6y2sej\/dl/);
@@ -276,6 +276,30 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
    assert.equal(landing.status,200);
    assert.match(landing.text,/<base href="\/themes\/ondago\/">/);
    assert.equal(landing.text.split('href="'+aPath()+'/dl"').length,6);
+   assert.equal(landing.text.split('src="/assets/brand-settings.js?v=').length,2);
+   assert.equal(landing.text.split('src="/assets/collector.js?v=').length,2);
+  }finally{
+   const restored=await post(route,{allowedTemplates:['feiyue','dptv'],template:'feiyue'},master);
+   assert.equal(restored.status,200,restored.text);
+  }
+ });
+ await t.test('PurpleAI project permission, preview, activation and server-rendered download isolation',async()=>{
+  const preview=aPath()+'/preview/purpleai';
+  assert.equal((await request(preview,ca)).status,403);
+  assert.equal((await post(aPath()+'/api/settings',{template:'purpleai'},ca)).status,403);
+  const route='/api/projects/'+A.project.slug;
+  try{
+   const allow=await post(route,{allowedTemplates:['feiyue','dptv','purpleai']},master);
+   assert.equal(allow.status,200,allow.text);
+   assert.equal(allow.data.project.template,'feiyue');
+   assert.equal((await request(preview,ca)).status,200);
+   assert.equal((await request(bPath()+'/preview/purpleai',cb)).status,403);
+   const use=await post(aPath()+'/api/settings',{template:'purpleai'},ca);
+   assert.equal(use.status,200,use.text);
+   const landing=await request(aPath());
+   assert.equal(landing.status,200);
+   assert.match(landing.text,/<base href="\/themes\/purpleai\/">/);
+   assert.equal(landing.text.split('href="'+aPath()+'/dl"').length,43);
    assert.equal(landing.text.split('src="/assets/brand-settings.js?v=').length,2);
    assert.equal(landing.text.split('src="/assets/collector.js?v=').length,2);
   }finally{
