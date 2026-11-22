@@ -145,12 +145,12 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
  await t.test('mutation rejects missing CSRF and cross-origin requests',async()=>{assert.equal((await post('/api/projects',{name:'bad'},{cookie:master.cookie})).status,403);assert.equal((await post('/api/projects',{name:'bad'},{...master,origin:'https://other.example'})).status,403);});
  await t.test('master sees the complete template catalog before creating any project',async()=>{
   const r=await request('/api/templates',master);assert.equal(r.status,200);assert.match(r.headers.get('cache-control'),/no-store/);assert.equal(r.data.projectCount,0);
-  assert.deepEqual(r.data.templates.map(t=>t.id).sort(),['purpleai','ondago','liv3es','miradoview','feiyue','dptv','quest','aivideo','lumama','ggtv','appstore','ultraplay','yacinetv','dptvplus','fizzio','kyss','sparkle','newf','soccerqueens','cinema','noxxtv','smarttrade','stockvault','loveapp','qiyou','stripchat','pornparadise','pornhub','chatee','cosplay','lustylive','nightplay','bokep','xhamster','mylive','kuaibo','tikapk','jiaoyou','cyberheart','promotions','india','apuestamx'].sort());
+  assert.deepEqual(r.data.templates.map(t=>t.id).sort(),['ensa','purpleai','ondago','liv3es','miradoview','feiyue','dptv','quest','aivideo','lumama','ggtv','appstore','ultraplay','yacinetv','dptvplus','fizzio','kyss','sparkle','newf','soccerqueens','cinema','noxxtv','smarttrade','stockvault','loveapp','qiyou','stripchat','pornparadise','pornhub','chatee','cosplay','lustylive','nightplay','bokep','xhamster','mylive','kuaibo','tikapk','jiaoyou','cyberheart','promotions','india','apuestamx'].sort());
   for(const item of r.data.templates){assert.equal(item.usedCount,0);assert.equal(item.allowedCount,0);assert.deepEqual(item.projects,[]);assert.equal(item.previewUrl,'/templates/'+item.id+'/preview');}
   const page=await request('/');assert.match(page.text,/data-view="templates"/);assert.match(page.text,/data-preview-size="desktop"/);
  });
- await t.test('OndagoTV is newest, defaults remain unchanged and all download anchors are finalized',async()=>{
-  const catalog=await request('/api/templates',master);assert.equal(catalog.data.templates[1].id,'ondago');
+ await t.test('OndagoTV stays registered after newer templates and all download anchors are finalized',async()=>{
+  const catalog=await request('/api/templates',master);assert.equal(catalog.data.templates[2].id,'ondago');
   const preview=await request('/templates/ondago/preview',master);assert.equal(preview.status,200);
   assert.equal((preview.text.match(/href="\/p\/template-demo\/dl"/g)||[]).length,5);
   assert.equal((preview.text.match(/https:\/\/hubondagotv\.com\/landing-assets\//g)||[]).length,34);
@@ -158,10 +158,20 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
   assert.match((await request('/')).text,/name="allowedTemplates" value="ondago">/);
   for(const file of ['theme.css','ondago.js','i18n.js','logo.svg'])assert.equal((await request('/themes/ondago/'+file)).status,200);
  });
+ await t.test('ENSA is newest, keeps defaults unchanged and finalizes every download anchor',async()=>{
+  const catalog=await request('/api/templates',master);assert.equal(catalog.data.templates[0].id,'ensa');
+  const preview=await request('/templates/ensa/preview',master);assert.equal(preview.status,200);
+  assert.equal((preview.text.match(/href="\/p\/template-demo\/dl"/g)||[]).length,48);
+  assert.equal((preview.text.match(/https:\/\/dah910c\.site\/ensa\/images\//g)||[]).length,65);
+  assert.match(preview.text,/https:\/\/dah910c\.site\/ensa\/video\.webm/);
+  assert.doesNotMatch(preview.text,/MeetU|meetu-sdk|api\.skyprotect|apk-url|api\/pixels|fbq\(|cloudflareinsights/);
+  assert.match((await request('/')).text,/name="allowedTemplates" value="ensa">/);
+  for(const file of ['theme.css','ensa.js','logo.svg'])assert.equal((await request('/themes/ensa/'+file)).status,200);
+ });
  await t.test('Liv3es remains registered with 24 marked download anchors',async()=>{
   const catalog=await request('/api/templates',master);
-  assert.equal(catalog.data.templates[2].id,'liv3es');
-  assert.equal(catalog.data.templates[2].name,'MiradoView / Liv3es');
+  assert.equal(catalog.data.templates[3].id,'liv3es');
+  assert.equal(catalog.data.templates[3].name,'MiradoView / Liv3es');
   const page=readFileSync(root+'resources/pages/liv3es.html','utf8');
   assert.match(page,/<html lang="es" dir="ltr">/);
   assert.equal((page.match(/<img[^>]+https:\/\/liv3es\.com\/static\/picture\//g)||[]).length,19);
@@ -178,7 +188,7 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
   assert.match((await request('/')).text,/name="allowedTemplates" value="liv3es">/);
  });
  await t.test('standalone previews server-render final download routes without accounts, tokens or analytics writes',async()=>{
-  const names={purpleai:'Shorts',ondago:'OndagoTV',liv3es:'MiradoView',miradoview:'MiradoView',feiyue:'ReelShort',dptv:'DPTV',quest:'Pasion TV',aivideo:'AI Video',lumama:'LumamaTV'};
+  const names={ensa:'XVIDEOS',purpleai:'Shorts',ondago:'OndagoTV',liv3es:'MiradoView',miradoview:'MiradoView',feiyue:'ReelShort',dptv:'DPTV',quest:'Pasion TV',aivideo:'AI Video',lumama:'LumamaTV'};
   for(const id of Object.keys(names)){
    const r=await request('/templates/'+id+'/preview',master);assert.equal(r.status,200,r.text);assert.match(r.text,new RegExp('<base href="/themes/'+id+'/">'));assert.equal(r.headers.get('x-frame-options'),'SAMEORIGIN');assert.match(r.headers.get('cache-control'),/no-store/);
    assert.doesNotMatch(r.text,/alphapundits\.com\/p\/p6y2sej\/dl/);

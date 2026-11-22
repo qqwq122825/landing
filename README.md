@@ -58,7 +58,7 @@ https://你的域名/p/随机项目编号/dl        跳转该项目配置的下�
 - 项目列表的红色“删除”需输入完整项目编号确认。仅总站可操作；永久删除该客户账号、配置、访问与下载记录，原落地页和子后台失效，其他项目及共享模板保留。无回收站，操作前请备份；仅临时停用使用“暂停”。删除保留操作日志及编号停用记录，防止新项目复用旧身份。详见 [项目删除说明](docs/updates/项目删除功能说明.md)。
 - 总站「模板管理」：集中展示全部模板，按名称或编号搜索，手机 / 桌面真实预览，查看使用数量、开放账号数量与关联项目。无项目也能预览；预览使用模板原始显示名，不创建账号、不改动客户配置、不记录访问、不启用 Pixel。模板目录与全局预览仅限总站登录后访问。
 - 客户：沿用原版深色窄版后台，7 项统计、趋势、国家 / 设备分布、分页明细；独立登录，只管理所属项目的显示名、图标、下载地址、模板、Pixel ID。总站保留浅色管理界面。
-- 当前目录共 **40** 款模板：原有 Feiyue / ReelShort、DPTV / MinuteDrama、Quest / Pasion TV、AI Video，加上参考后台两批共 33 款平台适配版，以及 LumamaTV、MiradoView、[MiradoView / Liv3es](docs/templates/liv3es.md)。带手机框预览，确认后切换；总站逐账号勾选开放范围，客户仅显示、预览和使用已开放模板。参考站共有 35 款入口（含已有 ReelShort / MinuteDrama）；新增清单、语言缺口与视觉差异见 [批次记录](docs/templates/reference-batch.md)。
+- 当前目录共 **43** 款模板：原有 Feiyue / ReelShort、DPTV / MinuteDrama、Quest / Pasion TV、AI Video，加上参考后台两批共 33 款平台适配版，以及 LumamaTV、MiradoView、[MiradoView / Liv3es](docs/templates/liv3es.md)、OndagoTV、紫色 AI 短剧与 [ENSA / XVIDEOS](docs/templates/ensa.md)。带手机框预览，确认后切换；总站逐账号勾选开放范围，客户仅显示、预览和使用已开放模板。参考站共有 35 款入口（含已有 ReelShort / MinuteDrama）；新增清单、语言缺口与视觉差异见 [批次记录](docs/templates/reference-batch.md)。
 - Liv3es 新增 24 种界面语言、浏览器语言识别、按项目记忆和阿语 RTL；保留原片名及海报文字，不改下载策略。详见 [Liv3es 语言范围](docs/templates/liv3es.md)。
 - ReelShort 剧集封面及对应标题点击直接走当前项目下载入口，不再弹二次下载提示；一次点击对应一次公共 `DownloadClick`。横向滑动不误触下载，全局 / 项目预览保持不下载、不计数。详见 [ReelShort 点击行为](docs/templates/feiyue.md)。
 - 真实落地页在 Facebook、Instagram 或 Messenger 内置浏览器中打开时，自动显示系统浏览器引导；Android 可点击按钮发起可浏览 Intent，iOS 可复制当前链接并按右上角菜单打开 Safari。预览与普通外部浏览器不显示，关闭后点击下载会重新引导而不直连 APK。详见 [Facebook 内置浏览器引导](docs/updates/Facebook内置浏览器引导.md)。
@@ -241,3 +241,7 @@ docs/                   网页安装指南及 updates/ 历史更新记录
 ## 紫色 AI 短剧 / Shorts（2026-11-19）
 
 新增 `purpleai`：用户提供的紫色欧美 AI 短剧 HTML，保留竖屏视频、40 张海报、十组推荐轮换与手机下滚内容；内嵌媒体原字节提取，支持英语及印地语界面、浏览器识别与逐项目手选记忆。所有 42 个真实下载入口接入项目下载、公共 Pixel 与第一方统计，固定外站 Pixel / 跳转 / beacon 已移除。后台目录最新优先，已有客户需单独授权，不改原模板或 FB 下载策略。详见 [接入记录](docs/templates/purpleai.md)。本节记录本地源码接入，不代表线上已部署。
+
+## ENSA / XVIDEOS（2026-11-23）
+
+新增 `ensa`，仿照 `https://dah910c.site/ensa/` 的黑橙色视频目录：保留双栏首屏、WebM 视频、热门横向卡片、15 张内容卡、评论、下载弹层与手机底部 CTA；18 张图片和 1 个视频按实际可用性热链来源。参考站仅观察到印度尼西亚语且无语言选择器，本次按原样单语接入。48 个真实下载入口统一走当前项目下载和公共 Pixel / 第一方统计；未复制 MeetU、固定 APK、来源 Pixel 或 beacon。模板最新优先，旧账号权限不自动扩大；当前仅本地完成，尚未提交、推送或部署。详见 [接入记录](docs/templates/ensa.md)。

@@ -36,7 +36,8 @@ $required = [
     'public/assets/brand-settings.js', 'public/assets/collector.js',
     'public/assets/vendor/tabler-1.5.1/tabler.min.css',
     'public/assets/vendor/tabler-1.5.1/tabler.min.js',
-    'resources/pages/purpleai.html', 'resources/pages/ondago.html', 'resources/pages/liv3es.html', 'resources/pages/miradoview.html', 'resources/pages/feiyue.html', 'resources/pages/dptv.html', 'resources/pages/quest.html', 'resources/pages/aivideo.html', 'resources/pages/lumama.html',
+    'resources/pages/ensa.html', 'resources/pages/purpleai.html', 'resources/pages/ondago.html', 'resources/pages/liv3es.html', 'resources/pages/miradoview.html', 'resources/pages/feiyue.html', 'resources/pages/dptv.html', 'resources/pages/quest.html', 'resources/pages/aivideo.html', 'resources/pages/lumama.html',
+    'public/themes/ensa/theme.css', 'public/themes/ensa/ensa.js', 'public/themes/ensa/logo.svg',
     'public/themes/aivideo/aivideo.css', 'public/themes/aivideo/aivideo.js', 'public/themes/aivideo/i18n.js', 'public/themes/aivideo/logo.svg',
     'public/themes/aivideo/teaser.jpg', 'public/themes/aivideo/teaser.mp4', 'public/themes/aivideo/stories.webp',
     'public/themes/purpleai/theme.css', 'public/themes/purpleai/purpleai.js', 'public/themes/purpleai/i18n.js', 'public/themes/purpleai/logo.svg',
@@ -60,7 +61,7 @@ $missing = array_filter($required, static function (string $file) use ($root): b
 });
 $check('核心程序与本地 UI 资源', !$missing);
 foreach ($missing as $file) echo '       缺失或不可读：'.$file.PHP_EOL;
-foreach (['purpleai', 'ondago', 'liv3es', 'miradoview', 'feiyue', 'dptv', 'quest', 'aivideo', 'lumama', 'ggtv', 'appstore', 'ultraplay', 'yacinetv', 'dptvplus', 'fizzio', 'kyss', 'sparkle', 'newf', 'soccerqueens', 'cinema', 'noxxtv', 'smarttrade', 'stockvault', 'kuaibo', 'tikapk', 'jiaoyou', 'cyberheart', 'promotions', 'india', 'apuestamx', 'loveapp', 'qiyou', 'stripchat', 'pornparadise', 'pornhub', 'chatee', 'cosplay', 'lustylive', 'nightplay', 'bokep', 'xhamster', 'mylive'] as $template) {
+foreach (['ensa', 'purpleai', 'ondago', 'liv3es', 'miradoview', 'feiyue', 'dptv', 'quest', 'aivideo', 'lumama', 'ggtv', 'appstore', 'ultraplay', 'yacinetv', 'dptvplus', 'fizzio', 'kyss', 'sparkle', 'newf', 'soccerqueens', 'cinema', 'noxxtv', 'smarttrade', 'stockvault', 'kuaibo', 'tikapk', 'jiaoyou', 'cyberheart', 'promotions', 'india', 'apuestamx', 'loveapp', 'qiyou', 'stripchat', 'pornparadise', 'pornhub', 'chatee', 'cosplay', 'lustylive', 'nightplay', 'bokep', 'xhamster', 'mylive'] as $template) {
     $check('模板资源目录：'.$template, is_dir($root.'/public/themes/'.$template)
         && is_readable($root.'/public/themes/'.$template));
 }
