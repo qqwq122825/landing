@@ -626,3 +626,10 @@
 .download-link{touch-action:manipulation}.play.download-link{display:flex}.p-cta.download-link{display:flex}
 .viewer-frame img{background:var(--surface-2)}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.dot,.play,.play::before,.play::after,.hot-track{animation:none!important}.card,.ph img{transition:none!important}}
+
+/* ENSA language switcher: compact in the original header and usable on mobile. */
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.lang-control{display:inline-flex;align-items:center}
+.lang-control select{max-width:154px;border:1px solid var(--line-2);border-radius:999px;background:var(--surface-2);color:var(--text);font:600 .76rem/1 Inter,sans-serif;padding:8px 30px 8px 12px;cursor:pointer;color-scheme:dark}
+.lang-control select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media(max-width:640px){.header-right{gap:8px}.header-right .pill{display:none}.lang-control select{max-width:132px;font-size:.72rem;padding:7px 25px 7px 9px}.logo-wordmark{max-width:120px}.logo{max-width:120px}}

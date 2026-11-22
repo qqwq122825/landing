@@ -37,7 +37,7 @@ $required = [
     'public/assets/vendor/tabler-1.5.1/tabler.min.css',
     'public/assets/vendor/tabler-1.5.1/tabler.min.js',
     'resources/pages/ensa.html', 'resources/pages/purpleai.html', 'resources/pages/ondago.html', 'resources/pages/liv3es.html', 'resources/pages/miradoview.html', 'resources/pages/feiyue.html', 'resources/pages/dptv.html', 'resources/pages/quest.html', 'resources/pages/aivideo.html', 'resources/pages/lumama.html',
-    'public/themes/ensa/theme.css', 'public/themes/ensa/ensa.js', 'public/themes/ensa/logo.svg',
+    'public/themes/ensa/theme.css', 'public/themes/ensa/i18n.js', 'public/themes/ensa/ensa.js', 'public/themes/ensa/logo.svg',
     'public/themes/aivideo/aivideo.css', 'public/themes/aivideo/aivideo.js', 'public/themes/aivideo/i18n.js', 'public/themes/aivideo/logo.svg',
     'public/themes/aivideo/teaser.jpg', 'public/themes/aivideo/teaser.mp4', 'public/themes/aivideo/stories.webp',
     'public/themes/purpleai/theme.css', 'public/themes/purpleai/purpleai.js', 'public/themes/purpleai/i18n.js', 'public/themes/purpleai/logo.svg',

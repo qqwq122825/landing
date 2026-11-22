@@ -166,7 +166,7 @@ test('Landing Hub integration — isolated SQLite fixture',async t=>{
   assert.match(preview.text,/https:\/\/dah910c\.site\/ensa\/video\.webm/);
   assert.doesNotMatch(preview.text,/MeetU|meetu-sdk|api\.skyprotect|apk-url|api\/pixels|fbq\(|cloudflareinsights/);
   assert.match((await request('/')).text,/name="allowedTemplates" value="ensa">/);
-  for(const file of ['theme.css','ensa.js','logo.svg'])assert.equal((await request('/themes/ensa/'+file)).status,200);
+  for(const file of ['theme.css','i18n.js','ensa.js','logo.svg'])assert.equal((await request('/themes/ensa/'+file)).status,200);
  });
  await t.test('Liv3es remains registered with 24 marked download anchors',async()=>{
   const catalog=await request('/api/templates',master);
