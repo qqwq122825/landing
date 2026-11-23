@@ -6,7 +6,8 @@ const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 function dictionaries(){const sandbox={window:{}};vm.runInNewContext(read('public/themes/ensa/i18n.js'),sandbox);return sandbox.window.ENSA_I18N;}
 test('ENSA preserves hotlinks and platform download wiring',()=>{
  const html=read('resources/pages/ensa.html'),js=read('public/themes/ensa/ensa.js');
- assert.match(html,/<html lang="id" dir="ltr">/);
+ assert.match(html,/<html lang="id" dir="ltr" translate="no" class="notranslate">/);
+ assert.match(html,/<meta name="google" content="notranslate">/);
  assert.equal((html.match(/class="[^"]*download-link/g)||[]).length,48);
  const imageUrls=[...html.matchAll(/https:\/\/dah910c\.site\/ensa\/images\/[^"']+/g)].map(match=>match[0]);
  assert.equal(new Set(imageUrls).size,18);assert.equal((html.match(/class="card" role="button"/g)||[]).length,27);
