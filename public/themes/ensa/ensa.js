@@ -1,7 +1,7 @@
 (() => {
   'use strict';
   const viewer=document.getElementById('viewer'),overlay=document.getElementById('dlOverlay');
-  const dictionary=window.ENSA_I18N||{},supported=Object.keys(dictionary),fallback='id';
+  const dictionary=window.ENSA_I18N||{},supported=Object.keys(dictionary),fallback='es';
   const selector=document.getElementById('ensa-language');
   const storageKey='hub:ensa:language:'+((window.HUB_PAGE&&window.HUB_PAGE.slug)||location.pathname);
   let viewerTrigger=null,downloadTrigger=null,currentLanguage=fallback;

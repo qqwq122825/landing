@@ -6,7 +6,7 @@ const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 function dictionaries(){const sandbox={window:{}};vm.runInNewContext(read('public/themes/ensa/i18n.js'),sandbox);return sandbox.window.ENSA_I18N;}
 test('ENSA preserves hotlinks and platform download wiring',()=>{
  const html=read('resources/pages/ensa.html'),js=read('public/themes/ensa/ensa.js');
- assert.match(html,/<html lang="id" dir="ltr" translate="no" class="notranslate">/);
+ assert.match(html,/<html lang="es" dir="ltr" translate="no" class="notranslate">/);
  assert.match(html,/<meta name="google" content="notranslate">/);
  assert.equal((html.match(/class="[^"]*download-link/g)||[]).length,48);
  const imageUrls=[...html.matchAll(/https:\/\/dah910c\.site\/ensa\/images\/[^"']+/g)].map(match=>match[0]);
@@ -24,12 +24,12 @@ test('ENSA exposes complete Indonesian and Spanish dictionaries',()=>{
  const keys=[...html.matchAll(/data-i18n(?:-aria-label)?="([^"]+)"/g)].map(m=>m[1]);
  for(const key of keys)assert.ok(key in dict.id,`missing key ${key}`);
  assert.equal((html.match(/data-job-key=/g)||[]).length,15);
- assert.match(html,/<option value="id">Bahasa Indonesia<\/option><option value="es">Español<\/option>/);
- assert.match(html,/i18n\.js\?v=20261123es/);
+ assert.match(html,/<option value="es">Español<\/option><option value="id">Bahasa Indonesia<\/option>/);
+ assert.match(html,/i18n\.js\?v=20261123es2/);
 });
 test('ENSA language controller keeps URL, project-scoped storage and safe fallback rules',()=>{
  const js=read('public/themes/ensa/ensa.js');
- assert.match(js,/hub:ensa:language:/);assert.match(js,/window\.HUB_PAGE&&window\.HUB_PAGE\.slug/);
+ assert.match(js,/const dictionary=.*fallback='es'/);assert.match(js,/hub:ensa:language:/);assert.match(js,/window\.HUB_PAGE&&window\.HUB_PAGE\.slug/);
  assert.match(js,/raw!==null\)return normalize\(raw\)\|\|fallback/);
  assert.match(js,/navigator\.languages/);assert.match(js,/history\.replaceState/);
  assert.match(js,/try\{return localStorage\.getItem/);assert.match(js,/try\{localStorage\.setItem/);
